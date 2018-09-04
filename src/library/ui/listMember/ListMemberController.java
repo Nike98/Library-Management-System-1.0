@@ -63,7 +63,7 @@ public class ListMemberController implements Initializable {
 	}
 	
 	private void LoadData() {
-		DatabaseHandler dataHandler = new DatabaseHandler();
+		DatabaseHandler dataHandler = DatabaseHandler.getInstance();
 		String qry = "SELECT * FROM MEMBER";
 		ResultSet res = dataHandler.exeQuery(qry);
 		

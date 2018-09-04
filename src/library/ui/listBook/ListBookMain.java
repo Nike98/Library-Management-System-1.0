@@ -15,10 +15,8 @@ public class ListBookMain extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("listBook.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/Resources/Stylesheet/MainStyleSheet.css").toExternalForm());
-			primaryStage.setTitle("List Book");
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			
 		} 
 		catch(Exception e) {
 			e.printStackTrace();

@@ -15,10 +15,8 @@ public class ListMemberMain extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("listMember.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/Resources/Stylesheet/MainStyleSheet.css").toExternalForm());
-			primaryStage.setTitle("List Member");
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			
 		} 
 		catch(Exception e) {
 			e.printStackTrace();

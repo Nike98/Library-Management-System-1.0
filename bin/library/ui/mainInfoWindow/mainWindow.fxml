@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.mainInfoWindow.MainWindowController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0">
          <top>
@@ -36,7 +36,7 @@
          <right>
             <VBox prefHeight="425.0" prefWidth="130.0" BorderPane.alignment="CENTER">
                <children>
-                  <JFXButton alignment="CENTER" contentDisplay="TOP" prefHeight="150.0" prefWidth="130.0" text="Add Book" textAlignment="CENTER">
+                  <JFXButton fx:id="btnaddBook" alignment="CENTER" contentDisplay="TOP" onAction="#AddBookButton" prefHeight="150.0" prefWidth="130.0" text="Add Book" textAlignment="CENTER">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>
@@ -54,7 +54,7 @@
                         <Insets />
                      </VBox.margin>
                   </JFXButton>
-                  <JFXButton alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" prefHeight="150.0" prefWidth="130.0" text="Add Member" textAlignment="CENTER">
+                  <JFXButton fx:id="btnaddMember" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#AddMemberButton" prefHeight="150.0" prefWidth="130.0" text="Add Member" textAlignment="CENTER">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>
@@ -69,12 +69,12 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXButton alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="80.0" prefHeight="150.0" prefWidth="130.0" text="List Books" textAlignment="CENTER">
+                  <JFXButton alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="80.0" onAction="#ListBookButton" prefHeight="150.0" prefWidth="130.0" text="List Books" textAlignment="CENTER">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="btnlistBook" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icons/listbook.png" />
                            </image>
@@ -84,7 +84,7 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXButton alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" prefHeight="150.0" prefWidth="130.0" text="List Members" textAlignment="CENTER">
+                  <JFXButton fx:id="btnlistMember" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#ListMemberButton" prefHeight="150.0" prefWidth="130.0" text="List Members" textAlignment="CENTER">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>
@@ -186,11 +186,11 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <JFXButton text="Issue">
+                                          <Button mnemonicParsing="false" text="Issue">
                                              <font>
                                                 <Font name="Arial Bold" size="14.0" />
                                              </font>
-                                          </JFXButton>
+                                          </Button>
                                        </children>
                                     </HBox>
                                  </children>
@@ -203,7 +203,47 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <VBox prefHeight="396.0" prefWidth="530.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <BorderPane prefHeight="396.0" prefWidth="520.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <top>
+                                    <JFXTextField labelFloat="true" promptText="Book ISBN" BorderPane.alignment="CENTER">
+                                       <font>
+                                          <Font name="Arial" size="14.0" />
+                                       </font>
+                                       <BorderPane.margin>
+                                          <Insets left="170.0" right="170.0" top="20.0" />
+                                       </BorderPane.margin>
+                                    </JFXTextField>
+                                 </top>
+                                 <center>
+                                    <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                       <BorderPane.margin>
+                                          <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                                       </BorderPane.margin>
+                                    </ListView>
+                                 </center>
+                                 <bottom>
+                                    <HBox alignment="CENTER" prefHeight="60.0" prefWidth="520.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Button mnemonicParsing="false" text="Renew">
+                                             <font>
+                                                <Font name="Arial Bold" size="14.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets right="90.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <Button mnemonicParsing="false" text="Submit">
+                                             <font>
+                                                <Font name="Arial Bold" size="14.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="90.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </bottom>
+                              </BorderPane>
                            </children>
                         </AnchorPane>
                   </content>

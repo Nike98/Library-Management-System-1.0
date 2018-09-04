@@ -45,7 +45,7 @@ public class AddBookController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		dataHandler = new DatabaseHandler();
+		dataHandler = DatabaseHandler.getInstance();
 	}
 	
 	@FXML

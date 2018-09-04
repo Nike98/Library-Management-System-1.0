@@ -11,15 +11,24 @@ import javax.swing.JOptionPane;
 
 public final class DatabaseHandler {
 	
+	private static DatabaseHandler handler = null;
+	
 	// Declaring the major Variables to be used throughout the class
 	private static Connection conn = null;
 	private static Statement stmt = null;
 	
 	// Constructor
-	public DatabaseHandler() {
+	private DatabaseHandler() {
 		CreateConnection();
 		setupBookTable();
 		setupMemberTable();
+	}
+	
+	public static DatabaseHandler getInstance() {
+		if (handler == null)
+			handler = new DatabaseHandler();
+		
+		return handler;
 	}
 	
 	/*
