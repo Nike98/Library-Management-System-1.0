@@ -21,5 +21,15 @@
 }
 
 .table-column {
-  -fx-alignment: CENTER;
+ 	-fx-alignment: CENTER;
+}
+
+.issue-button{
+	-fx-background-color: #424242;
+	-fx-text-fill: #FFFFFF;
+}
+
+.issue-button:hover{
+	-fx-background-color: #0288D1;
+	-fx-text-fill: #FFFFFF;
 }

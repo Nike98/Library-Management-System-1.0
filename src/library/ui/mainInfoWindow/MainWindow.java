@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import library.database.handler.DatabaseHandler;
 
 public class MainWindow extends Application {
 	
@@ -15,10 +16,11 @@ public class MainWindow extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("mainWindow.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/Resources/Stylesheet/MainStyleSheet.css").toExternalForm());
-			primaryStage.setTitle("");
+			primaryStage.setTitle("Dashboard");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
+			DatabaseHandler.getInstance();
 		} 
 		catch(Exception e) {
 			e.printStackTrace();
