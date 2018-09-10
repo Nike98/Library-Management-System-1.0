@@ -52,7 +52,7 @@ public final class DatabaseHandler {
 				System.out.println("Table " + Table_Name + " Exists.");
 			else {
 				stmt.execute("CREATE TABLE " + Table_Name + "("
-						+ "isbn number(17,0) constraints book_isbn_pk primary key,\n"
+						+ "isbn varchar2(17) constraints book_isbn_pk primary key,\n"
 						+ "title varchar2(50) not null,\n"
 						+ "author varchar2(40) not null,\n"
 						+ "edition_number varchar2(15) not null,\n"

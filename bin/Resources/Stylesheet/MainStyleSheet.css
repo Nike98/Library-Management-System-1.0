@@ -33,3 +33,7 @@
 	-fx-background-color: #0288D1;
 	-fx-text-fill: #FFFFFF;
 }
+
+.main-hbox{
+	-fx-background-color: #e7e7e7;
+}
