@@ -20,7 +20,13 @@ public class MainWindow extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
-			DatabaseHandler.getInstance();
+			// This Decreases the time the Application takes to load
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					DatabaseHandler.getInstance();
+				}
+			}).start();
 		} 
 		catch(Exception e) {
 			e.printStackTrace();

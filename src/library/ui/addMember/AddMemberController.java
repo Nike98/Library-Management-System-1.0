@@ -80,7 +80,7 @@ public class AddMemberController implements Initializable{
 					"'" + memLname + "'," + 
 					"'" + memCity + "'," + 
 					"'" + memAddress + "'," + 
-					"'" + memMobile + "'," + 
+					"" + memMobile + "," + 
 					"'" + memEmail + "'" +
 					")";
 				

@@ -58,10 +58,10 @@
 	id number(6,0) constraints member_id_pk primary key,
 	fname varchar2(15) not null,
 	lname varchar2(15) not null,
-	city varchar2(20) not null,
-	address varchar2(60) not null,
-	email_id varchar2(50) not null unique,
-	mobile_no number(10,0) not null unique
+	city varchar2(30) not null,
+	address varchar2(100) not null,
+	mobile_no number(10,0) constraints member_mobile_no_unique not null unique,
+	email_id varchar2(70) constraints member_email_id_unique not null unique
  );
  
  
@@ -69,10 +69,23 @@
  
  create table book
  (
-	isbn number(17,0) constraints book_isbn_pk primary key,
-	name varchar2(50) not null,
+	isbn varchar2(17) constraints book_isbn_pk primary key,
+	title varchar2(50) not null,
 	author varchar2(40) not null,
-	edition_number varchar2(15) not null,
-	price number(5,0) not null
+	edition_number varchar2(30) not null,
+	publisher varchar2(40) not null,
+	price number(5,0) not null,
+	available char(1) default 'Y' check (available in ('Y','N'))
+ );
+ 
+ 
+ -- Create Table Issue having all the Issue details
+ 
+ create table issue
+ (
+	isbn varchar2(17) constraints issue_isbn_fk references book(isbn),
+	member_id number(6,0) constraints issue_member_id_fk references member(id),
+	issue_time date default current_timestamp,
+	day_count int default 0
  );
  

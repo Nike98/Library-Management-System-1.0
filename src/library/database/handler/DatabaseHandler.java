@@ -22,6 +22,7 @@ public final class DatabaseHandler {
 		CreateConnection();
 		setupBookTable();
 		setupMemberTable();
+		setupIssueTable();
 	}
 	
 	public static DatabaseHandler getInstance() {
@@ -31,16 +32,16 @@ public final class DatabaseHandler {
 		return handler;
 	}
 	
-	/*
-	 * These methods are written to check whether the Specified table 
-	 * exists of or not.
-	 * 
-	 * If it exists then the further code execution continues.
-	 * 
-	 * If it doesn't exist then it creates the table in the below 
-	 * specified manner.
-	 */
 	private void setupBookTable() {
+		/*
+		 * These methods are written to check whether the Specified table 
+		 * exists of or not.
+		 * 
+		 * If it exists then the further code execution continues.
+		 * 
+		 * If it doesn't exist then it creates the table in the below 
+		 * specified manner.
+		 */
 		String Table_Name = "Book";
 		
 		try {
@@ -55,7 +56,7 @@ public final class DatabaseHandler {
 						+ "isbn varchar2(17) constraints book_isbn_pk primary key,\n"
 						+ "title varchar2(50) not null,\n"
 						+ "author varchar2(40) not null,\n"
-						+ "edition_number varchar2(15) not null,\n"
+						+ "edition_number varchar2(30) not null,\n"
 						+ "publisher varchar2(40) not null,\n"
 						+ "price number(5,0) not null,\n"
 						+ "available char(1) default 'Y' check (available in ('Y','N'))"
@@ -83,12 +84,46 @@ public final class DatabaseHandler {
 						+ "id number(6,0) constraints member_id_pk primary key,\n"
 						+ "fname varchar2(15) not null,\n"
 						+ "lname varchar2(15) not null,\n"
-						+ "city varchar2(20) not null,\n"
+						+ "city varchar2(30) not null,\n"
 						+ "address varchar2(100) not null,\n"
-						+ "mobile_no number(10,0) not null unique,\n"
-						+ "email_id varchar2(50) not null unique"
+						+ "mobile_no number(10,0) constraints member_mobile_no_unique not null unique,\n"
+						+ "email_id varchar2(70) constraints member_email_id_unique not null unique"
 						+ ")");
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// REMOVE THIS BEFORE DEPLOYMENT
+			System.err.println(e.getMessage() + " -- Database setup problem");
+		}
+	}
+	
+	private void setupIssueTable() {
+		/*
+		 * These methods are written to check whether the Specified table 
+		 * exists of or not.
+		 * 
+		 * If it exists then the further code execution continues.
+		 * 
+		 * If it doesn't exist then it creates the table in the below 
+		 * specified manner.
+		 */
+		String Table_Name = "Issue";
+		
+		try {
+			stmt = conn.createStatement();
+			DatabaseMetaData dbmetadata = conn.getMetaData();
+			ResultSet tables = dbmetadata.getTables(null, null, Table_Name.toUpperCase(), null);
+			
+			if (tables.next())
+				System.out.println("Table " + Table_Name + " Exists.");
+			else {
+				stmt.execute("CREATE TABLE " + Table_Name + "("
+						+ "isbn varchar2(17) constraints issue_isbn_fk references book(isbn),\n"
+						+ "member_id number(6,0) constraints issue_member_id_fk references member(id),"
+						+ "issue_time date default current_timestamp,"
+						+ "day_count int default 0"
+						+ ")");
+				}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			// REMOVE THIS BEFORE DEPLOYMENT
@@ -131,11 +166,11 @@ public final class DatabaseHandler {
 		return result;
 	}
 	
-	/*
-	 * This method performs particular action given to it
-	 * which include insert, select statements.
-	 */
 	public boolean exeAction(String qry) {
+		/*
+		 * This method performs particular action given to it
+		 * which include insert, select statements.
+		 */
 		try {
 			stmt = conn.createStatement();
 			stmt.execute(qry);
