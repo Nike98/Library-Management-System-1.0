@@ -50,6 +50,9 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private JFXTextField txfMemberId;
 	
+	@FXML
+    private JFXTextField Ren_txfIsbn;
+	
 	DatabaseHandler dbHandler;
 
 	@Override
@@ -204,21 +207,38 @@ public class MainWindowController implements Initializable {
 
 	@FXML
 	private void IssueOperation(ActionEvent event) {
+		/*
+		 * This method here performs the Issue Operation in the
+		 * Issue tab and is activated on the click of the Issue Button.
+		 * 
+		 * When clicked, it confirms with the User if the 
+		 * Operation is to be performed or not. If the User 
+		 * selects Cancel then the Operation is Cancelled.
+		 * 
+		 * If the user confirms, Then it performs the Issue Operation
+		 * in which it issues the particular book to the Selected Member.
+		 * 
+		 * Simultaneously it Updates the Book table to Set the Availability 
+		 * of that particular book to Unavailable.
+		 * 
+		 * If any Error occurs at this step then the Issue operation is
+		 * aborted and the message is shown to the User.
+		 * 
+		 */
 		String bookIsbn = txfIsbn.getText();
 		String memId = txfMemberId.getText();
 		
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Confirm Issue Operarion");
 		alert.setHeaderText(null);
-		alert.setContentText("Are you sure eyou want to Issue the Book " + lblBookName.getText() + "\n to" + lblMemName.getText() + " ?");
+		alert.setContentText("Are you sure eyou want to Issue the Book " + lblBookName.getText() + "\n to " + lblMemName.getText() + " ?");
 		
 		Optional<ButtonType> response = alert.showAndWait();
 		
 		if (response.get() == ButtonType.OK) {
-			String insert_qry = "INSERT INTO ISSUE (isbn, member_id, issue_time) values ("
+			String insert_qry = "INSERT INTO ISSUE (isbn, member_id) values ("
 					+ "'" + bookIsbn + "', "
-					+ "'" + memId + "', "
-					+ "to_date(sysdate, 'dd-mon-yyyy hh:mi:ss A.M.'))";
+					+ "'" + memId + "')";
 			
 			String update_qry = "UPDATE BOOK SET available = 'N' where isbn = '" + bookIsbn + "'";
 			
@@ -244,5 +264,18 @@ public class MainWindowController implements Initializable {
 			alertFailed.setContentText("Issue Operation Cancelled by User");
 			alertFailed.showAndWait();
 		}
+	}
+
+	/*
+	 * 
+	 * Renew / Submission tab Operations and 
+	 * Events Start from further on.
+	 * 
+	 */
+	
+	@FXML
+	private void Ren_LoadBookInfo(ActionEvent event) {
+		String isbn = Ren_txfIsbn.getText();
+		
 	}
 }

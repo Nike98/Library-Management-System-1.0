@@ -231,7 +231,7 @@
                            <children>
                               <BorderPane prefHeight="396.0" prefWidth="520.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <top>
-                                    <JFXTextField labelFloat="true" promptText="Book ISBN" BorderPane.alignment="CENTER">
+                                    <JFXTextField fx:id="Ren_txfIsbn" labelFloat="true" promptText="Book ISBN" BorderPane.alignment="CENTER">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
