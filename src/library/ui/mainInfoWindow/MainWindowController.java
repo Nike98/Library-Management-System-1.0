@@ -15,7 +15,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -216,26 +215,34 @@ public class MainWindowController implements Initializable {
 		Optional<ButtonType> response = alert.showAndWait();
 		
 		if (response.get() == ButtonType.OK) {
-			String str = "INSERT INTO ISSUE (isbn, member_id, issue_time) values ("
+			String insert_qry = "INSERT INTO ISSUE (isbn, member_id, issue_time) values ("
 					+ "'" + bookIsbn + "', "
 					+ "'" + memId + "', "
 					+ "to_date(sysdate, 'dd-mon-yyyy hh:mi:ss A.M.'))";
-		}
-	} 
-	
-	/*private String getBookTitle(String isbn) {
-		String query = "SELECT TITLE FROM BOOK WHERE ISBN = '" + isbn + "'";
-		ResultSet rs = dbHandler.exeQuery(query);
-		String title = null;
-		
-		try {
-			while(rs.next()) {
-				title = rs.getString("title");
+			
+			String update_qry = "UPDATE BOOK SET available = 'N' where isbn = '" + bookIsbn + "'";
+			
+			if (dbHandler.exeAction(insert_qry) && dbHandler.exeAction(update_qry)) {
+				Alert alertCompleted = new Alert(Alert.AlertType.INFORMATION);
+				alertCompleted.setTitle("Success");
+				alertCompleted.setHeaderText(null);
+				alertCompleted.setContentText("Book Issue Operation Completed Successfully");
+				alertCompleted.showAndWait();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			else {
+				Alert alertFailed = new Alert(Alert.AlertType.ERROR);
+				alertFailed.setTitle("Failed");
+				alertFailed.setHeaderText(null);
+				alertFailed.setContentText("Issue Operation Failed");
+				alertFailed.showAndWait();
+			}
 		}
-		
-		return title;
-	}*/
+		else {
+			Alert alertFailed = new Alert(Alert.AlertType.INFORMATION);
+			alertFailed.setTitle("Cancelled");
+			alertFailed.setHeaderText(null);
+			alertFailed.setContentText("Issue Operation Cancelled by User");
+			alertFailed.showAndWait();
+		}
+	}
 }

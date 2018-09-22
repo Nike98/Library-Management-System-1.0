@@ -212,7 +212,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <Button fx:id="btnIssue" mnemonicParsing="false" styleClass="issue-button" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Issue">
+                                          <Button fx:id="btnIssue" mnemonicParsing="false" onAction="#IssueOperation" styleClass="issue-button" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Issue">
                                              <font>
                                                 <Font name="Arial Bold" size="14.0" />
                                              </font>
