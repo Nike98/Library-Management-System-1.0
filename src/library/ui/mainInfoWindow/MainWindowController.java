@@ -293,7 +293,7 @@ public class MainWindowController implements Initializable {
 		
 		try {
 			while(rs.next()) {
-				String ren_bookIsbn = rs.getString(isbn);
+				String ren_bookIsbn = rs.getString("isbn");
 				String ren_memberId = rs.getString("member_id");
 				Timestamp ren_issueTime = rs.getTimestamp("issue_time");
 				int ren_count = rs.getInt("day_count");
@@ -328,5 +328,6 @@ public class MainWindowController implements Initializable {
 		}
 		
 		dataList.getItems().setAll(data);
+		System.out.println(dataList.getItems().setAll(data));
 	}
 }
