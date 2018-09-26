@@ -231,7 +231,7 @@
                            <children>
                               <BorderPane prefHeight="396.0" prefWidth="520.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <top>
-                                    <JFXTextField fx:id="Ren_txfIsbn" labelFloat="true" promptText="Book ISBN" BorderPane.alignment="CENTER">
+                                    <JFXTextField fx:id="Ren_txfIsbn" labelFloat="true" onAction="#Ren_LoadBookInfo" promptText="Book ISBN" BorderPane.alignment="CENTER">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
@@ -241,7 +241,7 @@
                                     </JFXTextField>
                                  </top>
                                  <center>
-                                    <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                    <ListView fx:id="dataList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                        <BorderPane.margin>
                                           <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                                        </BorderPane.margin>

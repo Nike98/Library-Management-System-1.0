@@ -4,10 +4,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Observable;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.effects.JFXDepthManager;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.embed.swt.FXCanvas;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -52,6 +59,9 @@ public class MainWindowController implements Initializable {
 	
 	@FXML
     private JFXTextField Ren_txfIsbn;
+	
+	@FXML
+	private ListView<String> dataList;
 	
 	DatabaseHandler dbHandler;
 
@@ -275,7 +285,48 @@ public class MainWindowController implements Initializable {
 	
 	@FXML
 	private void Ren_LoadBookInfo(ActionEvent event) {
-		String isbn = Ren_txfIsbn.getText();
+		ObservableList<String> data = FXCollections.observableArrayList();
 		
+		String isbn = Ren_txfIsbn.getText();
+		String query = "SELECT * FROM ISSUE WHERE ISBN = '" + isbn + "'";
+		ResultSet rs = dbHandler.exeQuery(query);
+		
+		try {
+			while(rs.next()) {
+				String ren_bookIsbn = rs.getString(isbn);
+				String ren_memberId = rs.getString("member_id");
+				Timestamp ren_issueTime = rs.getTimestamp("issue_time");
+				int ren_count = rs.getInt("day_count");
+				
+				data.add("Issue Date and Time : " + ren_issueTime.getTime());
+				data.add("Day Count : " + ren_count);
+				
+				data.add("Book Information :-");
+				query = "SELECT * FROM BOOK WHERE ISBN = '" + ren_bookIsbn + "'";
+				ResultSet rs_book = dbHandler.exeQuery(query);
+				while(rs_book.next()) {
+					data.add("ISBN : " + rs_book.getString("isbn"));
+					data.add("Title : " + rs_book.getString("title"));
+					data.add("Author : " + rs_book.getString("author"));
+					data.add("Edition : " + rs_book.getString("edition_number"));
+					data.add("Publisher : " + rs_book.getString("publisher"));
+					data.add("Price : " + rs_book.getInt("price"));
+				}
+				
+				data.add("Member Information :-");
+				query = "SELECT * FROM MEMBER WHERE ID = '" + ren_memberId + "'";
+				ResultSet rs_member = dbHandler.exeQuery(query);
+				while(rs_member.next()) {
+					data.add("ID : " + rs_member.getString("id"));
+					data.add("Name : " + rs_member.getString("fname") + " " + rs_member.getString("lname"));
+					data.add("Mobile Number : " + rs_member.getString("mobile_no"));
+					data.add("Email : " + rs_member.getString("email_id"));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		dataList.getItems().setAll(data);
 	}
 }
