@@ -5,15 +5,12 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Observable;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.effects.JFXDepthManager;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swt.FXCanvas;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
@@ -61,9 +59,13 @@ public class MainWindowController implements Initializable {
     private JFXTextField Ren_txfIsbn;
 	
 	@FXML
+    private Button Ren_btnSubmitBook;
+	
+	@FXML
 	private ListView<String> dataList;
 	
 	DatabaseHandler dbHandler;
+	boolean isReadytoSubmit = true;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -243,9 +245,9 @@ public class MainWindowController implements Initializable {
 		alert.setHeaderText(null);
 		alert.setContentText("Are you sure eyou want to Issue the Book " + lblBookName.getText() + "\n to " + lblMemName.getText() + " ?");
 		
-		Optional<ButtonType> response = alert.showAndWait();
+		Optional<ButtonType> get_response = alert.showAndWait();
 		
-		if (response.get() == ButtonType.OK) {
+		if (get_response.get() == ButtonType.OK) {
 			String insert_qry = "INSERT INTO ISSUE (isbn, member_id) values ("
 					+ "'" + bookIsbn + "', "
 					+ "'" + memId + "')";
@@ -268,11 +270,11 @@ public class MainWindowController implements Initializable {
 			}
 		}
 		else {
-			Alert alertFailed = new Alert(Alert.AlertType.INFORMATION);
-			alertFailed.setTitle("Cancelled");
-			alertFailed.setHeaderText(null);
-			alertFailed.setContentText("Issue Operation Cancelled by User");
-			alertFailed.showAndWait();
+			Alert alertCancelled = new Alert(Alert.AlertType.INFORMATION);
+			alertCancelled.setTitle("Cancelled");
+			alertCancelled.setHeaderText(null);
+			alertCancelled.setContentText("Issue Operation Cancelled by User");
+			alertCancelled.showAndWait();
 		}
 	}
 
@@ -285,7 +287,34 @@ public class MainWindowController implements Initializable {
 	
 	@FXML
 	private void Ren_LoadBookInfo(ActionEvent event) {
+		/*
+		 * This section of the code handles the Events 
+		 * fired by the JFXTextField in the Renew / Submission section.
+		 * 
+		 * It takes the input from the TextField as the ISBN of a Book.
+		 * Checks if the given ISBN number is present in the Issue
+		 * table i.e. if the Book is Issued or not.
+		 * 
+		 * If the Book is not present, no operation is performed.
+		 * But if the ISBN is found then the Issue related information
+		 * is fetched.
+		 * 
+		 * With this the Book information and the Issuing Member's
+		 * information is fetched too.
+		 * 
+		 * All this information is stored in an ObservableList.
+		 * This list checks the activity of the listeners.
+		 * 
+		 * Further then this information is displayed to the 
+		 * used in the user in the ListView which is placed 
+		 * under the same TextField.
+		 * 
+		 * Further on the isReadytoSubmit Boolean variable is
+		 * used to set if the book is Issued then it can be
+		 * submitted. Otherwise it is False.
+		 */
 		ObservableList<String> data = FXCollections.observableArrayList();
+		isReadytoSubmit = false;
 		
 		String isbn = Ren_txfIsbn.getText();
 		String query = "SELECT * FROM ISSUE WHERE ISBN = '" + isbn + "'";
@@ -298,36 +327,78 @@ public class MainWindowController implements Initializable {
 				Timestamp ren_issueTime = rs.getTimestamp("issue_time");
 				int ren_count = rs.getInt("day_count");
 				
-				data.add("Issue Date and Time : " + ren_issueTime.getTime());
+				data.add("Issue Date and Time : " + ren_issueTime.toGMTString());
 				data.add("Day Count : " + ren_count);
 				
 				data.add("Book Information :-");
 				query = "SELECT * FROM BOOK WHERE ISBN = '" + ren_bookIsbn + "'";
 				ResultSet rs_book = dbHandler.exeQuery(query);
 				while(rs_book.next()) {
-					data.add("ISBN : " + rs_book.getString("isbn"));
-					data.add("Title : " + rs_book.getString("title"));
-					data.add("Author : " + rs_book.getString("author"));
-					data.add("Edition : " + rs_book.getString("edition_number"));
-					data.add("Publisher : " + rs_book.getString("publisher"));
-					data.add("Price : " + rs_book.getInt("price"));
+					data.add("\t ISBN : " + rs_book.getString("isbn"));
+					data.add("\t Title : " + rs_book.getString("title"));
+					data.add("\t Author : " + rs_book.getString("author"));
+					data.add("\t Edition : " + rs_book.getString("edition_number"));
+					data.add("\t Publisher : " + rs_book.getString("publisher"));
+					data.add("\t Price : " + rs_book.getInt("price"));
 				}
 				
 				data.add("Member Information :-");
 				query = "SELECT * FROM MEMBER WHERE ID = '" + ren_memberId + "'";
 				ResultSet rs_member = dbHandler.exeQuery(query);
 				while(rs_member.next()) {
-					data.add("ID : " + rs_member.getString("id"));
-					data.add("Name : " + rs_member.getString("fname") + " " + rs_member.getString("lname"));
-					data.add("Mobile Number : " + rs_member.getString("mobile_no"));
-					data.add("Email : " + rs_member.getString("email_id"));
+					data.add("\t ID : " + rs_member.getString("id"));
+					data.add("\t Name : " + rs_member.getString("fname") + " " + rs_member.getString("lname"));
+					data.add("\t Mobile Number : " + rs_member.getString("mobile_no"));
+					data.add("\t Email : " + rs_member.getString("email_id"));
 				}
+				
+				isReadytoSubmit = true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		dataList.getItems().setAll(data);
-		System.out.println(dataList.getItems().setAll(data));
+	}
+	
+	@FXML
+	private void Ren_SubmitBookButton(ActionEvent event) {
+		if (!isReadytoSubmit)
+			return;
+		
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Submission Operarion");
+		alert.setHeaderText(null);
+		alert.setContentText("Are you sure oyu want to return the book ?");
+		
+		Optional<ButtonType> get_response = alert.showAndWait();
+		
+		if (get_response.get() == ButtonType.OK) {
+			String isbn = Ren_txfIsbn.getText();
+			String del_query = "DELETE FROM ISSUE WHERE ISBN = '" + isbn + "'";
+			String update_query = "UPDATE BOOK SET AVAILABLE = 'Y' WHERE ISBN = '" + isbn + "'";
+			
+			if (dbHandler.exeAction(del_query) && dbHandler.exeAction(update_query)) {
+				Alert suc_alert = new Alert(Alert.AlertType.INFORMATION);
+				suc_alert.setTitle("Successful");
+				suc_alert.setHeaderText(null);
+				suc_alert.setContentText("Book has been submitted");
+				suc_alert.showAndWait();
+			}
+			else {
+				Alert fail_alert = new Alert(Alert.AlertType.INFORMATION);
+				fail_alert.setTitle("Failed");
+				fail_alert.setHeaderText(null);
+				fail_alert.setContentText("Submission of book failed");
+				fail_alert.showAndWait();
+			}
+		}
+		else {
+			Alert alertCancelled = new Alert(Alert.AlertType.INFORMATION);
+			alertCancelled.setTitle("Cancelled");
+			alertCancelled.setHeaderText(null);
+			alertCancelled.setContentText("Submission Operation Cancelled by User");
+			alertCancelled.showAndWait();
+		}
 	}
 }

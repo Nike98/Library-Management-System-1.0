@@ -258,7 +258,7 @@
                                                 <Insets right="90.0" />
                                              </HBox.margin>
                                           </Button>
-                                          <Button mnemonicParsing="false" styleClass="issue-button" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Submit">
+                                          <Button fx:id="btnSubmitBook" mnemonicParsing="false" onAction="#Ren_SubmitBookButton" styleClass="issue-button" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Submit Book">
                                              <font>
                                                 <Font name="Arial Bold" size="14.0" />
                                              </font>
