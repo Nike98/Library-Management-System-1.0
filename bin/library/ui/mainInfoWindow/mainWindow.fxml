@@ -99,21 +99,6 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXButton fx:id="btnSettings" alignment="CENTER" contentDisplay="TOP" prefHeight="150.0" prefWidth="130.0" text="Settings" textAlignment="CENTER">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/images.png" />
-                           </image>
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                        </ImageView>
-                     </graphic>
-                  </JFXButton>
                </children>
             </VBox>
          </right>
@@ -250,20 +235,12 @@
                                  <bottom>
                                     <HBox alignment="CENTER" prefHeight="60.0" prefWidth="520.0" BorderPane.alignment="CENTER">
                                        <children>
-                                          <Button mnemonicParsing="false" styleClass="issue-button" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Renew">
+                                          <Button fx:id="Ren_btnSubmitBook" mnemonicParsing="false" onAction="#Ren_SubmitBookButton" styleClass="issue-button" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Submit Book">
                                              <font>
                                                 <Font name="Arial Bold" size="14.0" />
                                              </font>
                                              <HBox.margin>
-                                                <Insets right="90.0" />
-                                             </HBox.margin>
-                                          </Button>
-                                          <Button fx:id="btnSubmitBook" mnemonicParsing="false" onAction="#Ren_SubmitBookButton" styleClass="issue-button" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Submit Book">
-                                             <font>
-                                                <Font name="Arial Bold" size="14.0" />
-                                             </font>
-                                             <HBox.margin>
-                                                <Insets left="90.0" />
+                                                <Insets />
                                              </HBox.margin>
                                           </Button>
                                        </children>

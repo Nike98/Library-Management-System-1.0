@@ -363,6 +363,9 @@ public class MainWindowController implements Initializable {
 	
 	@FXML
 	private void Ren_SubmitBookButton(ActionEvent event) {
+		/*
+		 * Insert Comment Here.
+		 */
 		if (!isReadytoSubmit)
 			return;
 		
