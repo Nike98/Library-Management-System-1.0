@@ -364,7 +364,34 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void Ren_SubmitBookButton(ActionEvent event) {
 		/*
-		 * Insert Comment Here.
+		 * This section of the code handles the Events
+		 * fired when the User clicks on the Submit Book
+		 * button in the Renew/Submission tab of the Application.
+		 * 
+		 * The algorithm first checks if the value of isReadytoSubmit
+		 * is true i.e. if the Book is issued and the entry is present
+		 * in the Issue. If yes then the book can be Submitted. If this
+		 * case is false then the algorithm returns back to start
+		 * execution again and for an event to get fired.
+		 * 
+		 * Further if all goes well then the application asks a
+		 * confirmation from the user if s/he confirms to submit
+		 * the book back to Library. If the User clicks OK then the 
+		 * Book is Submitted, else if the User cancels the
+		 * operation then the application returns back to the
+		 * previous state.
+		 * 
+		 * If anywhere any kind of error occurs then the application
+		 * notifies the User about this.
+		 * 
+		 * Continuing with all the operations the algorithm also makes 
+		 * changes within the database in order for making the Book 
+		 * available again and deleting the Issue record.
+		 * 
+		 * 
+		 * **** ADD A TRIGGER PROCEDURE HERE IF POSSIBLE TO STORE THE DELETED DATA FROM THE ISSUE TABLE ****
+		 * 									DO IT IN THE NEW VERSION
+		 * 
 		 */
 		if (!isReadytoSubmit)
 			return;

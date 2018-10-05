@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
@@ -21,15 +22,36 @@ public class SettingsController implements Initializable {
     @FXML
     private JFXTextField txfUserName;
 
-    Preferences preferences;
+    //Preferences preferences;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initValues();
 	}
+	
+	@FXML
+	public void SaveButton_Click(ActionEvent event) {
+		int nonFinedDays = Integer.parseInt(txfnum_DaysWithoutFine.getText());
+		double fine = Double.parseDouble(txfFinePerDay.getText());
+		String uname = txfUserName.getText();
+		String passwd = txfPassword.getText();
+		
+		Preferences preferences = Preferences.getPreferences();
+		preferences.setnum_DaysWithoutFine(nonFinedDays);
+		preferences.setFinePerDay(fine);
+		preferences.setUsername(uname);
+		preferences.setPassword(passwd);
+		
+		Preferences.setPreferences(preferences);
+	}
+	
+	@FXML
+	public void CancelButton_click(ActionEvent event) {
+		
+	}
 
 	private void initValues() {
-		preferences.getPreferences();
+		Preferences preferences = Preferences.getPreferences();
 		txfnum_DaysWithoutFine.setText(String.valueOf(preferences.getnum_DaysWithoutFine()));
 		txfFinePerDay.setText(String.valueOf(preferences.getFinePerDay()));
 		txfUserName.setText(String.valueOf(preferences.getUsername()));

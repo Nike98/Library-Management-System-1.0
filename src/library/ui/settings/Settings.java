@@ -27,8 +27,6 @@ public class Settings extends Application {
 					DatabaseHandler.getInstance();
 				}
 			}).start();
-			
-			Preferences.initConfig();
 		} 
 		catch(Exception e) {
 			e.printStackTrace();

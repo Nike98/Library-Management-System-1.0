@@ -80,20 +80,33 @@ public class Preferences {
 		}
 	}
 	
-	public Preferences getPreferences() {
+	public static Preferences getPreferences() {
 		Gson gson = new Gson();
 		Preferences preference = new Preferences();
 		try {
 			preference  = gson.fromJson(new FileReader(CONFIG_FILE), Preferences.class);
-		} catch (JsonSyntaxException e) {
-			e.printStackTrace();
-		} catch (JsonIOException e) {
-			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			initConfig();
 			e.printStackTrace();
 		}
 		
 		return preference;
+	}
+	
+	public static void setPreferences(Preferences preferences) {
+		Writer writer = null;
+		try {
+			Gson gson = new Gson();
+			writer = new FileWriter(CONFIG_FILE);
+			gson.toJson(preferences, writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

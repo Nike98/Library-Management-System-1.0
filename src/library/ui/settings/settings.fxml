@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="325.0" prefWidth="350.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<AnchorPane prefHeight="325.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.settings.SettingsController">
    <children>
       <VBox prefHeight="270.0" prefWidth="350.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -48,7 +47,7 @@
       </VBox>
       <HBox alignment="CENTER" layoutX="45.0" layoutY="287.0" prefHeight="55.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <JFXButton prefHeight="30.0" prefWidth="90.0" styleClass="jfx-button-save" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Save">
+            <JFXButton fx:id="btnSave" onAction="#SaveButton_Click" prefHeight="30.0" prefWidth="90.0" styleClass="jfx-button-save" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Save">
                <HBox.margin>
                   <Insets right="50.0" />
                </HBox.margin>
@@ -56,7 +55,7 @@
                   <Font name="Arial" size="14.0" />
                </font>
             </JFXButton>
-            <JFXButton prefHeight="30.0" prefWidth="90.0" styleClass="jfx-button-cancel" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Cancel">
+            <JFXButton fx:id="btnCancel" onAction="#CancelButton_click" prefHeight="30.0" prefWidth="90.0" styleClass="jfx-button-cancel" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Cancel">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
