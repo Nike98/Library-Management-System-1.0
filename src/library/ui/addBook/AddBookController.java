@@ -2,13 +2,13 @@ package library.ui.addBook;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import library.alert.ThrowAlert;
 import library.database.handler.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -67,10 +67,7 @@ public class AddBookController implements Initializable {
 		boolean flag = isbn.isEmpty() || title.isEmpty() || author.isEmpty() ||
 				edition.isEmpty() || publisher.isEmpty() || price.isEmpty();
 		if (flag) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null);
-			alert.setContentText("Please enter in all fields");
-			alert.showAndWait();
+			ThrowAlert.showErrorMessage("Error Occured", "Please enter in all fields");
 			return;
 		}
 		
@@ -80,10 +77,7 @@ public class AddBookController implements Initializable {
 		}
 		else {
 			// If not then it will alert the User to do so
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null);
-			alert.setContentText("Price field has Characters");
-			alert.showAndWait();
+			ThrowAlert.showErrorMessage("Error Occured", "Price field has Characters");
 			return;
 		}
 		
@@ -102,17 +96,11 @@ public class AddBookController implements Initializable {
 		
 		// Saving the data to the Database
 		if (dataHandler.exeAction(query)) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setHeaderText(null);
-			alert.setContentText("Save Successfull");
-			alert.showAndWait();
+			ThrowAlert.showInformationMessage("Successful", "Save Successfull");
 		}
 		else {
 			// On Error
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null);
-			alert.setContentText("Failed to Save to Database");
-			alert.showAndWait();
+			ThrowAlert.showErrorMessage("Error Occured", "Failed to Save to Database");
 		}
 	}
 	

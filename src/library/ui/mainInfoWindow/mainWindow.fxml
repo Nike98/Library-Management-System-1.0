@@ -99,7 +99,7 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXButton fx:id="btnSettings" alignment="CENTER" contentDisplay="TOP" prefHeight="150.0" prefWidth="130.0" text="Settings" textAlignment="CENTER">
+                  <JFXButton fx:id="btnSettings" alignment="CENTER" contentDisplay="TOP" onAction="#SettingsButton" prefHeight="150.0" prefWidth="130.0" text="Settings" textAlignment="CENTER">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>

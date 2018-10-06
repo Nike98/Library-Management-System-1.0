@@ -11,13 +11,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
 import java.awt.SystemTray;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
@@ -26,7 +24,7 @@ import com.jfoenix.controls.events.JFXDialogEvent;
 
 public class ThrowAlert {
 
-	public void showInformationMessage(String title, String content) {
+	public static void showInformationMessage(String title, String content) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle(title);
 		alert.setHeaderText(null);
@@ -38,8 +36,8 @@ public class ThrowAlert {
 	
 	public static void showErrorMessage(String title, String content) {
 		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Error");
-		alert.setHeaderText(title);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
 		alert.setContentText(content);
 		alert.showAndWait();
 	}

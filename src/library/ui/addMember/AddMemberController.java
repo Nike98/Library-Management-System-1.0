@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
 
 public class AddMemberController implements Initializable{
@@ -66,10 +67,7 @@ public class AddMemberController implements Initializable{
 		boolean flag = memFname.isEmpty() || memLname.isEmpty() || memCity.isEmpty()
 				|| memAddress.isEmpty() || memMobile.isEmpty() || memEmail.isEmpty();
 		if (flag) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null);
-			alert.setContentText("Please enter in all fields");
-			alert.showAndWait();
+			ThrowAlert.showErrorMessage("Error Occured", "Please enter in all fields");
 			return;
 		}
 		
@@ -88,18 +86,11 @@ public class AddMemberController implements Initializable{
 		System.out.println(query);
 		
 		// Saving the data to the Database
-		if (dbHandler.exeAction(query)) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setHeaderText(null);
-			alert.setContentText("Member Added Successfully");
-			alert.showAndWait();
-		}
+		if (dbHandler.exeAction(query))
+			ThrowAlert.showInformationMessage("Operation Successful", "Member Added Successfully");
 		else {
 			// On Error
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null);
-			alert.setContentText("Failed to Save to Database");
-			alert.showAndWait();
+			ThrowAlert.showErrorMessage("Error Occured", "Failed to Save to Database");
 		}
 	}
 	

@@ -24,6 +24,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
 
 public class MainWindowController implements Initializable {
@@ -100,6 +101,11 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void ListMemberButton (ActionEvent event) {
 		LoadWindow("/library/ui/listMember/listMember.fxml", "Member List");
+	}
+	
+	@FXML
+	private void SettingsButton (ActionEvent event) {
+		LoadWindow("/library/ui/settings/settings.fxml", "Settings");
 	}
 	
 	private void LoadWindow (String location, String title) {
@@ -243,7 +249,7 @@ public class MainWindowController implements Initializable {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Confirm Issue Operarion");
 		alert.setHeaderText(null);
-		alert.setContentText("Are you sure eyou want to Issue the Book " + lblBookName.getText() + "\n to " + lblMemName.getText() + " ?");
+		alert.setContentText("Are you sure you want to Issue the Book " + lblBookName.getText() + "\n to " + lblMemName.getText() + " ?");
 		
 		Optional<ButtonType> get_response = alert.showAndWait();
 		
@@ -254,28 +260,13 @@ public class MainWindowController implements Initializable {
 			
 			String update_qry = "UPDATE BOOK SET available = 'N' where isbn = '" + bookIsbn + "'";
 			
-			if (dbHandler.exeAction(insert_qry) && dbHandler.exeAction(update_qry)) {
-				Alert alertCompleted = new Alert(Alert.AlertType.INFORMATION);
-				alertCompleted.setTitle("Success");
-				alertCompleted.setHeaderText(null);
-				alertCompleted.setContentText("Book Issue Operation Completed Successfully");
-				alertCompleted.showAndWait();
-			}
-			else {
-				Alert alertFailed = new Alert(Alert.AlertType.ERROR);
-				alertFailed.setTitle("Failed");
-				alertFailed.setHeaderText(null);
-				alertFailed.setContentText("Issue Operation Failed");
-				alertFailed.showAndWait();
-			}
+			if (dbHandler.exeAction(insert_qry) && dbHandler.exeAction(update_qry))
+				ThrowAlert.showInformationMessage("Success", "Book Issue Operation Completed Successfully");
+			else
+				ThrowAlert.showErrorMessage("Failed", "Issue Operation Failed");
 		}
-		else {
-			Alert alertCancelled = new Alert(Alert.AlertType.INFORMATION);
-			alertCancelled.setTitle("Cancelled");
-			alertCancelled.setHeaderText(null);
-			alertCancelled.setContentText("Issue Operation Cancelled by User");
-			alertCancelled.showAndWait();
-		}
+		else
+			ThrowAlert.showInformationMessage("Cancelled", "Issue Operation Cancelled by User");
 	}
 
 	/*
@@ -408,27 +399,12 @@ public class MainWindowController implements Initializable {
 			String del_query = "DELETE FROM ISSUE WHERE ISBN = '" + isbn + "'";
 			String update_query = "UPDATE BOOK SET AVAILABLE = 'Y' WHERE ISBN = '" + isbn + "'";
 			
-			if (dbHandler.exeAction(del_query) && dbHandler.exeAction(update_query)) {
-				Alert suc_alert = new Alert(Alert.AlertType.INFORMATION);
-				suc_alert.setTitle("Successful");
-				suc_alert.setHeaderText(null);
-				suc_alert.setContentText("Book has been submitted");
-				suc_alert.showAndWait();
-			}
-			else {
-				Alert fail_alert = new Alert(Alert.AlertType.INFORMATION);
-				fail_alert.setTitle("Failed");
-				fail_alert.setHeaderText(null);
-				fail_alert.setContentText("Submission of book failed");
-				fail_alert.showAndWait();
-			}
+			if (dbHandler.exeAction(del_query) && dbHandler.exeAction(update_query))
+				ThrowAlert.showInformationMessage("Successfull", "Book has been submitted");
+			else 
+				ThrowAlert.showInformationMessage("Failed", "Submission of book failed");
 		}
-		else {
-			Alert alertCancelled = new Alert(Alert.AlertType.INFORMATION);
-			alertCancelled.setTitle("Cancelled");
-			alertCancelled.setHeaderText(null);
-			alertCancelled.setContentText("Submission Operation Cancelled by User");
-			alertCancelled.showAndWait();
-		}
+		else
+			ThrowAlert.showInformationMessage("Cancelled", "Submission Operation Cancelled by User");
 	}
 }

@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.io.Writer;
 import org.apache.commons.codec.digest.DigestUtils;
 import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
+import library.alert.ThrowAlert;
 
 public class Preferences {
 
@@ -99,8 +98,10 @@ public class Preferences {
 			Gson gson = new Gson();
 			writer = new FileWriter(CONFIG_FILE);
 			gson.toJson(preferences, writer);
+			ThrowAlert.showInformationMessage("Success", "Settings Updated Successfully");
 		} catch (IOException e) {
 			e.printStackTrace();
+			ThrowAlert.showErrorMessage(e, "Error Occured", "Can't Save Configuration File");
 		} finally {
 			try {
 				writer.close();

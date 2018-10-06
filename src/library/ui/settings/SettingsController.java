@@ -7,8 +7,13 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 public class SettingsController implements Initializable {
+	
+	@FXML
+	private AnchorPane rootPane;
 	
 	@FXML
     private JFXTextField txfFinePerDay;
@@ -21,8 +26,6 @@ public class SettingsController implements Initializable {
 
     @FXML
     private JFXTextField txfUserName;
-
-    //Preferences preferences;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -47,7 +50,8 @@ public class SettingsController implements Initializable {
 	
 	@FXML
 	public void CancelButton_click(ActionEvent event) {
-		
+		Stage stage = (Stage) rootPane.getScene().getWindow();
+		stage.close();
 	}
 
 	private void initValues() {
