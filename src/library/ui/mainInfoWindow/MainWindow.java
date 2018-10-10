@@ -13,10 +13,10 @@ public class MainWindow extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		try {
 			
-			Parent root = FXMLLoader.load(getClass().getResource("mainWindow.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/library/ui/loginPage/login.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/Resources/Stylesheet/MainStyleSheet.css").toExternalForm());
-			primaryStage.setTitle("Dashboard");
+			primaryStage.setTitle("Login");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
