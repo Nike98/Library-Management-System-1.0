@@ -18,6 +18,7 @@ public class MainWindow extends Application {
 			scene.getStylesheets().add(getClass().getResource("/Resources/Stylesheet/MainStyleSheet.css").toExternalForm());
 			primaryStage.setTitle("Login");
 			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
 			primaryStage.show();
 			
 			// This Decreases the time the Application takes to load

@@ -86,9 +86,11 @@ public class AddMemberController implements Initializable{
 		System.out.println(query);
 		
 		// Saving the data to the Database
-		if (dbHandler.exeAction(query))
+		if (dbHandler.exeAction(query)) {
 			ThrowAlert.showInformationMessage("Operation Successful", "Member Added Successfully");
-		else {
+			Stage stage = (Stage) rootPane.getScene().getWindow();
+			stage.close();
+		} else {
 			// On Error
 			ThrowAlert.showErrorMessage("Error Occured", "Failed to Save to Database");
 		}

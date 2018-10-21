@@ -97,6 +97,8 @@ public class AddBookController implements Initializable {
 		// Saving the data to the Database
 		if (dataHandler.exeAction(query)) {
 			ThrowAlert.showInformationMessage("Successful", "Save Successfull");
+			Stage stage = (Stage) rootPane.getScene().getWindow();
+			stage.close();
 		}
 		else {
 			// On Error

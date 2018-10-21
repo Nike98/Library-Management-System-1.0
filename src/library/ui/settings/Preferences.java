@@ -57,7 +57,10 @@ public class Preferences {
 	}
 	
 	public void setPassword(String Password) {
-		this.Password = DigestUtils.shaHex(Password);
+		if (Password.length() < 16)
+			this.Password = DigestUtils.shaHex(Password);
+		else
+			this.Password = Password;
 	}
 	
 	public static void initConfig() {

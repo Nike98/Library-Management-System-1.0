@@ -3,17 +3,23 @@ package library.ui.listBook;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
 
 public class ListBookController implements Initializable{
@@ -53,6 +59,31 @@ public class ListBookController implements Initializable{
 		LoadData();
 	}
 	
+	@FXML
+	private void DeleteBookOperation(ActionEvent event) {
+		Book selectedForDeletion = MainTable.getSelectionModel().getSelectedItem();
+		if (selectedForDeletion == null) {
+			ThrowAlert.showErrorMessage("Error", "No Book Selected. Please select a proper Book row for Deletion");
+			return;
+		}
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setHeaderText(null);
+		alert.setTitle("Deleting Book");
+		alert.setContentText("Are you sure you want to Delete the Book " + selectedForDeletion.getTitle() + " ?");
+		Optional<ButtonType> response = alert.showAndWait();
+		if (response.get() == ButtonType.OK) {
+			boolean result = DatabaseHandler.getInstance().deleteBook(selectedForDeletion);
+			if (result) {
+				ThrowAlert.showInformationMessage("Operation Successful", "The Book " + selectedForDeletion.getTitle() + 
+						" was Deleted from the Records Successfully");
+				BookList.remove(selectedForDeletion);
+			} else
+				ThrowAlert.showErrorMessage("Error Occured", "The Book " + selectedForDeletion.getTitle() + 
+						" could not be Deleted from the Records");
+		} else
+			ThrowAlert.showErrorMessage("Operation Cancelled", "Deletion Operation Cancelled by the User");
+	}
+
 	private void initializeCol() {
 		colIsbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
 		colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -84,7 +115,7 @@ public class ListBookController implements Initializable{
 			e.printStackTrace();
 		}
 		
-		MainTable.getItems().setAll(BookList);
+		MainTable.setItems(BookList);;
 	}
 	
 	public static class Book{

@@ -4,10 +4,13 @@ package library.database.handler;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+
+import library.ui.listBook.ListBookController.Book;
 
 public final class DatabaseHandler {
 	
@@ -67,6 +70,40 @@ public final class DatabaseHandler {
 			// REMOVE THIS BEFORE DEPLOYMENT
 			System.err.println(e.getMessage() + " -- Database setup problem");
 		}
+	}
+	
+	public boolean deleteBook(Book book) {
+		try {
+			String deleteQuery = "DELETE FROM BOOK WHERE ISBN = ?";
+			PreparedStatement stmt = conn.prepareStatement(deleteQuery);
+			stmt.setString(1, book.getIsbn());
+			int res = stmt.executeUpdate();
+			if (res == 1)
+				return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean isBookIssued(Book book) {
+		try {
+			String checkIssue = "SELECT COUNT(*) FROM ISSUE WHERE ISBN = ?";
+			PreparedStatement stmt = conn.prepareStatement(checkIssue);
+			stmt.setString(1, book.getIsbn());
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				System.out.println(count);
+				if (count > 0)
+					return true;
+				else 
+					return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	private void setupMemberTable() {
