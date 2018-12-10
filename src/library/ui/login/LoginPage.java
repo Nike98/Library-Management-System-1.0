@@ -1,22 +1,23 @@
-package library.ui.settings;
+
+package library.ui.login;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+//import library.database.handler.DatabaseHandlerMain;
 
-public class SettingsController extends Application {
+public class LoginPage extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		
 		try {
 			
-			Parent root = FXMLLoader.load(getClass().getResource("settings.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("loginPage.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/Resources/StyleSheets/LibraryMainStyleSheet.css").toExternalForm());
-			primaryStage.setTitle("Settings");
+			primaryStage.setTitle("Login");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
@@ -26,7 +27,7 @@ public class SettingsController extends Application {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static void main(String[] args) {
 		launch(args);
 	}

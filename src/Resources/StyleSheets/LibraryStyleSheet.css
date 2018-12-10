@@ -1,0 +1,46 @@
+
+* {
+	-fx-primary: #2A2E37;
+	-fx-secondary: #FFFF8D;
+	-fx-primarytext: #B2B2B2;
+	-fx-red: #d50000;
+}
+
+.root {
+	-fx-background-color: -fx-primary;
+}
+
+.glyph-icon{
+	-fx-fill: -fx-primarytext;
+}
+
+.button{
+	-fx-text-fill: -fx-primarytext;
+}
+
+/* For the Login Buttons */
+.login-button{
+	-fx-border-color: -fx-secondary;
+	-fx-border-radius: 20px;
+	-fx-background-radius: 20px;
+}
+
+.login-button:hover{
+	-fx-border-color: -fx-secondary;
+	-fx-background-color: -fx-secondary;
+	-fx-text-fill: -fx-primarytext;
+	-fx-font-weight: bold;
+}
+
+/* To make the Text Field as the same color as the Login Buttons */
+.text-field{
+	-fx-text-fill: -fx-primarytext;
+	-fx-font-size: 13pt;
+	-jfx-focus-color: -fx-secondary;
+}
+
+/* To work when the User enters some wrong credentials */
+.wrong-credentials{
+	-jfx-unfocus-color: -fx-red;
+	-jfx-focus-color: -fx-red;
+}
