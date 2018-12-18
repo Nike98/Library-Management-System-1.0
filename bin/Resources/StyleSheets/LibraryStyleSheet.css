@@ -3,7 +3,7 @@
 	-fx-primary: #2A2E37;
 	-fx-secondary: #FFFF8D;
 	-fx-primarytext: #B2B2B2;
-	-fx-red: #d50000;
+	-fx-red: #FF0000;
 }
 
 .root {
@@ -16,6 +16,7 @@
 
 .button{
 	-fx-text-fill: -fx-primarytext;
+	-fx-background-fill: -fx-primary;
 }
 
 /* For the Login Buttons */
@@ -28,14 +29,13 @@
 .login-button:hover{
 	-fx-border-color: -fx-secondary;
 	-fx-background-color: -fx-secondary;
-	-fx-text-fill: -fx-primarytext;
-	-fx-font-weight: bold;
+	-fx-text-fill: -fx-primary;
 }
 
 /* To make the Text Field as the same color as the Login Buttons */
-.text-field{
+.jfxtext-field{
 	-fx-text-fill: -fx-primarytext;
-	-fx-font-size: 13pt;
+	-fx-font-size: 14pt;
 	-jfx-focus-color: -fx-secondary;
 }
 
@@ -43,4 +43,47 @@
 .wrong-credentials{
 	-jfx-unfocus-color: -fx-red;
 	-jfx-focus-color: -fx-red;
+	-fx-font-size: 14pt;
 }
+
+/*
+ * Dashboard CSS Area
+ */
+/* Tab Pane */
+.tab{
+	-fx-background-color: -fx-primary;
+	-fx-pref-width: 350.0;
+	-fx-pref-height: 60.0;
+}
+
+.tab-header-background{
+	-fx-background-color: -fx-primary;
+}
+
+.menu-bar{
+	-fx-base: -fx-primary;
+	-fx-background-color: fx-primary;
+}
+
+.context-menu{
+	-fx-background-color: derive(-fx-primary, 20%);
+}
+
+/* Hamburger Menu */
+.jfx-hamburger-icon{
+	-fx-spacing: 7;
+}
+
+.jfx-hamburger-icon StackPane {
+	-fx-background-color: -fx-secondary;
+	-fx-background-radius: 5px;
+}
+
+
+
+
+
+
+
+
+

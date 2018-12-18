@@ -6,12 +6,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-
 import org.apache.commons.codec.digest.DigestUtils;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
+import library.alert.ThrowAlert;
 
 public class Preferences {
 
@@ -60,7 +57,10 @@ public class Preferences {
 	}
 	
 	public void setPassword(String Password) {
-		this.Password = DigestUtils.shaHex(Password);
+		if (Password.length() < 16)
+			this.Password = DigestUtils.shaHex(Password);
+		else
+			this.Password = Password;
 	}
 	
 	public static void initConfig() {
@@ -70,6 +70,7 @@ public class Preferences {
 			Preferences preference = new Preferences();
 			Gson gson = new Gson();
 			writer = new FileWriter(CONFIG_FILE);
+			gson.toJson(preference, writer);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally {
@@ -86,15 +87,30 @@ public class Preferences {
 		Preferences preference = new Preferences();
 		try {
 			preference  = gson.fromJson(new FileReader(CONFIG_FILE), Preferences.class);
-		} catch (JsonSyntaxException e) {
-			e.printStackTrace();
-		} catch (JsonIOException e) {
-			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			initConfig();
 			e.printStackTrace();
 		}
 		
 		return preference;
+	}
+	
+	public static void setPreferences(Preferences preferences) {
+		Writer writer = null;
+		try {
+			Gson gson = new Gson();
+			writer = new FileWriter(CONFIG_FILE);
+			gson.toJson(preferences, writer);
+			ThrowAlert.showInformationMessage("Success", "Settings Updated Successfully");
+		} catch (IOException e) {
+			e.printStackTrace();
+			ThrowAlert.showErrorMessage(e, "Error Occured", "Can't Save Configuration File");
+		} finally {
+			try {
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

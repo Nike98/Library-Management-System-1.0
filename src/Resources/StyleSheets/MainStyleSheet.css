@@ -19,3 +19,21 @@
 	
 	-fx-background-color: #d50000;
 }
+
+.table-column {
+ 	-fx-alignment: CENTER;
+}
+
+.issue-button{
+	-fx-background-color: #424242;
+	-fx-text-fill: #FFFFFF;
+}
+
+.issue-button:hover{
+	-fx-background-color: #0288D1;
+	-fx-text-fill: #FFFFFF;
+}
+
+.main-hbox{
+	-fx-background-color: #e7e7e7;
+}

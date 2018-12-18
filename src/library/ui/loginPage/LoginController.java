@@ -1,5 +1,4 @@
-
-package library.ui.login;
+package library.ui.loginPage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -46,9 +45,8 @@ public class LoginController implements Initializable{
 			closeStage();
 			LoadDashboard();
 		} else {
-			ThrowAlert.showErrorMessage("Login Error", "Invalid Credentials");
-			txfUsername.setText("");
-			txfPassword.setText("");
+			txfUsername.getStyleClass().add("wrong-credentials");
+			txfPassword.getStyleClass().add("wrong-credentials");
 		}
 	}
 	
@@ -58,7 +56,7 @@ public class LoginController implements Initializable{
 	
 	private void LoadDashboard() {
 		try {
-			Parent parent = FXMLLoader.load(getClass().getResource("/library/ui/mainInfoWindow/mainWindow.fxml"));
+			Parent parent = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/dashboard.fxml"));
 			Stage stage = new Stage();
 			stage.setTitle("Dashboard");
 			stage.setScene(new Scene(parent));

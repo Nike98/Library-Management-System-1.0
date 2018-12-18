@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.weathericons.*?>
+<?import com.jfoenix.svg.*?>
+<?import de.jensd.fx.glyphs.testapps.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="425.0" prefWidth="130.0" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <JFXButton fx:id="btnaddBook" alignment="CENTER" contentDisplay="TOP" onAction="#AddBookButton" prefHeight="400.0" prefWidth="150.0" text="Add Book" textAlignment="CENTER">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <graphic>
+            <FontAwesomeIcon iconName="BOOK" size="25" styleClass="glyph-icon" />
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="btnaddMember" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#AddMemberButton" prefHeight="400.0" prefWidth="150.0" text="Add Member" textAlignment="CENTER">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+         <graphic>
+            <FontAwesomeIcon iconName="USER_PLUS" size="25" styleClass="glyph-icon" />
+         </graphic>
+      </JFXButton>
+      <JFXButton alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="80.0" onAction="#ListBookButton" prefHeight="400.0" prefWidth="150.0" text="List Books" textAlignment="CENTER">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+         <graphic>
+            <FontAwesomeIcon iconName="TABLE" size="25" styleClass="glyph-icon" />
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="btnlistMember" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#ListMemberButton" prefHeight="400.0" prefWidth="150.0" text="List Members" textAlignment="CENTER">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+         <graphic>
+            <FontAwesomeIcon iconName="USERS" size="25" styleClass="glyph-icon" />
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="btnSettings" alignment="CENTER" contentDisplay="TOP" onAction="#SettingsButton" prefHeight="400.0" prefWidth="150.0" text="Settings" textAlignment="CENTER">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+         <graphic>
+            <FontAwesomeIcon iconName="GEAR" size="25" styleClass="glyph-icon" />
+         </graphic>
+      </JFXButton>
+   </children>
+</VBox>
