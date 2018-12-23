@@ -1,4 +1,4 @@
-package library.ui.dashboard;
+package library.ui.dashboard.mainStage;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,13 +7,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import library.database.handler.DatabaseHandler;
 
-public class Dashboard extends Application {
+public class MainStage extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
 			
-			Parent root = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/dashboard.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/mainStage/mainStage.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/Resources/StyleSheets/LibraryStyleSheet.css").toExternalForm());
 			primaryStage.setTitle("Dashboard");

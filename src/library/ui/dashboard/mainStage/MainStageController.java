@@ -1,4 +1,4 @@
-package library.ui.dashboard;
+package library.ui.dashboard.mainStage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -7,27 +7,30 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import com.jfoenix.controls.JFXDrawer;
+import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.effects.JFXDepthManager;
+import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
 
-public class DashboardController implements Initializable {
+public class MainStageController implements Initializable {
 	
 	@FXML
 	private HBox hboxBook;
@@ -65,6 +68,12 @@ public class DashboardController implements Initializable {
 	@FXML
 	private ListView<String> dataList;
 	
+	@FXML
+	private JFXHamburger hamburger;
+	
+	@FXML
+	private JFXDrawer tool_drawer;
+	
 	DatabaseHandler dbHandler;
 	boolean isReadytoSubmit = true;
 
@@ -80,46 +89,41 @@ public class DashboardController implements Initializable {
 		JFXDepthManager.setDepth(hboxMember, 1);
 		
 		dbHandler = DatabaseHandler.getInstance();
+		
+		// Initializes the Drawer using the Hamburger
+		initDrawer();
 	}
 	
-	// Associating the particular button clicks to their respective modules 
-	@FXML
-	private void AddBookButton (ActionEvent event) {
-		LoadWindow("/library/ui/addbook/addbook.fxml", "Add New Book");
-	}
-	
-	@FXML
-	private void ListBookButton (ActionEvent event) {
-		LoadWindow("/library/ui/listBook/listBook.fxml", "Book List");
-	}
-	
-	@FXML
-	private void AddMemberButton (ActionEvent event) {
-		LoadWindow("/library/ui/addMember/addMember.fxml", "Add New Member");
-	}
-	
-	@FXML
-	private void ListMemberButton (ActionEvent event) {
-		LoadWindow("/library/ui/listMember/listMember.fxml", "Member List");
-	}
-	
-	@FXML
-	private void SettingsButton (ActionEvent event) {
-		LoadWindow("/library/ui/settings/settings.fxml", "Settings");
-	}
-	
-	private void LoadWindow (String location, String title) {
-		// This is used by the above functions to call their respective modules
+	// Method to load a Toolbox on the click of the Hamburger icon
+	private void initDrawer() {
 		try {
-			Parent parent = FXMLLoader.load(getClass().getResource(location));
-			Stage stage = new Stage();
-			stage.setTitle(title);
-			stage.setScene(new Scene(parent));
-			stage.show();
+			VBox toolbar = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/toolbar/toolbar.fxml"));
+			tool_drawer.setSidePane(toolbar);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		HamburgerSlideCloseTransition task = new HamburgerSlideCloseTransition(hamburger);
+		task.setRate(-1);
+		
+		hamburger.addEventFilter(MouseEvent.MOUSE_CLICKED, (Event event) -> {
+			task.setRate(task.getRate() * -1);
+			task.play();
+			
+			if (tool_drawer.isClosed()) {
+				tool_drawer.open();
+			} else {
+				tool_drawer.close();
+			}			
+		});
 	}
+	
+	/*
+	 * 
+	 * Issue tab Operations and Events
+	 * start from further here.
+	 * 
+	 */
 	
 	@FXML
 	private void LoadBookInfo(ActionEvent event) {
@@ -272,7 +276,7 @@ public class DashboardController implements Initializable {
 	/*
 	 * 
 	 * Renew / Submission tab Operations and 
-	 * Events Start from further on.
+	 * Events Start from further here.
 	 * 
 	 */
 	

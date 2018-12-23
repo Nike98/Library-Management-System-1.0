@@ -56,7 +56,7 @@ public class LoginController implements Initializable{
 	
 	private void LoadDashboard() {
 		try {
-			Parent parent = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/dashboard.fxml"));
+			Parent parent = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/mainStage/mainstage.fxml"));
 			Stage stage = new Stage();
 			stage.setTitle("Dashboard");
 			stage.setScene(new Scene(parent));

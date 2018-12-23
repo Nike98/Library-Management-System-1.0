@@ -12,9 +12,9 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="425.0" prefWidth="130.0" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="425.0" prefWidth="130.0" stylesheets="@../../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.dashboard.toolbar.ToolBarController">
    <children>
-      <JFXButton fx:id="btnaddBook" alignment="CENTER" contentDisplay="TOP" onAction="#AddBookButton" prefHeight="400.0" prefWidth="150.0" text="Add Book" textAlignment="CENTER">
+      <JFXButton fx:id="btnAddBook" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#AddBookButton" prefHeight="400.0" prefWidth="150.0" styleClass="toolbar-button" text="Add Book" textAlignment="CENTER">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font>
@@ -25,7 +25,7 @@
             <FontAwesomeIcon iconName="BOOK" size="25" styleClass="glyph-icon" />
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="btnaddMember" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#AddMemberButton" prefHeight="400.0" prefWidth="150.0" text="Add Member" textAlignment="CENTER">
+      <JFXButton fx:id="btnAddMember" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddMemberButton" prefHeight="400.0" prefWidth="150.0" styleClass="toolbar-button" text="Add Member" textAlignment="CENTER">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font>
@@ -33,7 +33,7 @@
             <FontAwesomeIcon iconName="USER_PLUS" size="25" styleClass="glyph-icon" />
          </graphic>
       </JFXButton>
-      <JFXButton alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="80.0" onAction="#ListBookButton" prefHeight="400.0" prefWidth="150.0" text="List Books" textAlignment="CENTER">
+      <JFXButton fx:id="btnListBook" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="80.0" mnemonicParsing="false" onAction="#ListBookButton" prefHeight="400.0" prefWidth="150.0" styleClass="toolbar-button" text="List Books" textAlignment="CENTER">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font>
@@ -41,7 +41,7 @@
             <FontAwesomeIcon iconName="TABLE" size="25" styleClass="glyph-icon" />
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="btnlistMember" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#ListMemberButton" prefHeight="400.0" prefWidth="150.0" text="List Members" textAlignment="CENTER">
+      <JFXButton fx:id="btnListMember" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#ListMemberButton" prefHeight="400.0" prefWidth="150.0" styleClass="toolbar-button" text="List Members" textAlignment="CENTER">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font>
@@ -49,7 +49,7 @@
             <FontAwesomeIcon iconName="USERS" size="25" styleClass="glyph-icon" />
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="btnSettings" alignment="CENTER" contentDisplay="TOP" onAction="#SettingsButton" prefHeight="400.0" prefWidth="150.0" text="Settings" textAlignment="CENTER">
+      <JFXButton fx:id="btnSettings" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#SettingsButton" prefHeight="400.0" prefWidth="150.0" styleClass="toolbar-button" text="Settings" textAlignment="CENTER">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font>
