@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="330.0" prefWidth="320.0" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.loginPage.LoginController">
+<AnchorPane prefHeight="350.0" prefWidth="340.0" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.loginPage.LoginController">
    <children>
-      <FontAwesomeIcon fill="#2b2b2b" iconName="LOCK" layoutX="136.0" layoutY="79.0" size="5em" styleClass="glyph-icon" textAlignment="CENTER" AnchorPane.leftAnchor="136.0" AnchorPane.rightAnchor="135.42856979370117" />
+      <FontAwesomeIcon fill="#2b2b2b" iconName="LOCK" layoutX="161.0" layoutY="80.0" size="5em" styleClass="glyph-icon" textAlignment="CENTER" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="30.0" />
       <JFXTextField fx:id="txfUsername" labelFloat="true" layoutX="88.0" layoutY="118.0" promptText="Username" styleClass="jfxtext-field" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="40.0">
          <font>
             <Font name="Arial" size="14.0" />
@@ -24,12 +24,12 @@
          </font>
       </JFXPasswordField>
       <FontAwesomeIcon iconName="KEY" layoutX="20.0" layoutY="217.0" size="2em" styleClass="glyph-icon" />
-      <JFXButton layoutX="35.0" layoutY="268.0" onAction="#LoginButton" prefHeight="35.0" prefWidth="80.0" styleClass="login-button" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" text="Login" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="40.0">
+      <JFXButton layoutX="35.0" layoutY="268.0" onAction="#LoginButton" prefHeight="35.0" prefWidth="90.0" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" text="Login" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="50.0">
          <font>
             <Font name="Arial" size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton layoutX="190.0" layoutY="268.0" onAction="#CancelButton" prefHeight="35.0" prefWidth="80.0" styleClass="login-button" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" text="Exit" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="40.0">
+      <JFXButton layoutX="190.0" layoutY="268.0" onAction="#CancelButton" prefHeight="35.0" prefWidth="90.0" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" text="Exit" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="50.0">
          <font>
             <Font name="Arial" size="14.0" />
          </font>

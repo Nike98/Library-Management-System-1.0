@@ -2,11 +2,14 @@ package library.ui.dashboard.mainStage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXTextField;
@@ -20,7 +23,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
@@ -63,7 +65,10 @@ public class MainStageController implements Initializable {
     private JFXTextField Ren_txfIsbn;
 	
 	@FXML
-    private Button Ren_btnSubmitBook;
+	private JFXButton Ren_btnRenewBook;
+	
+	@FXML
+    private JFXButton Ren_btnSubmitBook;
 	
 	@FXML
 	private ListView<String> dataList;
@@ -73,6 +78,39 @@ public class MainStageController implements Initializable {
 	
 	@FXML
 	private JFXDrawer tool_drawer;
+	
+	@FXML
+	private HBox Ren_DataContainer;
+	
+	@FXML
+	private Text BoxMember_Name;
+	
+	@FXML
+	private Text BoxMember_Email;
+	
+	@FXML
+	private Text BoxMember_Contact;
+	
+	@FXML
+	private Text BoxBook_Isbn;
+	
+	@FXML
+	private Text BoxBook_Name;
+	
+	@FXML
+	private Text BoxBook_Author;
+	
+	@FXML
+	private Text BoxBook_Publisher;
+	
+	@FXML
+	private Text BoxIssue_Date;
+	
+	@FXML
+	private Text BoxIssue_NoOfDays;
+	
+	@FXML
+	private Text BoxIssue_Fine;
 	
 	DatabaseHandler dbHandler;
 	boolean isReadytoSubmit = true;
@@ -93,6 +131,7 @@ public class MainStageController implements Initializable {
 		// Initializes the Drawer using the Hamburger
 		initDrawer();
 	}
+	
 	
 	// Method to load a Toolbox on the click of the Hamburger icon
 	private void initDrawer() {
@@ -118,12 +157,14 @@ public class MainStageController implements Initializable {
 		});
 	}
 	
+	
 	/*
 	 * 
 	 * Issue tab Operations and Events
 	 * start from further here.
 	 * 
 	 */
+	
 	
 	@FXML
 	private void LoadBookInfo(ActionEvent event) {
@@ -179,6 +220,7 @@ public class MainStageController implements Initializable {
 		}
 	}
 	
+	
 	@FXML
 	private void LoadMemberInfo(ActionEvent event) {
 		/* This method is associated with the Member ID TextField.
@@ -226,6 +268,7 @@ public class MainStageController implements Initializable {
 			}
 		}
 	}
+	
 
 	@FXML
 	private void IssueOperation(ActionEvent event) {
@@ -272,6 +315,7 @@ public class MainStageController implements Initializable {
 		else
 			ThrowAlert.showInformationMessage("Cancelled", "Issue Operation Cancelled by User");
 	}
+	
 
 	/*
 	 * 
@@ -279,6 +323,7 @@ public class MainStageController implements Initializable {
 	 * Events Start from further here.
 	 * 
 	 */
+	
 	
 	@FXML
 	private void Ren_LoadBookInfo(ActionEvent event) {
@@ -311,50 +356,105 @@ public class MainStageController implements Initializable {
 		ObservableList<String> data = FXCollections.observableArrayList();
 		isReadytoSubmit = false;
 		
-		String isbn = Ren_txfIsbn.getText();
-		String query = "SELECT * FROM ISSUE WHERE ISBN = '" + isbn + "'";
-		ResultSet rs = dbHandler.exeQuery(query);
-		
 		try {
-			while(rs.next()) {
-				String ren_bookIsbn = rs.getString("isbn");
-				String ren_memberId = rs.getString("member_id");
-				Timestamp ren_issueTime = rs.getTimestamp("issue_time");
-				int ren_count = rs.getInt("day_count");
-				
-				data.add("Issue Date and Time : " + ren_issueTime.toGMTString());
-				data.add("Day Count : " + ren_count);
-				
-				data.add("Book Information :-");
-				query = "SELECT * FROM BOOK WHERE ISBN = '" + ren_bookIsbn + "'";
-				ResultSet rs_book = dbHandler.exeQuery(query);
-				while(rs_book.next()) {
-					data.add("\t ISBN : " + rs_book.getString("isbn"));
-					data.add("\t Title : " + rs_book.getString("title"));
-					data.add("\t Author : " + rs_book.getString("author"));
-					data.add("\t Edition : " + rs_book.getString("edition_number"));
-					data.add("\t Publisher : " + rs_book.getString("publisher"));
-					data.add("\t Price : " + rs_book.getInt("price"));
-				}
-				
-				data.add("Member Information :-");
-				query = "SELECT * FROM MEMBER WHERE ID = '" + ren_memberId + "'";
-				ResultSet rs_member = dbHandler.exeQuery(query);
-				while(rs_member.next()) {
-					data.add("\t ID : " + rs_member.getString("id"));
-					data.add("\t Name : " + rs_member.getString("fname") + " " + rs_member.getString("lname"));
-					data.add("\t Mobile Number : " + rs_member.getString("mobile_no"));
-					data.add("\t Email : " + rs_member.getString("email_id"));
-				}
-				
+			String isbn = Ren_txfIsbn.getText();
+			String query = "SELECT "
+					+ "ISSUE.isbn, ISSUE.member_id, ISSUE.issue_time, ISSUE.day_count, \n"
+					+ "MEMBER.fname, MEMBER.lname, MEMBER.mobile_no, MEMBER.email_id, \n"
+					+ "BOOK.title, BOOK.author, BOOK.publisher, BOOK.available \n"
+					+ "FROM ISSUE \n"
+					+ "LEFT JOIN MEMBER \n"
+					+ "ON ISSUE.member_id = MEMBER.id \n"
+					+ "LEFT JOIN BOOK \n"
+					+ "ON ISSUE.isbn = BOOK.isbn \n"
+					+ "WHERE ISSUE.isbn = '" + isbn + "'";
+			
+			ResultSet rs = dbHandler.exeQuery(query);
+			if (rs.next()) {
+				// Member Info
+					BoxMember_Name.setText(rs.getString("fname"));
+					BoxMember_Email.setText(rs.getString("email_id"));
+					BoxMember_Contact.setText(rs.getString("mobile_no"));
+				// Member End
+					
+				// Book Info
+					BoxBook_Isbn.setText(rs.getString("isbn"));
+					BoxBook_Name.setText(rs.getString("title"));
+					BoxBook_Author.setText(rs.getString("author"));
+					BoxBook_Publisher.setText(rs.getString("publisher"));
+				// Book End
+					
+				// Issue Info
+						// Getting and Setting the date and time into proper format
+							Timestamp ren_issueTime = rs.getTimestamp("issue_time");
+							Date issueDate = new Date(ren_issueTime.getTime());
+						//End
+					BoxIssue_Date.setText(issueDate.toString());
+					// Getting the difference of the current date and the Issued Date to Calculate the Fine (if any)
+					Long timeElapsed = System.currentTimeMillis() - ren_issueTime.getTime();
+					Long daysElapsed = TimeUnit.DAYS.convert(timeElapsed, TimeUnit.MILLISECONDS);
+					//
+					BoxIssue_NoOfDays.setText(daysElapsed.toString());
+					BoxIssue_Fine.setText("Not Supported Yet");
+				//Issue End
+					
 				isReadytoSubmit = true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		dataList.getItems().setAll(data);
+//		String query = "SELECT * FROM ISSUE WHERE ISBN = '" + isbn + "'";
+//		ResultSet rs = dbHandler.exeQuery(query);
+//		
+//		try {
+//			while(rs.next()) {
+//				String ren_bookIsbn = rs.getString("isbn");
+//				String ren_memberId = rs.getString("member_id");
+//				Timestamp ren_issueTime = rs.getTimestamp("issue_time");
+//				int ren_count = rs.getInt("day_count");
+//				
+//				data.add("Issue Date and Time : " + ren_issueTime.toGMTString());
+//				data.add("Day Count : " + ren_count);
+//				
+//				data.add("Book Information :-");
+//				query = "SELECT * FROM BOOK WHERE ISBN = '" + ren_bookIsbn + "'";
+//				ResultSet rs_book = dbHandler.exeQuery(query);
+//				while(rs_book.next()) {
+//					data.add("\t ISBN : " + rs_book.getString("isbn"));
+//					data.add("\t Title : " + rs_book.getString("title"));
+//					data.add("\t Author : " + rs_book.getString("author"));
+//					data.add("\t Edition : " + rs_book.getString("edition_number"));
+//					data.add("\t Publisher : " + rs_book.getString("publisher"));
+//					data.add("\t Price : " + rs_book.getInt("price"));
+//				}
+//				
+//				data.add("Member Information :-");
+//				query = "SELECT * FROM MEMBER WHERE ID = '" + ren_memberId + "'";
+//				ResultSet rs_member = dbHandler.exeQuery(query);
+//				while(rs_member.next()) {
+//					data.add("\t ID : " + rs_member.getString("id"));
+//					data.add("\t Name : " + rs_member.getString("fname") + " " + rs_member.getString("lname"));
+//					data.add("\t Mobile Number : " + rs_member.getString("mobile_no"));
+//					data.add("\t Email : " + rs_member.getString("email_id"));
+//				}
+//				
+//				isReadytoSubmit = true;
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		dataList.getItems().setAll(data);
+		
+		
 	}
+	
+	@FXML
+	private void Ren_RenewBookButton(ActionEvent event) {
+		
+	}
+	
 	
 	@FXML
 	private void Ren_SubmitBookButton(ActionEvent event) {

@@ -16,6 +16,7 @@ public final class DatabaseHandler {
 	private static DatabaseHandler handler = null;
 	
 	// Declaring the major Variables to be used throughout the class
+	private static final String DB_URL = "jdbc:derby:libraryDB;create=true";
 	private static Connection conn = null;
 	private static Statement stmt = null;
 	
@@ -25,6 +26,35 @@ public final class DatabaseHandler {
 		setupBookTable();
 		setupMemberTable();
 		setupIssueTable();
+	}
+	
+	// Method to make the Connection to the Oracle Database
+	private static void CreateConnection() {
+		
+        try {
+        	Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
+			conn = DriverManager.getConnection(DB_URL);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Cannot load Derby Database", "Database Error", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+			System.exit(0);
+		}
+		
+		/*try {
+
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","lib_demo","lib");
+			
+			return conn;
+			
+		} catch ( Exception e ) {
+			
+			JOptionPane.showMessageDialog(null, "Cannot load Oracle Database", "Database Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
+		
+		return null;*/
 	}
 	
 	public static DatabaseHandler getInstance() {
@@ -54,14 +84,79 @@ public final class DatabaseHandler {
 			if (tables.next())
 				System.out.println("Table " + Table_Name + " Exists.");
 			else {
+				stmt.execute("CREATE TABLE " + Table_Name + " ("
+						+ "isbn varchar(17),\n"
+						+ "title varchar(200) not null,\n"
+						+ "author varchar(60) not null,\n"
+						+ "edition_number varchar(60) not null,\n"
+						+ "publisher varchar(200) not null,\n"
+						+ "price integer not null,\n"
+						+ "available boolean default true,\n"
+						+ "constraint book_isbn_pk primary key (isbn)"
+						+ ")");
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// REMOVE THIS BEFORE DEPLOYMENT
+			System.err.println(e.getMessage() + " -- Database setup problem");
+		}
+	}
+	
+	private void setupMemberTable() {
+		String Table_Name = "Member";
+		
+		try {
+			stmt = conn.createStatement();
+			DatabaseMetaData dbmetadata = conn.getMetaData();
+			ResultSet tables = dbmetadata.getTables(null, null, Table_Name.toUpperCase(), null);
+			
+			if (tables.next())
+				System.out.println("Table " + Table_Name + " Exists.");
+			else {
 				stmt.execute("CREATE TABLE " + Table_Name + "("
-						+ "isbn varchar2(17) constraints book_isbn_pk primary key,\n"
-						+ "title varchar2(50) not null,\n"
-						+ "author varchar2(40) not null,\n"
-						+ "edition_number varchar2(30) not null,\n"
-						+ "publisher varchar2(40) not null,\n"
-						+ "price number(5,0) not null,\n"
-						+ "available char(1) default 'Y' check (available in ('Y','N'))"
+						+ "id integer generated always as identity (start with 100, increment by 1),\n"
+						+ "name varchar(200) not null,\n"
+						+ "city varchar(100) not null,\n"
+						+ "address varchar(200) not null,\n"
+						+ "mobile_no integer not null unique,\n"
+						+ "email_id varchar(100) not null unique,\n"
+						+ "constraint member_id_pk primary key (id)"
+						+ ")");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println(e.getMessage() + " -- Database setup problem");
+		}
+	}
+	
+	private void setupIssueTable() {
+		
+	  /*
+	   * These methods are written to check whether the Specified table 
+	   * exists of or not. 
+	   * 
+	   * If it exists then the further code execution continues. 
+	   * If it doesn't exist then it creates the table in the below 
+	   * specified manner.
+	   */
+		 
+		String Table_Name = "Issue";
+		
+		try {
+			stmt = conn.createStatement();
+			DatabaseMetaData dbmetadata = conn.getMetaData();
+			ResultSet tables = dbmetadata.getTables(null, null, Table_Name.toUpperCase(), null);
+			
+			if (tables.next())
+				System.out.println("Table " + Table_Name + " Exists.");
+			else {
+				stmt.execute("CREATE TABLE " + Table_Name + "("
+						+ "isbn varchar(17),\n"
+						+ "member_id integer,\n"
+						+ "issue_time timestamp default current_timestamp,\n"
+						+ "day_count integer default 0,\n"
+						+ "constraint issue_isbn_fk foreign key (isbn) references book(isbn),\n"
+						+ "constraint issue_member_id foreign key (member_id) references member(id)"
 						+ ")");
 				}
 		} catch (SQLException e) {
@@ -105,87 +200,8 @@ public final class DatabaseHandler {
 		return false;
 	}
 	
-	private void setupMemberTable() {
-		String Table_Name = "Member";
-		
-		try {
-			stmt = conn.createStatement();
-			DatabaseMetaData dbmetadata = conn.getMetaData();
-			ResultSet tables = dbmetadata.getTables(null, null, Table_Name.toUpperCase(), null);
-			
-			if (tables.next())
-				System.out.println("Table " + Table_Name + " Exists.");
-			else {
-				stmt.execute("CREATE TABLE " + Table_Name + "("
-						+ "id number(6,0) constraints member_id_pk primary key,\n"
-						+ "fname varchar2(15) not null,\n"
-						+ "lname varchar2(15) not null,\n"
-						+ "city varchar2(30) not null,\n"
-						+ "address varchar2(100) not null,\n"
-						+ "mobile_no number(10,0) constraints member_mobile_no_unique not null unique,\n"
-						+ "email_id varchar2(70) constraints member_email_id_unique not null unique"
-						+ ")");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			// REMOVE THIS BEFORE DEPLOYMENT
-			System.err.println(e.getMessage() + " -- Database setup problem");
-		}
-	}
 	
-	private void setupIssueTable() {
-		/*
-		 * These methods are written to check whether the Specified table 
-		 * exists of or not.
-		 * 
-		 * If it exists then the further code execution continues.
-		 * 
-		 * If it doesn't exist then it creates the table in the below 
-		 * specified manner.
-		 */
-		String Table_Name = "Issue";
-		
-		try {
-			stmt = conn.createStatement();
-			DatabaseMetaData dbmetadata = conn.getMetaData();
-			ResultSet tables = dbmetadata.getTables(null, null, Table_Name.toUpperCase(), null);
-			
-			if (tables.next())
-				System.out.println("Table " + Table_Name + " Exists.");
-			else {
-				stmt.execute("CREATE TABLE " + Table_Name + "("
-						+ "isbn varchar2(17) constraints issue_isbn_fk references book(isbn),\n"
-						+ "member_id number(6,0) constraints issue_member_id_fk references member(id),"
-						+ "issue_time date default current_timestamp,"
-						+ "day_count int default 0"
-						+ ")");
-				}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			// REMOVE THIS BEFORE DEPLOYMENT
-			System.err.println(e.getMessage() + " -- Database setup problem");
-		}
-	}
 
-	// Method to make the Connection to the Oracle Database
-	public static Connection CreateConnection() {
-		
-		try {
-
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","lib_demo","lib");
-			
-			return conn;
-			
-		} catch ( Exception e ) {
-			
-			JOptionPane.showMessageDialog(null, "Cannot load Oracle Database", "Database Error", JOptionPane.ERROR_MESSAGE);
-			System.exit(0);
-		}
-		
-		return null;
-	}
 	
 	// Method to execute a particular query passed as a String to this method
 	public ResultSet exeQuery(String query) {

@@ -17,16 +17,13 @@
 .button{
 	-fx-text-fill: -fx-primarytext;
 	-fx-background-fill: -fx-primary;
-}
-
-/* For the Login Buttons */
-.login-button{
 	-fx-border-color: -fx-secondary;
 	-fx-border-radius: 20px;
 	-fx-background-radius: 20px;
+	-fx-font-size: 13pt;
+	-fx-unfocus-color: -fx-primarytext;
 }
-
-.login-button:hover{
+.button:hover{
 	-fx-border-color: -fx-secondary;
 	-fx-background-color: -fx-secondary;
 	-fx-text-fill: -fx-primary;
@@ -37,6 +34,7 @@
 	-fx-text-fill: -fx-primarytext;
 	-fx-font-size: 14pt;
 	-jfx-focus-color: -fx-secondary;
+	-jfx-unfocus-color: -fx-primarytext;
 }
 
 /* To work when the User enters some wrong credentials */
@@ -82,20 +80,32 @@
 
 /* Toolbar Buttons */
 .toolbar-button{
-	-fx-background-color: derive(-fx-primary, 20%);
+	-fx-border-color: transparent;
+    -fx-background-color: derive(-fx-primary, 10%);
+    -fx-background-radius: 0px;
+    -fx-border-radius: 0px;
 }
 
-.toolbar-button:hover 
-{
+.toolbar-button:hover {
 	-fx-background-color: -fx-secondary;
 	-fx-text-fill: -fx-primary;
 }
 
-.toolbar-button:hover .glyph-icon 
-{
+.toolbar-button:hover .glyph-icon {
 	-fx-fill: -fx-primary;
 }
 
+/* Label Texts */
+.main-text {
+	-fx-fill: -fx-secondary;
+	-fx-font-size: 14pt;
+	-fx-text-alignment: center;
+}
+
+/* Information Boxes in the Renew/Submission tab on Dashboard */
+.info-pane {
+	-fx-background-color: derive(-fx-primary, 10%);
+}
 
 
 
