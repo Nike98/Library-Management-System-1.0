@@ -29,10 +29,7 @@ public class ListMemberController implements Initializable {
 	private TableColumn<Member, String> colId;
 	                    
 	@FXML               
-	private TableColumn<Member, String> colFname;
-	                    
-	@FXML               
-	private TableColumn<Member, String> colLname;
+	private TableColumn<Member, String> colName;
 	
 	@FXML               
 	private TableColumn<Member, String> colCity;
@@ -54,8 +51,7 @@ public class ListMemberController implements Initializable {
 	
 	private void initializeCol() {
 		colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		colFname.setCellValueFactory(new PropertyValueFactory<>("fname"));
-		colLname.setCellValueFactory(new PropertyValueFactory<>("lname"));
+		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
 		colCity.setCellValueFactory(new PropertyValueFactory<>("city"));
 		colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
 		colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -70,14 +66,13 @@ public class ListMemberController implements Initializable {
 		try {
 			while (res.next()) {
 				String id = res.getString("id");
-				String fname = res.getString("fname");
-				String lname = res.getString("lname");
+				String name = res.getString("name");
 				String city = res.getString("city");
 				String address = res.getString("address");
 				String email = res.getString("email_id");
 				String mobile = res.getString("mobile_no");
 				
-				MemberList.add(new Member(id, fname, lname, city, address, email, mobile));
+				MemberList.add(new Member(id, name, city, address, email, mobile));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -88,18 +83,16 @@ public class ListMemberController implements Initializable {
 
 	public static class Member {
 		private final SimpleStringProperty id;
-		private final SimpleStringProperty fname;
-		private final SimpleStringProperty lname;
+		private final SimpleStringProperty name;
 		private final SimpleStringProperty city;
 		private final SimpleStringProperty address;
 		private final SimpleStringProperty email;
 		private final SimpleStringProperty mobile;
 		
-		Member ( String id, String fname, String lname, String city, 
+		Member ( String id, String name, String city, 
 				String address, String email, String mobile ){
 			this.id = new SimpleStringProperty(id);
-			this.fname = new SimpleStringProperty(fname);
-			this.lname = new SimpleStringProperty(lname);
+			this.name = new SimpleStringProperty(name);
 			this.city = new SimpleStringProperty(city);
 			this.address = new SimpleStringProperty(address);
 			this.email = new SimpleStringProperty(email);
@@ -110,12 +103,8 @@ public class ListMemberController implements Initializable {
 			return id.get();
 		}
 		
-		public String getFirstName() {
-			return fname.get();
-		}
-
-		public String getLastName() {
-			return lname.get();
+		public String getName() {
+			return name.get();
 		}
 
 		public String getCity() {

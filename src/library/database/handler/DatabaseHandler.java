@@ -118,7 +118,7 @@ public final class DatabaseHandler {
 						+ "name varchar(200) not null,\n"
 						+ "city varchar(100) not null,\n"
 						+ "address varchar(200) not null,\n"
-						+ "mobile_no integer not null unique,\n"
+						+ "mobile_no bigint not null unique,\n"
 						+ "email_id varchar(100) not null unique,\n"
 						+ "constraint member_id_pk primary key (id)"
 						+ ")");
@@ -199,9 +199,6 @@ public final class DatabaseHandler {
 		}
 		return false;
 	}
-	
-	
-
 	
 	// Method to execute a particular query passed as a String to this method
 	public ResultSet exeQuery(String query) {

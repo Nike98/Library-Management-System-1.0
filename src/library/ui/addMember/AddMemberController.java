@@ -19,10 +19,7 @@ public class AddMemberController implements Initializable{
 	private AnchorPane rootPane;
 
 	@FXML
-	private JFXTextField txfFirstName;
-	
-	@FXML
-	private JFXTextField txfLastName;
+	private JFXTextField txfName;
 	
 	@FXML
 	private JFXTextField txfCity;
@@ -51,8 +48,7 @@ public class AddMemberController implements Initializable{
 
 	@FXML
 	private void AddButtonEvent(ActionEvent event) {
-		String memFname = txfFirstName.getText();
-		String memLname = txfLastName.getText();
+		String memName =txfName.getText();
 		String memCity = txfCity.getText();
 		String memAddress = txfAddress.getText();
 		String memMobile = txfMobileNo.getText();
@@ -63,7 +59,7 @@ public class AddMemberController implements Initializable{
 		 * In case if any field id empty,
 		 * an alert box will pop up on the screen.
 		 */
-		boolean flag = memFname.isEmpty() || memLname.isEmpty() || memCity.isEmpty()
+		boolean flag = memName.isEmpty() || memCity.isEmpty()
 				|| memAddress.isEmpty() || memMobile.isEmpty() || memEmail.isEmpty();
 		if (flag) {
 			ThrowAlert.showErrorMessage("Error Occured", "Please enter in all fields");
@@ -71,10 +67,10 @@ public class AddMemberController implements Initializable{
 		}
 		
 		// Main SQL Query to Add the Book into the Database
-		String query = " INSERT INTO MEMBER VALUES (" +
-					"member_sequence.nextval," +
-					"'" + memFname + "'," +
-					"'" + memLname + "'," + 
+		String query = " INSERT INTO MEMBER " +
+				 	"(name, city, address, mobile_no, email_id)" +
+					" VALUES (" +
+					"'" + memName + "'," + 
 					"'" + memCity + "'," + 
 					"'" + memAddress + "'," + 
 					"" + memMobile + "," + 

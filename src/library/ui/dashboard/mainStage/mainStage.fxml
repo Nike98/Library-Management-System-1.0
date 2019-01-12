@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.dashboard.mainStage.MainStageController">
+<StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.dashboard.mainStage.MainStageController">
    <children>
-      <AnchorPane>
+      <AnchorPane fx:id="rootAnchorPane">
          <children>
             <BorderPane prefHeight="550.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <top>
@@ -173,7 +173,7 @@
                                              <bottom>
                                                 <HBox alignment="CENTER" prefHeight="80.0" prefWidth="520.0" BorderPane.alignment="CENTER">
                                                    <children>
-                                                      <JFXButton fx:id="Ren_btnRenewBook" mnemonicParsing="false" onAction="#Ren_RenewBookButton" prefWidth="150.0" text="Renew" textAlignment="CENTER">
+                                                      <JFXButton fx:id="Ren_btnRenewBook" disable="true" mnemonicParsing="false" onAction="#Ren_RenewBookButton" prefWidth="150.0" text="Renew" textAlignment="CENTER">
                                                          <font>
                                                             <Font name="Arial Bold" size="14.0" />
                                                          </font>
@@ -181,7 +181,7 @@
                                                             <Insets right="60.0" />
                                                          </HBox.margin>
                                                       </JFXButton>
-                                                      <JFXButton fx:id="Ren_btnSubmitBook1" mnemonicParsing="false" onAction="#Ren_SubmitBookButton" prefWidth="150.0" text="Submit Book" textAlignment="CENTER">
+                                                      <JFXButton fx:id="Ren_btnSubmitBook" disable="true" mnemonicParsing="false" onAction="#Ren_SubmitBookButton" prefWidth="150.0" text="Submit Book" textAlignment="CENTER">
                                                          <font>
                                                             <Font name="Arial Bold" size="14.0" />
                                                          </font>
@@ -203,7 +203,7 @@
                                                 </JFXTextField>
                                              </top>
                                              <center>
-                                                <HBox fx:id="Ren_DataContainer" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                                <HBox fx:id="RenSub_DataContainer" alignment="CENTER" opacity="0.0" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                                    <BorderPane.margin>
                                                       <Insets left="30.0" right="30.0" top="20.0" />
                                                    </BorderPane.margin>

@@ -21,7 +21,6 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.events.JFXDialogEvent;
 
-
 public class ThrowAlert {
 
 	public static void showInformationMessage(String title, String content) {
@@ -101,30 +100,30 @@ public class ThrowAlert {
 		alert.getDialogPane().setExpandableContent(expContent);
 		alert.showAndWait();
 	}
-
-	public static void showMaterialDialog(StackPane root, Node nodeToBeBlurred, List<JFXButton> controls, String header, String body) {
-		BoxBlur blur = new BoxBlur(3, 3, 3);
-		if (controls.isEmpty())
-			controls.add(new JFXButton("Okay"));
-		
+	
+	public static void showDialog(StackPane root, Node blurNode, List<JFXButton> btnControls, String header, String body) {
 		JFXDialogLayout dialogLayout = new JFXDialogLayout();
 		JFXDialog dialog = new JFXDialog(root, dialogLayout, JFXDialog.DialogTransition.TOP);
+		BoxBlur blurEffect = new BoxBlur(4, 4, 4);
+		blurNode.setDisable(true);
 		
-		controls.forEach(controlButton ->{
-			controlButton.getStyleClass().add("dialog-button");
-			controlButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent mouseEvent) -> {
+		btnControls.forEach(button -> {
+			button.getStyleClass().add("dialog-button");
+			button.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent mouseEvent) -> {
 				dialog.close();
 			});
 		});
 		
 		dialogLayout.setHeading(new Label(header));
 		dialogLayout.setBody(new Label(body));
-		dialogLayout.setActions(controls);
+		dialogLayout.setActions(btnControls);
 		dialog.show();
-		dialog.setOnDialogClosed((JFXDialogEvent event) -> {
-			nodeToBeBlurred.setEffect(null);
+		root.requestFocus();
+		dialog.setOnDialogClosed((JFXDialogEvent closeEvent) -> {
+			blurNode.setEffect(null);
+			blurNode.setDisable(false);
 		});
-		nodeToBeBlurred.setEffect(blur);
+		blurNode.setEffect(blurEffect);
 	}
 	
 	public static void showSysTrayMessage(String title, String message) {

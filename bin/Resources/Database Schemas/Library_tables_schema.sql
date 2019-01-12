@@ -83,12 +83,12 @@
 create table book
 (
 	isbn varchar(17),
-	title varchar(200) not null constraint book_title,
-	author varchar(60) not null constraint book_author,
-	edition_number varchar(60) not null constraint book_edition_number,
-	publisher varchar(200) not null constraint book_publisher,
-	price decimal(5,2) not null constraint book_price,
-	available boolean default true constraint book_available,
+	title varchar(200) not null,
+	author varchar(60) not null,
+	edition_number varchar(60) not null,
+	publisher varchar(200) not null,
+	price integer not null,
+	available boolean default true,
 	constraint book_isbn_pk primary key (isbn)
 );
 
@@ -96,11 +96,11 @@ create table book
 create table member
 (
 	id integer generated always as identity (start with 100, increment by 1),
-	name varchar(200) not null constraint member_name,
-	city varchar(100) not null constraint member_city,
-	address varchar(200) not null constraint member_address,
-	mobile_no integer not null unique constraint member_mobile_no,
-	email_id varchar(100) not null unique constraint member_email_id,
+	name varchar(200) not null,
+	city varchar(100) not null,
+	address varchar(200) not null,
+	mobile_no integer not null unique,
+	email_id varchar(100) not null unique,
 	constraint member_id_pk primary key (id)
 );
 
@@ -109,8 +109,8 @@ create table issue
 (
 	isbn varchar(17),
 	member_id integer,
-	issue_time timestamp default current_timestamp constraint issue_table_issue_time,
-	day_count integer default 0 constraint issue_day_count,
+	issue_time timestamp default current_timestamp,
+	day_count integer default 0,
 	constraint issue_isbn_fk foreign key (isbn) references book(isbn),
 	constraint issue_member_id foreign key (member_id) references member(id)
 );

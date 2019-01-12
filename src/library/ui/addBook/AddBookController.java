@@ -88,8 +88,8 @@ public class AddBookController implements Initializable {
 					"'" + author + "'," + 
 					"'" + edition + "'," + 
 					"'" + publisher + "'," + 
-					"" + price + "," +
-					"'Y' )";
+					" " + price +
+					")";
 		
 		// REMOVE THIS BEFORE DEPLOYMENT
 		System.out.println(query);

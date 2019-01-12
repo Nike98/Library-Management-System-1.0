@@ -6,13 +6,17 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.events.JFXDialogEvent;
 import com.jfoenix.effects.JFXDepthManager;
 import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
 import javafx.collections.FXCollections;
@@ -24,15 +28,26 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
+import library.util.LibraryUtil;
 
 public class MainStageController implements Initializable {
+	
+	@FXML
+	private StackPane rootPane;
+	
+	@FXML
+	private AnchorPane rootAnchorPane;
 	
 	@FXML
 	private HBox hboxBook;
@@ -80,7 +95,7 @@ public class MainStageController implements Initializable {
 	private JFXDrawer tool_drawer;
 	
 	@FXML
-	private HBox Ren_DataContainer;
+	private HBox RenSub_DataContainer;
 	
 	@FXML
 	private Text BoxMember_Name;
@@ -132,6 +147,39 @@ public class MainStageController implements Initializable {
 		initDrawer();
 	}
 	
+	private void clearEntries() {
+		// Member
+			BoxMember_Name.setText("");
+			BoxMember_Email.setText("");
+			BoxMember_Contact.setText("");
+		// End
+			
+		// Book
+			BoxBook_Isbn.setText("");
+			BoxBook_Name.setText("");
+			BoxBook_Author.setText("");
+			BoxBook_Publisher.setText("");
+		// End
+			
+		// Issue
+			BoxIssue_Date.setText("");
+			BoxIssue_NoOfDays.setText("");
+			BoxIssue_Fine.setText("");
+		// End
+			
+		EnableDisableControls(false);
+		RenSub_DataContainer.setOpacity(0);
+	}
+
+	private void EnableDisableControls(Boolean enableFlag) {
+		if (enableFlag) {
+			Ren_btnRenewBook.setDisable(false);
+			Ren_btnSubmitBook.setDisable(false);
+		} else {
+			Ren_btnRenewBook.setDisable(true);
+			Ren_btnSubmitBook.setDisable(true);
+		}
+	}
 	
 	// Method to load a Toolbox on the click of the Hamburger icon
 	private void initDrawer() {
@@ -195,12 +243,12 @@ public class MainStageController implements Initializable {
 				while(rs.next()) {
 					String bkName = rs.getString("title");
 					String bkAuthor = rs.getString("author");
-					String bkStatus = rs.getString("available");
+					boolean bkStatus = rs.getBoolean("available");
 					
 					lblBookName.setText(bkName);
 					lblAuthor.setText(bkAuthor);
 					
-					if(bkStatus.equals("Y"))
+					if(bkStatus)
 						lblStatus.setText("Available");
 					else
 						lblStatus.setText("Book Unavailable");
@@ -243,17 +291,16 @@ public class MainStageController implements Initializable {
 		else {
 			int int_id = Integer.parseInt(id);
 			System.out.println(int_id);
-			String query = "SELECT * FROM MEMBER WHERE ID = '" + int_id + "'";
+			String query = "SELECT * FROM MEMBER WHERE ID = " + int_id;
 			ResultSet rs = dbHandler.exeQuery(query);
 			Boolean flag = false;
 			
 			try {
 				while(rs.next()) {
-					String Mem_f_Name = rs.getString("fname");
-					String Mem_l_Name = rs.getString("lname");
+					String MemName = rs.getString("name");
 					String MemEmail = rs.getString("email_id");
 					
-					lblMemName.setText(Mem_f_Name + " " + Mem_l_Name);
+					lblMemName.setText(MemName);
 					lblMemEmail.setText(MemEmail);
 					
 					flag = true;
@@ -291,29 +338,37 @@ public class MainStageController implements Initializable {
 		 * 
 		 */
 		String bookIsbn = txfIsbn.getText();
-		String memId = txfMemberId.getText();
+		int memId = Integer.parseInt(txfMemberId.getText());
 		
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Confirm Issue Operarion");
-		alert.setHeaderText(null);
-		alert.setContentText("Are you sure you want to Issue the Book " + lblBookName.getText() + "\n to " + lblMemName.getText() + " ?");
-		
-		Optional<ButtonType> get_response = alert.showAndWait();
-		
-		if (get_response.get() == ButtonType.OK) {
+		JFXButton btnYes = new JFXButton("YES");
+		btnYes.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventYes) -> {
 			String insert_qry = "INSERT INTO ISSUE (isbn, member_id) values ("
 					+ "'" + bookIsbn + "', "
-					+ "'" + memId + "')";
+					+ "" + memId + ")";
 			
-			String update_qry = "UPDATE BOOK SET available = 'N' where isbn = '" + bookIsbn + "'";
+			String update_qry = "UPDATE BOOK SET available = false where isbn = '" + bookIsbn + "'";
 			
-			if (dbHandler.exeAction(insert_qry) && dbHandler.exeAction(update_qry))
-				ThrowAlert.showInformationMessage("Success", "Book Issue Operation Completed Successfully");
-			else
-				ThrowAlert.showErrorMessage("Failed", "Issue Operation Failed");
-		}
-		else
-			ThrowAlert.showInformationMessage("Cancelled", "Issue Operation Cancelled by User");
+			if (dbHandler.exeAction(insert_qry) && dbHandler.exeAction(update_qry)) {
+				//ThrowAlert.showInformationMessage("Success", "Book Issue Operation Completed Successfully");
+				JFXButton btnBack = new JFXButton("Done. Go Back");
+				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnBack), 
+						"Issue Successfull", "Issued " + lblBookName.getText() + " to " + lblMemName.getText());
+			}
+			else {
+				//ThrowAlert.showErrorMessage("Failed", "Issue Operation Failed");
+				JFXButton btnCheck = new JFXButton("Go Back and Check");
+				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnCheck), "Issue Operation Failed", null);
+			}
+		});
+		
+		JFXButton btnNo = new JFXButton("NO");
+		btnNo.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventNo) -> {
+			JFXButton btnFail = new JFXButton("OK. Go Back");
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnFail), "Failed", "Issue Operation was Cancelled");
+		});
+		
+		ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnYes, btnNo), "Confirm Issue", 
+				"Are you sure you want to Issue the Book \"" + lblBookName.getText() + "\"\n to " + lblMemName.getText() + " ?");
 	}
 	
 
@@ -353,6 +408,7 @@ public class MainStageController implements Initializable {
 		 * used to set if the book is Issued then it can be
 		 * submitted. Otherwise it is False.
 		 */
+		clearEntries();
 		ObservableList<String> data = FXCollections.observableArrayList();
 		isReadytoSubmit = false;
 		
@@ -360,7 +416,7 @@ public class MainStageController implements Initializable {
 			String isbn = Ren_txfIsbn.getText();
 			String query = "SELECT "
 					+ "ISSUE.isbn, ISSUE.member_id, ISSUE.issue_time, ISSUE.day_count, \n"
-					+ "MEMBER.fname, MEMBER.lname, MEMBER.mobile_no, MEMBER.email_id, \n"
+					+ "MEMBER.name, MEMBER.mobile_no, MEMBER.email_id, \n"
 					+ "BOOK.title, BOOK.author, BOOK.publisher, BOOK.available \n"
 					+ "FROM ISSUE \n"
 					+ "LEFT JOIN MEMBER \n"
@@ -372,7 +428,7 @@ public class MainStageController implements Initializable {
 			ResultSet rs = dbHandler.exeQuery(query);
 			if (rs.next()) {
 				// Member Info
-					BoxMember_Name.setText(rs.getString("fname"));
+					BoxMember_Name.setText(rs.getString("name"));
 					BoxMember_Email.setText(rs.getString("email_id"));
 					BoxMember_Contact.setText(rs.getString("mobile_no"));
 				// Member End
@@ -389,70 +445,95 @@ public class MainStageController implements Initializable {
 							Timestamp ren_issueTime = rs.getTimestamp("issue_time");
 							Date issueDate = new Date(ren_issueTime.getTime());
 						//End
-					BoxIssue_Date.setText(issueDate.toString());
-					// Getting the difference of the current date and the Issued Date to Calculate the Fine (if any)
-					Long timeElapsed = System.currentTimeMillis() - ren_issueTime.getTime();
-					Long daysElapsed = TimeUnit.DAYS.convert(timeElapsed, TimeUnit.MILLISECONDS);
-					//
+					BoxIssue_Date.setText(LibraryUtil.formatDateTimeString(issueDate));
+						// Getting the difference of the current date and the Issued Date to Calculate the Fine (if any)
+							Long timeElapsed = System.currentTimeMillis() - ren_issueTime.getTime();
+							Long daysElapsed = TimeUnit.DAYS.convert(timeElapsed, TimeUnit.MILLISECONDS);
+						// End
 					BoxIssue_NoOfDays.setText(daysElapsed.toString());
 					BoxIssue_Fine.setText("Not Supported Yet");
 				//Issue End
 					
+				isReadytoSubmit = true;
+				EnableDisableControls(true);
+				RenSub_DataContainer.setOpacity(1);
+			} else {
+				JFXButton btnOk = new JFXButton("OK");
+				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnOk), "No such Book Exists in the Issue Database", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		/*String query = "SELECT * FROM ISSUE WHERE ISBN = '" + isbn + "'";
+		ResultSet rs = dbHandler.exeQuery(query);
+		
+		try {
+			while(rs.next()) {
+				String ren_bookIsbn = rs.getString("isbn");
+				String ren_memberId = rs.getString("member_id");
+				Timestamp ren_issueTime = rs.getTimestamp("issue_time");
+				int ren_count = rs.getInt("day_count");
+				
+				data.add("Issue Date and Time : " + ren_issueTime.toGMTString());
+				data.add("Day Count : " + ren_count);
+				
+				data.add("Book Information :-");
+				query = "SELECT * FROM BOOK WHERE ISBN = '" + ren_bookIsbn + "'";
+				ResultSet rs_book = dbHandler.exeQuery(query);
+				while(rs_book.next()) {
+					data.add("\t ISBN : " + rs_book.getString("isbn"));
+					data.add("\t Title : " + rs_book.getString("title"));
+					data.add("\t Author : " + rs_book.getString("author"));
+					data.add("\t Edition : " + rs_book.getString("edition_number"));
+					data.add("\t Publisher : " + rs_book.getString("publisher"));
+					data.add("\t Price : " + rs_book.getInt("price"));
+				}
+				
+				data.add("Member Information :-");
+				query = "SELECT * FROM MEMBER WHERE ID = '" + ren_memberId + "'";
+				ResultSet rs_member = dbHandler.exeQuery(query);
+				while(rs_member.next()) {
+					data.add("\t ID : " + rs_member.getString("id"));
+					data.add("\t Name : " + rs_member.getString("fname") + " " + rs_member.getString("lname"));
+					data.add("\t Mobile Number : " + rs_member.getString("mobile_no"));
+					data.add("\t Email : " + rs_member.getString("email_id"));
+				}
+				
 				isReadytoSubmit = true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-//		String query = "SELECT * FROM ISSUE WHERE ISBN = '" + isbn + "'";
-//		ResultSet rs = dbHandler.exeQuery(query);
-//		
-//		try {
-//			while(rs.next()) {
-//				String ren_bookIsbn = rs.getString("isbn");
-//				String ren_memberId = rs.getString("member_id");
-//				Timestamp ren_issueTime = rs.getTimestamp("issue_time");
-//				int ren_count = rs.getInt("day_count");
-//				
-//				data.add("Issue Date and Time : " + ren_issueTime.toGMTString());
-//				data.add("Day Count : " + ren_count);
-//				
-//				data.add("Book Information :-");
-//				query = "SELECT * FROM BOOK WHERE ISBN = '" + ren_bookIsbn + "'";
-//				ResultSet rs_book = dbHandler.exeQuery(query);
-//				while(rs_book.next()) {
-//					data.add("\t ISBN : " + rs_book.getString("isbn"));
-//					data.add("\t Title : " + rs_book.getString("title"));
-//					data.add("\t Author : " + rs_book.getString("author"));
-//					data.add("\t Edition : " + rs_book.getString("edition_number"));
-//					data.add("\t Publisher : " + rs_book.getString("publisher"));
-//					data.add("\t Price : " + rs_book.getInt("price"));
-//				}
-//				
-//				data.add("Member Information :-");
-//				query = "SELECT * FROM MEMBER WHERE ID = '" + ren_memberId + "'";
-//				ResultSet rs_member = dbHandler.exeQuery(query);
-//				while(rs_member.next()) {
-//					data.add("\t ID : " + rs_member.getString("id"));
-//					data.add("\t Name : " + rs_member.getString("fname") + " " + rs_member.getString("lname"));
-//					data.add("\t Mobile Number : " + rs_member.getString("mobile_no"));
-//					data.add("\t Email : " + rs_member.getString("email_id"));
-//				}
-//				
-//				isReadytoSubmit = true;
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		dataList.getItems().setAll(data);
-		
+		dataList.getItems().setAll(data);*/
 		
 	}
 	
 	@FXML
 	private void Ren_RenewBookButton(ActionEvent event) {
+		if (!isReadytoSubmit)
+			ThrowAlert.showErrorMessage("Failed", "Select a Book to Renew");
 		
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Renew Operarion");
+		alert.setHeaderText(null);
+		alert.setContentText("Are you sure you want to Renew the book ?");
+		
+		Optional<ButtonType> get_response = alert.showAndWait();
+		
+		if (get_response.get() == ButtonType.OK) {
+			String update = "UPDATE ISSUE\n"
+					+ "SET issue_time = CURRENT_TIMESTAMP\n"
+					+ "WHERE isbn = '" + Ren_txfIsbn.getText() + "'";
+			if (dbHandler.exeAction(update)) {
+				ThrowAlert.showInformationMessage("Success", "Book Renewed Successfully");
+				Ren_LoadBookInfo(null);
+			}
+			else
+				ThrowAlert.showErrorMessage("Failed", "Book Renew Operation Failed");
+		} else
+			ThrowAlert.showErrorMessage("Failed", "Book Renew Operation cancelled by user");
 	}
 	
 	
@@ -501,10 +582,12 @@ public class MainStageController implements Initializable {
 		if (get_response.get() == ButtonType.OK) {
 			String isbn = Ren_txfIsbn.getText();
 			String del_query = "DELETE FROM ISSUE WHERE ISBN = '" + isbn + "'";
-			String update_query = "UPDATE BOOK SET AVAILABLE = 'Y' WHERE ISBN = '" + isbn + "'";
+			String update_query = "UPDATE BOOK SET AVAILABLE = TRUE WHERE ISBN = '" + isbn + "'";
 			
-			if (dbHandler.exeAction(del_query) && dbHandler.exeAction(update_query))
+			if (dbHandler.exeAction(del_query) && dbHandler.exeAction(update_query)) {
+				Ren_LoadBookInfo(null);
 				ThrowAlert.showInformationMessage("Successfull", "Book has been submitted");
+			}
 			else 
 				ThrowAlert.showInformationMessage("Failed", "Submission of book failed");
 		}
