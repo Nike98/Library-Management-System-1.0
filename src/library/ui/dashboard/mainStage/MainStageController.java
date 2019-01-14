@@ -147,7 +147,22 @@ public class MainStageController implements Initializable {
 		initDrawer();
 	}
 	
-	private void clearEntries() {
+	public void clearIssueTabEntries() {
+		// Book
+			txfIsbn.setText("");
+			lblBookName.setText("");
+			lblAuthor.setText("");
+			lblStatus.setText("");
+		// End
+			
+		// Member
+			txfMemberId.setText("");
+			lblMemName.setText("");
+			lblMemEmail.setText("");
+		// End
+	}
+	
+	private void clearRenewTabEntries() {
 		// Member
 			BoxMember_Name.setText("");
 			BoxMember_Email.setText("");
@@ -359,12 +374,15 @@ public class MainStageController implements Initializable {
 				JFXButton btnCheck = new JFXButton("Go Back and Check");
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnCheck), "Issue Operation Failed", null);
 			}
+			clearIssueTabEntries();
 		});
 		
-		JFXButton btnNo = new JFXButton("NO");
+		JFXButton btnNo = new JFXButton("NO")
+				;
 		btnNo.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventNo) -> {
 			JFXButton btnFail = new JFXButton("OK. Go Back");
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnFail), "Failed", "Issue Operation was Cancelled");
+			clearIssueTabEntries();
 		});
 		
 		ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnYes, btnNo), "Confirm Issue", 
@@ -408,7 +426,7 @@ public class MainStageController implements Initializable {
 		 * used to set if the book is Issued then it can be
 		 * submitted. Otherwise it is False.
 		 */
-		clearEntries();
+		clearRenewTabEntries();
 		ObservableList<String> data = FXCollections.observableArrayList();
 		isReadytoSubmit = false;
 		
@@ -512,28 +530,39 @@ public class MainStageController implements Initializable {
 	
 	@FXML
 	private void Ren_RenewBookButton(ActionEvent event) {
-		if (!isReadytoSubmit)
-			ThrowAlert.showErrorMessage("Failed", "Select a Book to Renew");
+		if (!isReadytoSubmit) {
+			JFXButton btnCheck = new JFXButton("Go Back and Check");
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnCheck),
+					"Book Not Selected", "Please select a Book to Submit");
+			return;
+		}
 		
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Confirm Renew Operarion");
-		alert.setHeaderText(null);
-		alert.setContentText("Are you sure you want to Renew the book ?");
-		
-		Optional<ButtonType> get_response = alert.showAndWait();
-		
-		if (get_response.get() == ButtonType.OK) {
+		JFXButton btnYes = new JFXButton("YES");
+		btnYes.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventYes) -> {
 			String update = "UPDATE ISSUE\n"
 					+ "SET issue_time = CURRENT_TIMESTAMP\n"
 					+ "WHERE isbn = '" + Ren_txfIsbn.getText() + "'";
 			if (dbHandler.exeAction(update)) {
-				ThrowAlert.showInformationMessage("Success", "Book Renewed Successfully");
-				Ren_LoadBookInfo(null);
+				JFXButton btnSuccess = new JFXButton("Done. Go Back");
+				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnSuccess), "Book Renewed Successfully", null);
+				EnableDisableControls(false);
+				RenSub_DataContainer.setOpacity(0);
 			}
-			else
-				ThrowAlert.showErrorMessage("Failed", "Book Renew Operation Failed");
-		} else
-			ThrowAlert.showErrorMessage("Failed", "Book Renew Operation cancelled by user");
+			else {
+				JFXButton btnFail = new JFXButton("Go Back and Check");
+				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnFail), "Book Renew Opeartion Failed", null);
+			}
+		});
+		
+		JFXButton btnNo = new JFXButton("NO");
+		btnNo.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventNo) -> {
+			JFXButton btnCancelled = new JFXButton("OK. Go Back");
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnCancelled), "Renew Operation was Cancelled", null);			
+		});
+		
+		ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnYes, btnNo),
+				"Confirm Renew Operation", 
+				"Are you sue you want to Renew the book \"" + BoxBook_Name.getText() + "\"?");
 	}
 	
 	
@@ -569,29 +598,38 @@ public class MainStageController implements Initializable {
 		 * 									DO IT IN THE NEW VERSION
 		 * 
 		 */
-		if (!isReadytoSubmit)
+		if (!isReadytoSubmit) {
+			JFXButton btnCheck = new JFXButton("Go Back and Check");
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnCheck),
+					"Book Not Selected", "Please select a Book to Submit");
 			return;
+		}
 		
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Confirm Submission Operarion");
-		alert.setHeaderText(null);
-		alert.setContentText("Are you sure oyu want to return the book ?");
-		
-		Optional<ButtonType> get_response = alert.showAndWait();
-		
-		if (get_response.get() == ButtonType.OK) {
+		JFXButton btnYes = new JFXButton("YES");
+		btnYes.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventYes) -> {
 			String isbn = Ren_txfIsbn.getText();
 			String del_query = "DELETE FROM ISSUE WHERE ISBN = '" + isbn + "'";
 			String update_query = "UPDATE BOOK SET AVAILABLE = TRUE WHERE ISBN = '" + isbn + "'";
 			
 			if (dbHandler.exeAction(del_query) && dbHandler.exeAction(update_query)) {
-				Ren_LoadBookInfo(null);
-				ThrowAlert.showInformationMessage("Successfull", "Book has been submitted");
+				JFXButton btnSuccess = new JFXButton("Done. Go Back");
+				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnSuccess), "Book has been Submitted", null);
+				EnableDisableControls(false);
+				RenSub_DataContainer.setOpacity(0);
+			} else {
+				JFXButton btnFail = new JFXButton("Go Back and Check");
+				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnFail), "Book Submission Failed", null);
 			}
-			else 
-				ThrowAlert.showInformationMessage("Failed", "Submission of book failed");
-		}
-		else
-			ThrowAlert.showInformationMessage("Cancelled", "Submission Operation Cancelled by User");
+		});
+		
+		JFXButton btnNo = new JFXButton("NO");
+		btnNo.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventNo) -> {
+			JFXButton btnCancelled = new JFXButton("OK. Go Back");
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnCancelled), "Submission Operation was Cancelled", null);			
+		});
+		
+		ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnYes, btnNo),
+				"Confirm Submission Operation", 
+				"Are you sue you want to Return the book \"" + BoxBook_Name.getText() + "\"?");
 	}
 }
