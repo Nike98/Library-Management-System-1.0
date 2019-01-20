@@ -9,6 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 import library.ui.listBook.ListBookController.Book;
 
 public final class DatabaseHandler {
@@ -198,6 +202,54 @@ public final class DatabaseHandler {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public ObservableList<PieChart.Data> getBookStatistics() {
+		ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
+		try {
+			String bookQuery = "SELECT COUNT(*) FROM BOOK";
+			String issueQuery = "SELECT COUNT(*) FROM ISSUE";
+			ResultSet rs = exeQuery(bookQuery);
+			// For Book
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				data.add(new PieChart.Data("Total Books (" + count + ")", count));
+			}
+			
+			// For Issue
+			rs = exeQuery(issueQuery);
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				data.add(new PieChart.Data("Issued Books (" + count + ")", count));
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return data;
+	}
+	
+	public ObservableList<PieChart.Data> getMemberStatistics() {
+		ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
+		try {
+			String memberQuery = "SELECT COUNT(*) FROM MEMBER";
+			String issueQuery = "SELECT COUNT(DISTINCT MEMBER_ID) FROM ISSUE";
+			ResultSet rs = exeQuery(memberQuery);
+			// For Member
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				data.add(new PieChart.Data("Total Members (" + count + ")", count));
+			}
+			
+			// For Issue
+			rs = exeQuery(issueQuery);
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				data.add(new PieChart.Data("Members with Books (" + count + ")", count));
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return data;
 	}
 	
 	// Method to execute a particular query passed as a String to this method

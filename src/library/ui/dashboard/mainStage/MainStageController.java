@@ -23,13 +23,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -47,6 +50,12 @@ public class MainStageController implements Initializable {
 	private StackPane rootPane;
 	
 	@FXML
+	private Tab IssueTab;
+	
+	@FXML
+	private Tab RenewSubmissionTab;
+	
+	@FXML
 	private AnchorPane rootAnchorPane;
 	
 	@FXML
@@ -54,6 +63,12 @@ public class MainStageController implements Initializable {
 	
 	@FXML
 	private HBox hboxMember;
+	
+	@FXML
+	private StackPane BookStackPane;
+	
+	@FXML
+	private StackPane MemberStackPane;
 	
 	@FXML
 	private Text lblBookName;
@@ -129,6 +144,8 @@ public class MainStageController implements Initializable {
 	
 	DatabaseHandler dbHandler;
 	boolean isReadytoSubmit = true;
+	PieChart bookChart;
+	PieChart memberChart;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -145,21 +162,73 @@ public class MainStageController implements Initializable {
 		
 		// Initializes the Drawer using the Hamburger
 		initDrawer();
+		initGraphs();
 	}
 	
-	public void clearIssueTabEntries() {
+	private void initDrawer() {
+		// Method to load a Toolbox on the click of the Hamburger icon
+		try {
+			VBox toolbar = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/toolbar/toolbar.fxml"));
+			tool_drawer.setSidePane(toolbar);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		HamburgerSlideCloseTransition task = new HamburgerSlideCloseTransition(hamburger);
+		task.setRate(-1);
+		
+		hamburger.addEventFilter(MouseEvent.MOUSE_CLICKED, (Event event) -> {
+			task.setRate(task.getRate() * -1);
+			task.play();
+			
+			if (tool_drawer.isClosed()) {
+				tool_drawer.open();
+			} else {
+				tool_drawer.close();
+			}			
+		});
+	}
+	
+	private void initGraphs() {
+		bookChart = new PieChart(dbHandler.getBookStatistics());
+		memberChart = new PieChart(dbHandler.getMemberStatistics());
+		
+		BookStackPane.getChildren().add(bookChart);
+		MemberStackPane.getChildren().add(memberChart);
+		
+		IssueTab.setOnSelectionChanged((Event event) -> {
+			clearIssueTabEntries();
+			if (IssueTab.isSelected())
+				refreshGraphs();
+		});
+	}
+	
+	private void clearBookCache() {
+		lblBookName.setText("");
+		lblAuthor.setText("");
+		lblStatus.setText("");
+	}
+	
+	private void clearMemberCache() {
+		lblMemName.setText("");
+		lblMemEmail.setText("");
+	}
+	
+	private void clearIssueTabEntries() {
 		// Book
-			txfIsbn.setText("");
+			txfIsbn.clear();
 			lblBookName.setText("");
 			lblAuthor.setText("");
 			lblStatus.setText("");
 		// End
 			
 		// Member
-			txfMemberId.setText("");
+			txfMemberId.clear();
 			lblMemName.setText("");
 			lblMemEmail.setText("");
 		// End
+		
+		EnableDisableGraphs(true);
 	}
 	
 	private void clearRenewTabEntries() {
@@ -185,6 +254,21 @@ public class MainStageController implements Initializable {
 		EnableDisableControls(false);
 		RenSub_DataContainer.setOpacity(0);
 	}
+	
+	private void refreshGraphs() {
+		bookChart.setData(dbHandler.getBookStatistics());
+		memberChart.setData(dbHandler.getMemberStatistics());
+	}
+	
+	private void EnableDisableGraphs(Boolean status) {
+		if (status) {
+			bookChart.setOpacity(1);
+			memberChart.setOpacity(1);
+		} else {
+			bookChart.setOpacity(0);
+			memberChart.setOpacity(0);
+		}
+	}
 
 	private void EnableDisableControls(Boolean enableFlag) {
 		if (enableFlag) {
@@ -196,38 +280,12 @@ public class MainStageController implements Initializable {
 		}
 	}
 	
-	// Method to load a Toolbox on the click of the Hamburger icon
-	private void initDrawer() {
-		try {
-			VBox toolbar = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/toolbar/toolbar.fxml"));
-			tool_drawer.setSidePane(toolbar);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		HamburgerSlideCloseTransition task = new HamburgerSlideCloseTransition(hamburger);
-		task.setRate(-1);
-		
-		hamburger.addEventFilter(MouseEvent.MOUSE_CLICKED, (Event event) -> {
-			task.setRate(task.getRate() * -1);
-			task.play();
-			
-			if (tool_drawer.isClosed()) {
-				tool_drawer.open();
-			} else {
-				tool_drawer.close();
-			}			
-		});
-	}
-	
-	
 	/*
 	 * 
 	 * Issue tab Operations and Events
 	 * start from further here.
 	 * 
 	 */
-	
 	
 	@FXML
 	private void LoadBookInfo(ActionEvent event) {
@@ -242,6 +300,9 @@ public class MainStageController implements Initializable {
 		 *  
 		 *  If the Data is found then it displays it.
 		 */
+		clearBookCache();
+		EnableDisableGraphs(false);
+		
 		String isbn = txfIsbn.getText();
 		
 		if (isbn.equals("")) {
@@ -283,7 +344,6 @@ public class MainStageController implements Initializable {
 		}
 	}
 	
-	
 	@FXML
 	private void LoadMemberInfo(ActionEvent event) {
 		/* This method is associated with the Member ID TextField.
@@ -297,6 +357,9 @@ public class MainStageController implements Initializable {
 		 *  
 		 *  If the Data is found then it displays it.
 		 */
+		clearMemberCache();
+		EnableDisableGraphs(false);
+		
 		String id = txfMemberId.getText();
 		
 		if (id.equals("")) {
@@ -331,7 +394,6 @@ public class MainStageController implements Initializable {
 		}
 	}
 	
-
 	@FXML
 	private void IssueOperation(ActionEvent event) {
 		/*
@@ -389,14 +451,12 @@ public class MainStageController implements Initializable {
 				"Are you sure you want to Issue the Book \"" + lblBookName.getText() + "\"\n to " + lblMemName.getText() + " ?");
 	}
 	
-
 	/*
 	 * 
 	 * Renew / Submission tab Operations and 
 	 * Events Start from further here.
 	 * 
 	 */
-	
 	
 	@FXML
 	private void Ren_LoadBookInfo(ActionEvent event) {
@@ -427,7 +487,7 @@ public class MainStageController implements Initializable {
 		 * submitted. Otherwise it is False.
 		 */
 		clearRenewTabEntries();
-		ObservableList<String> data = FXCollections.observableArrayList();
+		//ObservableList<String> data = FXCollections.observableArrayList();
 		isReadytoSubmit = false;
 		
 		try {
@@ -564,7 +624,6 @@ public class MainStageController implements Initializable {
 				"Confirm Renew Operation", 
 				"Are you sue you want to Renew the book \"" + BoxBook_Name.getText() + "\"?");
 	}
-	
 	
 	@FXML
 	private void Ren_SubmitBookButton(ActionEvent event) {
