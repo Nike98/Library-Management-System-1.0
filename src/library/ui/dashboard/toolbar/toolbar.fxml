@@ -12,7 +12,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="425.0" prefWidth="130.0" stylesheets="@../../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.dashboard.toolbar.ToolBarController">
+<VBox prefHeight="450.0" prefWidth="130.0" stylesheets="@../../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.dashboard.toolbar.ToolBarController">
    <children>
       <JFXButton fx:id="btnAddBook" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#AddBookButton" prefHeight="400.0" prefWidth="150.0" styleClass="toolbar-button" text="Add Book" textAlignment="CENTER">
          <font>
@@ -47,6 +47,14 @@
          </font>
          <graphic>
             <FontAwesomeIcon iconName="USERS" size="25" styleClass="glyph-icon" />
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="btnListIssue" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#ListIssueButton" prefHeight="400.0" prefWidth="150.0" styleClass="toolbar-button" text="Issue List" textAlignment="CENTER">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+         <graphic>
+            <FontAwesomeIcon iconName="CHECK_SQUARE_ALT" size="25" styleClass="glyph-icon" />
          </graphic>
       </JFXButton>
       <JFXButton fx:id="btnSettings" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#SettingsButton" prefHeight="400.0" prefWidth="150.0" styleClass="toolbar-button" text="Settings" textAlignment="CENTER">

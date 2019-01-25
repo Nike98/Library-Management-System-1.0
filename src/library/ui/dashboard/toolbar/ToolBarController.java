@@ -20,30 +20,38 @@ public class ToolBarController {
 	 private JFXButton btnListMember;
 	 
 	 @FXML
+	 private JFXButton btnListIssue;
+	 
+	 @FXML
 	 private JFXButton btnSettings;
 
 	 @FXML
-	 void AddBookButton(ActionEvent event) {
+	 private void AddBookButton(ActionEvent event) {
 		 LibraryUtil.LoadWindow(getClass().getResource("/library/ui/addbook/addbook.fxml"), "Add New Book", null);
 	 }
 
 	 @FXML
-	 void AddMemberButton(ActionEvent event) {
+	 private void AddMemberButton(ActionEvent event) {
 		 LibraryUtil.LoadWindow(getClass().getResource("/library/ui/addMember/addMember.fxml"), "Add New Member", null);
 	 }
 
 	 @FXML
-	 void ListBookButton(ActionEvent event) {
+	 private void ListBookButton(ActionEvent event) {
 		 LibraryUtil.LoadWindow(getClass().getResource("/library/ui/listBook/listBook.fxml"), "Member List", null);
 	 }
 
 	 @FXML
-	 void ListMemberButton(ActionEvent event) {
+	 private void ListMemberButton(ActionEvent event) {
 		 LibraryUtil.LoadWindow(getClass().getResource("/library/ui/listMember/listMember.fxml"), "Add New Member", null);
+	 }
+	 
+	 @FXML
+	 private void ListIssueButton(ActionEvent event) {
+		 LibraryUtil.LoadWindow(getClass().getResource("/library/ui/issueList/issueList.fxml"), "Issue List", null);
 	 }
 
 	 @FXML
-	 void SettingsButton(ActionEvent event) {
+	 private void SettingsButton(ActionEvent event) {
 		 LibraryUtil.LoadWindow(getClass().getResource("/library/ui/settings/settings.fxml"), "Settings", null);
 	 }
 }

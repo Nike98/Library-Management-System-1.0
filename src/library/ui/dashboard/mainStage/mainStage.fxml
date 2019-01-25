@@ -347,10 +347,13 @@
                   </AnchorPane>
                </center>
                <right>
-                  <JFXDrawer fx:id="tool_drawer" defaultDrawerSize="150.0" direction="RIGHT" resizableOnDrag="true" />
+                  <JFXDrawer fx:id="tool_drawer" defaultDrawerSize="150.0" direction="RIGHT" prefHeight="580.0" prefWidth="150.0" resizableOnDrag="true" />
                </right>
             </BorderPane>
          </children>
       </AnchorPane>
    </children>
+   <rotationAxis>
+      <Point3D />
+   </rotationAxis>
 </StackPane>

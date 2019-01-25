@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import library.ui.settings.Preferences;
 
 public class LibraryUtil {
 	
@@ -35,6 +36,16 @@ public class LibraryUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Double getFineAmount(int days) {
+		Preferences pref = Preferences.getPreferences();
+		Integer fineDays = days - pref.getnum_DaysWithoutFine();
+		double fine = 0;
+		if (fineDays > 0)
+			fine = fineDays * pref.getFinePerDay();
+
+		return fine;
 	}
 
 	public static String getDateString (Date date) {

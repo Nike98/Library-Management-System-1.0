@@ -32,7 +32,7 @@
 
 /* To make the Text Field as the same color as the Login Buttons */
 .jfxtext-field{
-	-fx-text-fill: -fx-primarytext;
+	-fx-text-fill: -fx-secondary;
 	-fx-font-size: 14pt;
 	-jfx-focus-color: -fx-secondary;
 	-jfx-unfocus-color: -fx-primarytext;
