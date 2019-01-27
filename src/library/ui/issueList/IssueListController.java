@@ -7,30 +7,44 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
-
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import library.ui.callback.BookReturnCallback;
 import library.database.handler.DatabaseHandler;
 import library.util.LibraryUtil;
 
 public class IssueListController implements Initializable {
 	
-	ObservableList<Issue> IssueList = FXCollections.observableArrayList();
+	private ObservableList<Issue> IssueList = FXCollections.observableArrayList();
+	private BookReturnCallback callback;
 	
 	@FXML
-	private AnchorPane rootPane;
+	private StackPane rootPane;
+	
+	@FXML
+	private AnchorPane rootAnchorPane;
 	
 	@FXML
 	private TableView<Issue> tableView;
+	
+	@FXML
+	private MenuItem contextRefresh;
+	
+	@FXML
+	private MenuItem contextReturnBook;
 	
 	@FXML
 	private TableColumn<Issue, Integer> colSrNo;
@@ -51,7 +65,7 @@ public class IssueListController implements Initializable {
 	private TableColumn<Issue, Integer> colDays;
 	
 	@FXML
-	private TableColumn<Issue, Integer> colFine;
+	private TableColumn<Issue, Double> colFine;
  
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -64,7 +78,7 @@ public class IssueListController implements Initializable {
 		colIsbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
 		colBookName.setCellValueFactory(new PropertyValueFactory<>("bookName"));
 		colMemberName.setCellValueFactory(new PropertyValueFactory<>("memberName"));
-		colIssueTime.setCellValueFactory(new PropertyValueFactory<>("issue_time"));
+		colIssueTime.setCellValueFactory(new PropertyValueFactory<>("issuetime"));
 		colDays.setCellValueFactory(new PropertyValueFactory<>("days"));
 		colFine.setCellValueFactory(new PropertyValueFactory<>("fine"));
 		tableView.setItems(IssueList);
@@ -92,11 +106,34 @@ public class IssueListController implements Initializable {
 				Integer days = Math.toIntExact(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - issueTime.getTime()));
 				Double fine = LibraryUtil.getFineAmount(days);
 				Issue issueInfo = new Issue(counter, isbn, bookTitle, memName, LibraryUtil.formatDateTimeString(new Date(issueTime.getTime())), days, fine);
+				/*System.out.println(counter +  "\n" + isbn + "\n" + bookTitle + "\n"
+						+ memName + "\n" + LibraryUtil.formatDateTimeString(new Date(issueTime.getTime()))
+						+ "\n" + days + "\n" + fine);*/
 				IssueList.add(issueInfo);
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void setBookReturnCallback(BookReturnCallback callback) {
+		this.callback = callback;
+	}
+	
+	private Stage getstage() {
+		return (Stage) tableView.getScene().getWindow();
+	}
+	
+	@FXML
+	private void handleRefresh(ActionEvent event) {
+		LoadData();
+	}
+	
+	@FXML
+	private void handleReturnbook(ActionEvent event) {
+		Issue issueInfo = tableView.getSelectionModel().getSelectedItem();
+		if (issueInfo != null)
+			callback.loadBookReturn(issueInfo.getIsbn());
 	}
 	
 	public static class Issue {		
@@ -108,7 +145,7 @@ public class IssueListController implements Initializable {
 		private final SimpleIntegerProperty days;
 		private final SimpleDoubleProperty fine;
 		
-		Issue (Integer id, String isbn, String bookName, String memName, 
+		public Issue (Integer id, String isbn, String bookName, String memName, 
 				String issueTime, Integer days, Double fine){
 			this.id = new SimpleIntegerProperty(id);
 			this.isbn = new SimpleStringProperty(isbn);
