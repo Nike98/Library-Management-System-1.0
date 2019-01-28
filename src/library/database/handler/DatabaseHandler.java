@@ -8,8 +8,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.swing.JOptionPane;
-
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
@@ -30,6 +39,10 @@ public final class DatabaseHandler {
 		setupBookTable();
 		setupMemberTable();
 		setupIssueTable();
+	}
+	
+	public static void main(String[] args) {
+		DatabaseHandler.getInstance();
 	}
 	
 	// Method to make the Connection to the Oracle Database
@@ -66,6 +79,57 @@ public final class DatabaseHandler {
 			handler = new DatabaseHandler();
 		
 		return handler;
+	}
+	
+	private static void inflateDB() {
+		List<String> tableData = new ArrayList<>();
+		try {
+			Set<String> loadedTables = getDBTables();
+			System.out.println("Already loaded Tables " + loadedTables);
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(DatabaseHandler.class.getClass().getResourceAsStream("/Resources/database/tables.xml"));
+			NodeList nodeList = doc.getElementsByTagName("table-entry");
+			for (int i = 0 ; i < nodeList.getLength() ; i++) {
+				Node node = nodeList.item(i);
+				Element entry = (Element) node;
+				String tableName = entry.getAttribute("name");
+				String query = entry.getAttribute("col-data");
+				if (!loadedTables.contains(tableName.toLowerCase()))
+					tableData.add(String.format("CERATE TABLE %s (%s)", tableName, query));
+			}
+			if (tableData.isEmpty())
+				System.out.println("Tables are already loaded");
+			else {
+				System.out.println("Inflating new tables");
+				createTables(tableData);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	private static void createTables(List<String> tableData) throws SQLException {
+		Statement statement = conn.createStatement();
+		statement.closeOnCompletion();
+		for (String command: tableData) {
+			System.out.println(command);
+			statement.addBatch(command);
+		}
+		statement.executeBatch();
+	}
+	
+	private static Set<String> getDBTables() throws SQLException{
+		Set<String> set = new HashSet<>();
+		DatabaseMetaData dbMetaData = conn.getMetaData();
+		readDBTables(set, dbMetaData, "TABLE", null);
+		return set;
+	}
+	
+	private static void readDBTables(Set<String> set, DatabaseMetaData dbMetaData, String searchCriteria, String schema) throws SQLException {
+		ResultSet rs = dbMetaData.getTables(null, schema, null, new String[]{searchCriteria});
+		while (rs.next())
+			set.add(rs.getString("TABLE_NAME").toLowerCase());
 	}
 	
 	private void setupBookTable() {

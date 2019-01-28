@@ -39,9 +39,9 @@
                <center>
                   <AnchorPane>
                      <children>
-                        <JFXTabPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
+                        <JFXTabPane fx:id="mainTabPane" centerShape="false" prefHeight="575.0" prefWidth="850.0" styleClass="tab-main" stylesheets="@../../../../Resources/StyleSheets/LibraryStyleSheet.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <tabs>
-                              <Tab fx:id="IssueTab" text="Issue">
+                              <Tab fx:id="IssueTab" closable="false" styleClass="tab-main" text="Issue">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
@@ -173,7 +173,7 @@
                                     </AnchorPane>
                                  </content>
                               </Tab>
-                              <Tab fx:id="RenewSubmissionTab" text="Renew / Submission">
+                              <Tab fx:id="RenewSubmissionTab" closable="false" styleClass="tab-main" text="Renew / Submission">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>

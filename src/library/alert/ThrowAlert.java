@@ -3,6 +3,7 @@ package library.alert;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.effect.BoxBlur;
@@ -11,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import library.util.LibraryUtil;
 import java.awt.SystemTray;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
@@ -28,8 +30,7 @@ public class ThrowAlert {
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(content);
-		
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		styleAlert(alert);
 		alert.showAndWait();
 	}
 	
@@ -38,6 +39,7 @@ public class ThrowAlert {
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(content);
+		styleAlert(alert);
 		alert.showAndWait();
 	}
 	
@@ -68,6 +70,8 @@ public class ThrowAlert {
 		expContent.add(txtArea, 0, 1);
 		
 		alert.getDialogPane().setExpandableContent(expContent);
+		
+		styleAlert(alert);
 		alert.showAndWait();
 	}
 
@@ -130,5 +134,14 @@ public class ThrowAlert {
 		SystemTray sysTray = SystemTray.getSystemTray();
 		//BufferedImage image
 		// Add all this when custom image of the app is created
+	}
+	
+	private static void styleAlert(Alert alert) {
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		//LibraryUtil.seticon
+		
+		DialogPane dialogPane = alert.getDialogPane();
+		dialogPane.getStylesheets().add(ThrowAlert.class.getResource("/Resources/Stylesheets/LibraryStyleSheet.css").toExternalForm());
+		dialogPane.getStyleClass().add("custom-alert");
 	}
 }

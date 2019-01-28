@@ -59,11 +59,13 @@
 
 .tab-label{
 	-fx-text-fill: -fx-secondary;
-	-fx-font-size: 10pt;
+	-fx-font-size: 12pt;
 }
 
 .tab-main{
+	-fx-pref-width: 410;
 	-fx-pref-height: 60;
+	-fx-max-width: 410;
 	-fx-max-height: 60;
 }
 
@@ -135,15 +137,15 @@
 
 /* Dialog Box */
 .dialog-button{
-	-fx-border-color: -fx-blue-1;
+	-fx-border-color: -fx-blue;
 	-fx-border-radius: 1px;
 	-fx-background-radius: 3px;	
 	-fx-text-fill: white;
 }
 
 .dialog-button:hover{
-	-fx-background-color: -fx-blue-1;
-	-fx-border-color: derive(-fx-blue-1, 20%);
+	-fx-background-color: -fx-blue;
+	-fx-border-color: derive(-fx-blue, 20%);
 	-fx-text-fill: white;
 }
 
@@ -262,7 +264,7 @@
 
 /* JFXDialog */
 .jfx-layout-heading{
-	-fx-background-color: -fx-blue-1;
+	-fx-background-color: -fx-blue;
 }
 
 .jfx-layout-heading .label{
@@ -284,4 +286,35 @@
 	-fx-background-radius: 5px;
 	-fx-fill: derive(blue, 80%);
 	-fx-cursor: hand;
+}
+
+/* ALert Dialog */
+.custom-alert{
+	-fx-background-color: -fx-primary;
+	-fx-text-fill: white;
+}
+
+.custom-alert > *.button-bar > *.container{
+	-fx-background-color: -fx-primary;
+}
+
+.custom-alert > *.label-content{
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
+	-fx-text-fill: white;
+}
+
+.custom-alert:header *.header-panel{
+	-fx-background-color: -fx-blue;
+}
+
+.custom-alert:header .header-panel .label{
+	-fx-font-style: normal;
+	-fx-text-fill: white;
+}
+
+.custom-alert:header *.header-panel *.label{
+	-fx-font-size: 18px;
+	-fx-font-style: italic;
+	-fx-fill: -fx-primary;
 }
