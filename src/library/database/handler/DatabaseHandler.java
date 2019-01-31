@@ -23,6 +23,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 import library.ui.listBook.ListBookController.Book;
+import library.ui.listMember.ListMemberController;
 
 public final class DatabaseHandler {
 	
@@ -33,18 +34,30 @@ public final class DatabaseHandler {
 	private static Connection conn = null;
 	private static Statement stmt = null;
 	
+	static {
+		CreateConnection();
+		inflateDB();
+	}
+	
 	// Constructor
 	private DatabaseHandler() {
-		CreateConnection();
-		setupBookTable();
-		setupMemberTable();
-		setupIssueTable();
+//		CreateConnection();
+//		setupBookTable();
+//		setupMemberTable();
+//		setupIssueTable();
 	}
 	
 	public static void main(String[] args) {
 		DatabaseHandler.getInstance();
 	}
 	
+	public static DatabaseHandler getInstance() {
+		if (handler == null)
+			handler = new DatabaseHandler();
+		
+		return handler;
+	}
+		
 	// Method to make the Connection to the Oracle Database
 	private static void CreateConnection() {
 		
@@ -74,11 +87,8 @@ public final class DatabaseHandler {
 		return null;*/
 	}
 	
-	public static DatabaseHandler getInstance() {
-		if (handler == null)
-			handler = new DatabaseHandler();
-		
-		return handler;
+	public Connection getConnection() {
+		return conn;
 	}
 	
 	private static void inflateDB() {
@@ -132,8 +142,8 @@ public final class DatabaseHandler {
 			set.add(rs.getString("TABLE_NAME").toLowerCase());
 	}
 	
-	private void setupBookTable() {
-		/*
+	/*private void setupBookTable() {
+		
 		 * These methods are written to check whether the Specified table 
 		 * exists of or not.
 		 * 
@@ -141,7 +151,7 @@ public final class DatabaseHandler {
 		 * 
 		 * If it doesn't exist then it creates the table in the below 
 		 * specified manner.
-		 */
+		 
 		String Table_Name = "Book";
 		
 		try {
@@ -199,14 +209,14 @@ public final class DatabaseHandler {
 	
 	private void setupIssueTable() {
 		
-	  /*
+	  
 	   * These methods are written to check whether the Specified table 
 	   * exists of or not. 
 	   * 
 	   * If it exists then the further code execution continues. 
 	   * If it doesn't exist then it creates the table in the below 
 	   * specified manner.
-	   */
+	   
 		 
 		String Table_Name = "Issue";
 		
@@ -232,7 +242,7 @@ public final class DatabaseHandler {
 			// REMOVE THIS BEFORE DEPLOYMENT
 			System.err.println(e.getMessage() + " -- Database setup problem");
 		}
-	}
+	}*/
 	
 	public boolean deleteBook(Book book) {
 		try {
@@ -241,6 +251,20 @@ public final class DatabaseHandler {
 			stmt.setString(1, book.getIsbn());
 			int res = stmt.executeUpdate();
 			if (res == 1)
+				return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean deleteMember(ListMemberController.Member member) {
+		try {
+			String deleteStatement = "DELETE FROM MEMBER WHERE ID= ?";
+			PreparedStatement stmt = conn.prepareStatement(deleteStatement);
+			stmt.setInt(1, member.getId());
+			int result = stmt.executeUpdate();
+			if (result == 1)
 				return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -262,6 +286,68 @@ public final class DatabaseHandler {
 				else 
 					return false;
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean checkMemberIssueStatus(ListMemberController.Member member) {
+		try {
+			String checkStatus = "SELECT COUNT(*) FROM ISSUE WHERE MEMBER_ID = ?";
+			PreparedStatement stmt = conn.prepareStatement(checkStatus);
+			stmt.setInt(1, member.getId());
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				return (count > 0);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean updatebook(Book book) {
+		try {
+			String update = "UPDATE BOOK SET \n"
+					+ "TITLE = ?, \n"
+					+ "AUTHOR = ?, \n"
+					+ "PUBLISHER = ?, \n"
+					+ "EDITION_NUMBER = ?, \n"
+					+ "PRICE = ?, \n"
+					+ "AVAILABLE = ?, \n"
+					+ "WHERE ISBN = ?";
+			PreparedStatement stmt = conn.prepareStatement(update);
+			stmt.setString(1, book.getTitle());
+			stmt.setString(2, book.getAuthor());
+			stmt.setString(3, book.getPublisher());
+			stmt.setString(4, book.getEdition());
+			stmt.setInt(5, book.getPrice());
+			stmt.setBoolean(6, book.getAvailibility());
+			int res = stmt.executeUpdate();
+			return (res > 0);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean updateMember(ListMemberController.Member member) {
+		try {
+			String update = "UPDATE MEMBER SET \n"
+					+ "NAME = ?, \n"
+					+ "CITY = ?, \n"
+					+ "ADDRESS = ?, \n"
+					+ "MOBILE_NO = ?, \n"
+					+ "EMAIL_ID = ?, \n"
+					+ "WHERE ID = ?";
+			PreparedStatement stmt = conn.prepareStatement(update);
+			stmt.setString(1, member.getName());
+			stmt.setString(2, member.getCity());
+			stmt.setString(3, member.getAddress());
+			stmt.setLong(4, member.getMobile());
+			stmt.setString(5, member.getEmail());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

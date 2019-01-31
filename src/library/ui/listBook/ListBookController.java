@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -106,8 +108,8 @@ public class ListBookController implements Initializable{
 				String author = res.getString("author");
 				String edition = res.getString("edition_number");
 				String publisher = res.getString("publisher");
-				int price = res.getInt("price");
-				String avail = res.getString("available");
+				Integer price = res.getInt("price");
+				Boolean avail = res.getBoolean("available");
 				
 				BookList.add(new Book(isbn, title, author, edition, publisher, price, avail));
 			}
@@ -125,17 +127,17 @@ public class ListBookController implements Initializable{
 		private final SimpleStringProperty edition;
 		private final SimpleStringProperty publisher;
 		private final SimpleIntegerProperty price;
-		private final SimpleStringProperty availibility;
+		private final SimpleBooleanProperty availibility;
 		
 		Book ( String isbn, String title, String author, String edition, 
-				String publisher, int price, String availability ){
+				String publisher, Integer price, Boolean availability ){
 			this.isbn = new SimpleStringProperty(isbn);
 			this.title = new SimpleStringProperty(title);
 			this.author = new SimpleStringProperty(author);
 			this.edition = new SimpleStringProperty(edition);
 			this.publisher = new SimpleStringProperty(publisher);
 			this.price = new SimpleIntegerProperty(price);
-			this.availibility = new SimpleStringProperty(availability);
+			this.availibility = new SimpleBooleanProperty(availability);
 		}
 		
 		public String getIsbn() {
@@ -158,11 +160,11 @@ public class ListBookController implements Initializable{
 			return publisher.get();
 		}
 
-		public int getPrice() {
+		public Integer getPrice() {
 			return price.get();
 		}
 
-		public String getAvailibility() {
+		public Boolean getAvailibility() {
 			return availibility.get();
 		}
 	}

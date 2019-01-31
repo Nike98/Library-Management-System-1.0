@@ -4,6 +4,9 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -65,14 +68,14 @@ public class ListMemberController implements Initializable {
 		
 		try {
 			while (res.next()) {
-				String id = res.getString("id");
+				Integer id = res.getInt("id");
 				String name = res.getString("name");
 				String city = res.getString("city");
 				String address = res.getString("address");
+				Long mobile = res.getLong("mobile_no");
 				String email = res.getString("email_id");
-				String mobile = res.getString("mobile_no");
 				
-				MemberList.add(new Member(id, name, city, address, email, mobile));
+				MemberList.add(new Member(id, name, city, address, mobile, email));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -82,24 +85,24 @@ public class ListMemberController implements Initializable {
 	}
 
 	public static class Member {
-		private final SimpleStringProperty id;
+		private final SimpleIntegerProperty id;
 		private final SimpleStringProperty name;
 		private final SimpleStringProperty city;
 		private final SimpleStringProperty address;
+		private final SimpleLongProperty mobile;
 		private final SimpleStringProperty email;
-		private final SimpleStringProperty mobile;
 		
-		Member ( String id, String name, String city, 
-				String address, String email, String mobile ){
-			this.id = new SimpleStringProperty(id);
+		Member ( Integer id, String name, String city, 
+				String address, Long mobile, String email){
+			this.id = new SimpleIntegerProperty(id);
 			this.name = new SimpleStringProperty(name);
 			this.city = new SimpleStringProperty(city);
 			this.address = new SimpleStringProperty(address);
+			this.mobile = new SimpleLongProperty(mobile);
 			this.email = new SimpleStringProperty(email);
-			this.mobile = new SimpleStringProperty(mobile);
 		}
 		
-		public String getId() {
+		public Integer getId() {
 			return id.get();
 		}
 		
@@ -114,13 +117,13 @@ public class ListMemberController implements Initializable {
 		public String getAddress() {
 			return address.get();
 		}
+		
+		public Long getMobile() {
+			return mobile.get();
+		}
 
 		public String getEmail() {
 			return email.get();
-		}
-
-		public String getMobile() {
-			return mobile.get();
 		}
 	}
 }
