@@ -1,4 +1,4 @@
-package library.ui.addbook;
+package library.ui.addBook;
 
 import java.net.URL;
 import java.util.ResourceBundle;
