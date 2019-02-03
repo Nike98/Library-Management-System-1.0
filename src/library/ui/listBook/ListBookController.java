@@ -108,7 +108,7 @@ public class ListBookController implements Initializable{
 				String author = res.getString("author");
 				String edition = res.getString("edition_number");
 				String publisher = res.getString("publisher");
-				Integer price = res.getInt("price");
+				String price = res.getString("price");
 				Boolean avail = res.getBoolean("available");
 				
 				BookList.add(new Book(isbn, title, author, edition, publisher, price, avail));
@@ -126,17 +126,17 @@ public class ListBookController implements Initializable{
 		private final SimpleStringProperty author;
 		private final SimpleStringProperty edition;
 		private final SimpleStringProperty publisher;
-		private final SimpleIntegerProperty price;
+		private final SimpleStringProperty price;
 		private final SimpleBooleanProperty availibility;
 		
-		Book ( String isbn, String title, String author, String edition, 
-				String publisher, Integer price, Boolean availability ){
+		public Book ( String isbn, String title, String author, String edition, 
+				String publisher, String price, Boolean availability ) {
 			this.isbn = new SimpleStringProperty(isbn);
 			this.title = new SimpleStringProperty(title);
 			this.author = new SimpleStringProperty(author);
 			this.edition = new SimpleStringProperty(edition);
 			this.publisher = new SimpleStringProperty(publisher);
-			this.price = new SimpleIntegerProperty(price);
+			this.price = new SimpleStringProperty(price);
 			this.availibility = new SimpleBooleanProperty(availability);
 		}
 		
@@ -160,7 +160,7 @@ public class ListBookController implements Initializable{
 			return publisher.get();
 		}
 
-		public Integer getPrice() {
+		public String getPrice() {
 			return price.get();
 		}
 

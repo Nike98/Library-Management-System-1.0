@@ -1,24 +1,30 @@
 package library.ui.addBook;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import library.alert.ThrowAlert;
 import library.database.handler.*;
+import library.ui.listBook.ListBookController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class AddBookController implements Initializable {
 	
 	@FXML
-	private AnchorPane rootPane;
+	private StackPane rootPane;
+	
+	@FXML
+	private AnchorPane rootAnchorPane;
 
 	@FXML
-	private JFXTextField txfISBN;
+	private JFXTextField txfIsbn;
 	
 	@FXML
 	private JFXTextField txfTitle;
@@ -41,18 +47,20 @@ public class AddBookController implements Initializable {
 	@FXML
 	private JFXButton btnCancel;
 	
-	DatabaseHandler dataHandler;
+	private DatabaseHandler dbHandler;
+	private DatabaseHelper dbHelper;
+	private Boolean isInEditMode = Boolean.FALSE;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		dataHandler = DatabaseHandler.getInstance();
+		dbHandler = DatabaseHandler.getInstance();
 	}
 	
 	@FXML
 	private void SaveButtonEvent(ActionEvent event) {
 		
 		// Local String variables for the values extracted from the input
-		String isbn = txfISBN.getText();
+		String isbn = txfIsbn.getText();
 		String title = txfTitle.getText();
 		String author = txfAuthor.getText();
 		String edition = txfEdition.getText();
@@ -66,8 +74,9 @@ public class AddBookController implements Initializable {
 		 */
 		boolean flag = isbn.isEmpty() || title.isEmpty() || author.isEmpty() ||
 				edition.isEmpty() || publisher.isEmpty() || price.isEmpty();
+		
 		if (flag) {
-			ThrowAlert.showErrorMessage("Error Occured", "Please enter in all fields");
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Insufficient Data", "Please enter data in all the fields");
 			return;
 		}
 		
@@ -95,7 +104,7 @@ public class AddBookController implements Initializable {
 		System.out.println(query);
 		
 		// Saving the data to the Database
-		if (dataHandler.exeAction(query)) {
+		if (dbHandler.exeAction(query)) {
 			ThrowAlert.showInformationMessage("Successful", "Save Successfull");
 			Stage stage = (Stage) rootPane.getScene().getWindow();
 			stage.close();
@@ -120,13 +129,19 @@ public class AddBookController implements Initializable {
 	 * regular progression.
 	 *
 	 */
-	private boolean isNumber(String p) {
-		if (p.length() < 5) {
-			for (int i = 0 ; i < p.length() ; i++) {
-				if (Character.isDigit(p.charAt(i)) == false)
+	private boolean isNumber(String price) {
+		if (price.length() < 5) {
+			for (int i = 0 ; i < price.length() ; i++) {
+				if (Character.isDigit(price.charAt(i)) == false)
 					return false;
 			}
 		}
 		return true;
+	}
+	
+	private void handleEditOperation() {
+		ListBookController.Book book = new ListBookController.Book(
+				txfIsbn.getText(), txfTitle.getText(), txfAuthor.getText(), txfEdition.getText(), 
+				txfPublisher.getText(), txfPrice.getText(), true);
 	}
 }

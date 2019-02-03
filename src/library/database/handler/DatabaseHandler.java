@@ -323,7 +323,7 @@ public final class DatabaseHandler {
 			stmt.setString(2, book.getAuthor());
 			stmt.setString(3, book.getPublisher());
 			stmt.setString(4, book.getEdition());
-			stmt.setInt(5, book.getPrice());
+			stmt.setString(5, book.getPrice());
 			stmt.setBoolean(6, book.getAvailibility());
 			int res = stmt.executeUpdate();
 			return (res > 0);
