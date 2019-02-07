@@ -13,14 +13,14 @@ public class DatabaseHelper {
 	public static boolean insertNewBook(Book book) {
 		try {
 			PreparedStatement statement = DatabaseHandler.getInstance().getConnection().prepareStatement(
-					"INSERT INTO BOOK (ISBN, TITLE, AUTHOR, EDITION_NUMBER, PUBLISHER, PRICE, AVAILABILITY) \n"
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?");
+					"INSERT INTO BOOK (ISBN, TITLE, AUTHOR, EDITION_NUMBER, PUBLISHER, PRICE, AVAILABLE) \n"
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?)");
 			statement.setString(1, book.getIsbn());
 			statement.setString(2, book.getTitle());
 			statement.setString(3, book.getAuthor());
 			statement.setString(4, book.getEdition_number());
 			statement.setString(5, book.getPublisher());
-			statement.setInt(6, book.getPrice());
+			statement.setString(6, book.getPrice());
 			statement.setBoolean(7, book.getAvailable());
 			return statement.executeUpdate() > 0;
 		} catch (SQLException e) {

@@ -436,6 +436,7 @@ public class MainStageController implements Initializable {
 				JFXButton btnCheck = new JFXButton("Go Back and Check");
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnCheck), "Issue Operation Failed", null);
 			}
+			refreshGraphs();
 			clearIssueTabEntries();
 		});
 		
@@ -679,6 +680,7 @@ public class MainStageController implements Initializable {
 				JFXButton btnFail = new JFXButton("Go Back and Check");
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnFail), "Book Submission Failed", null);
 			}
+			clearRenewTabEntries();
 		});
 		
 		JFXButton btnNo = new JFXButton("NO");

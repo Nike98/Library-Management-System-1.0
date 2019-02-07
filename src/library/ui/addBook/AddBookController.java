@@ -3,7 +3,11 @@ package library.ui.addBook;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import library.alert.ThrowAlert;
+import library.data.model.Book;
 import library.database.handler.*;
 import library.ui.listBook.ListBookController;
 import com.jfoenix.controls.JFXButton;
@@ -48,7 +52,6 @@ public class AddBookController implements Initializable {
 	private JFXButton btnCancel;
 	
 	private DatabaseHandler dbHandler;
-	private DatabaseHelper dbHelper;
 	private Boolean isInEditMode = Boolean.FALSE;
 
 	@Override
@@ -80,38 +83,35 @@ public class AddBookController implements Initializable {
 			return;
 		}
 		
+		if (isInEditMode) {
+			handleEditOperation();
+			return;
+		}
+		
+		if (DatabaseHelper.checkBookExistence(isbn)) {
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Duplicate Book ISBN", 
+					"Book with the same ISBN already exists.\nPlease use a new ISBN code/number");
+			return;
+		}
+		
 		if (isNumber(price)) {
 			// If the Price field has no characters it will convert the data into integer
 			Integer.parseInt(price);
-		}
-		else {
+		} else {
 			// If not then it will alert the User to do so
 			ThrowAlert.showErrorMessage("Error Occured", "Price field has Characters");
 			return;
 		}
 		
-		// Main SQL Query to Add the Book into the Database
-		String query = " INSERT INTO BOOK VALUES (" +
-					"'" + isbn + "'," +
-					"'" + title + "'," + 
-					"'" + author + "'," + 
-					"'" + edition + "'," + 
-					"'" + publisher + "'," + 
-					" " + price +
-					")";
-		
-		// REMOVE THIS BEFORE DEPLOYMENT
-		System.out.println(query);
-		
-		// Saving the data to the Database
-		if (dbHandler.exeAction(query)) {
-			ThrowAlert.showInformationMessage("Successful", "Save Successfull");
-			Stage stage = (Stage) rootPane.getScene().getWindow();
-			stage.close();
-		}
-		else {
-			// On Error
-			ThrowAlert.showErrorMessage("Error Occured", "Failed to Save to Database");
+		Book book = new Book(isbn, title, author, edition, publisher, price, Boolean.TRUE);
+		boolean result = DatabaseHelper.insertNewBook(book);
+		if (result) {
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "New Book Added", 
+					title + " has been added");
+			clearEntries();
+		} else {
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Failed to Add New Book", 
+					"Please check all the entries and try again");
 		}
 	}
 	
@@ -121,16 +121,16 @@ public class AddBookController implements Initializable {
 		stage.close();
 	}
 	
-	/*
-	 * Method to check for any characters in the Price field
-	 *  
-	 * If the Price field doesn't have any any characters 
-	 * in it then it returns true and the code continues
-	 * regular progression.
-	 *
-	 */
 	private boolean isNumber(String price) {
-		if (price.length() < 5) {
+		/*
+		 * Method to check for any characters in the Price field
+		 *  
+		 * If the Price field doesn't have any any characters 
+		 * in it then it returns true and the code continues
+		 * regular progression.
+		 *
+		 */
+		if (price.length() < 6) {
 			for (int i = 0 ; i < price.length() ; i++) {
 				if (Character.isDigit(price.charAt(i)) == false)
 					return false;
@@ -139,9 +139,33 @@ public class AddBookController implements Initializable {
 		return true;
 	}
 	
+	public void inflateUI(ListBookController.Book book) {
+		txfIsbn.setText(book.getIsbn());
+		txfIsbn.setEditable(false);
+		txfTitle.setText(book.getTitle());
+		txfAuthor.setText(book.getAuthor());
+		txfEdition.setText(book.getEdition());
+		txfPublisher.setText(book.getPublisher());
+		txfPrice.setText(book.getPrice());
+		isInEditMode = Boolean.TRUE;
+	}
+	
+	private void clearEntries() {
+		txfIsbn.clear();
+		txfTitle.clear();
+		txfAuthor.clear();
+		txfEdition.clear();
+		txfPublisher.clear();
+		txfPrice.clear();
+	}
+	
 	private void handleEditOperation() {
 		ListBookController.Book book = new ListBookController.Book(
 				txfIsbn.getText(), txfTitle.getText(), txfAuthor.getText(), txfEdition.getText(), 
 				txfPublisher.getText(), txfPrice.getText(), true);
+		if (dbHandler.updatebook(book))
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Operation Successfull", "Book Update Completed Successfully");
+		else
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Operation Failed", "Book Update Failed");
 	}
 }

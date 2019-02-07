@@ -7,13 +7,14 @@ public class Book {
 	String author;
 	String edition_number;
 	String publisher;
-	Integer price;
+	String price;
 	Boolean available;
 	
-	public Book (String isbn, String title, String edition_number, 
-			String publisher, Integer price, Boolean available) {
+	public Book (String isbn, String title, String author, String edition_number, 
+			String publisher, String price, Boolean available) {
 		this.isbn = isbn;
 		this.title = title;
+		this.author = author;
 		this.edition_number = edition_number;
 		this.publisher = publisher;
 		this.price = price;
@@ -60,11 +61,11 @@ public class Book {
 		this.publisher = publisher;
 	}
 
-	public Integer getPrice() {
+	public String getPrice() {
 		return price;
 	}
 
-	public void setPrice(Integer price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 
