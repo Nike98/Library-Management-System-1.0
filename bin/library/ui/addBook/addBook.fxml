@@ -13,14 +13,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.addBook.AddBookController">
+<StackPane fx:id="rootPane" prefHeight="600.0" prefWidth="500.0" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.addBook.AddBookController">
    <children>
       <AnchorPane fx:id="rootAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="400.0">
          <children>
             <VBox prefHeight="320.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <JFXTextField fx:id="txfIsbn" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Book ISBN">
+                  <JFXTextField fx:id="txfIsbn" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Book ISBN" styleClass="jfxtext-field" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css">
                      <font>
                         <Font name="Arial" size="18.0" />
                      </font>
@@ -31,7 +30,7 @@
                         <Insets top="15.0" />
                      </VBox.margin>
                   </JFXTextField>
-                  <JFXTextField fx:id="txfTitle" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Book Title">
+                  <JFXTextField fx:id="txfTitle" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Book Title" styleClass="jfxtext-field" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="30.0" />
                      </padding>
@@ -42,7 +41,7 @@
                         <Insets top="15.0" />
                      </VBox.margin>
                   </JFXTextField>
-                  <JFXTextField fx:id="txfAuthor" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Author">
+                  <JFXTextField fx:id="txfAuthor" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Author" styleClass="jfxtext-field" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css">
                      <font>
                         <Font name="Arial" size="18.0" />
                      </font>
@@ -53,7 +52,7 @@
                         <Insets top="15.0" />
                      </VBox.margin>
                   </JFXTextField>
-                  <JFXTextField fx:id="txfEdition" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Book Edition ">
+                  <JFXTextField fx:id="txfEdition" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Book Edition " styleClass="jfxtext-field" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css">
                      <font>
                         <Font name="Arial" size="18.0" />
                      </font>
@@ -64,7 +63,7 @@
                         <Insets top="15.0" />
                      </VBox.margin>
                   </JFXTextField>
-                  <JFXTextField fx:id="txfPublisher" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Publisher">
+                  <JFXTextField fx:id="txfPublisher" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Publisher" styleClass="jfxtext-field" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css">
                      <font>
                         <Font name="Arial" size="18.0" />
                      </font>
@@ -75,7 +74,7 @@
                         <Insets top="15.0" />
                      </VBox.margin>
                   </JFXTextField>
-                  <JFXTextField fx:id="txfPrice" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Price">
+                  <JFXTextField fx:id="txfPrice" labelFloat="true" prefHeight="37.0" prefWidth="400.0" promptText="Price" styleClass="jfxtext-field" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css">
                      <font>
                         <Font name="Arial" size="18.0" />
                      </font>
@@ -86,12 +85,12 @@
                         <Insets top="15.0" />
                      </VBox.margin>
                   </JFXTextField>
-                  <HBox prefHeight="60.0" prefWidth="400.0">
+                  <HBox prefHeight="60.0" prefWidth="400.0" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css">
                      <padding>
                         <Insets top="20.0" />
                      </padding>
                      <VBox.margin>
-                        <Insets />
+                        <Insets top="20.0" />
                      </VBox.margin>
                      <children>
                         <JFXButton fx:id="btnSave" onAction="#SaveButtonEvent" prefHeight="52.0" prefWidth="133.0" styleClass="jfx-button-save" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Save" textAlignment="CENTER">

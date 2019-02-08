@@ -95,11 +95,10 @@ public class AddBookController implements Initializable {
 		}
 		
 		if (isNumber(price)) {
-			// If the Price field has no characters it will convert the data into integer
 			Integer.parseInt(price);
 		} else {
-			// If not then it will alert the User to do so
-			ThrowAlert.showErrorMessage("Error Occured", "Price field has Characters");
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Input Mismatch", 
+					"Price Field has characters. Please enter numerical values");
 			return;
 		}
 		
