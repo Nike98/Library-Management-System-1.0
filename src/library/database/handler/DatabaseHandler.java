@@ -348,6 +348,7 @@ public final class DatabaseHandler {
 			stmt.setString(3, member.getAddress());
 			stmt.setLong(4, member.getMobile());
 			stmt.setString(5, member.getEmail());
+			stmt.setInt(6, member.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

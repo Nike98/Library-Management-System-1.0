@@ -108,6 +108,8 @@ public class AddBookController implements Initializable {
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "New Book Added", 
 					title + " has been added");
 			clearEntries();
+			Stage stage = (Stage) rootPane.getScene().getWindow();
+			stage.close();
 		} else {
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Failed to Add New Book", 
 					"Please check all the entries and try again");

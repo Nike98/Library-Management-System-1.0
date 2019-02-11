@@ -1,6 +1,9 @@
 package library.ui.addMember;
 
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
@@ -9,14 +12,23 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
+import library.ui.listMember.ListMemberController;
+import library.ui.listMember.ListMemberController.Member;
 
 public class AddMemberController implements Initializable{
 	
 	@FXML
-	private AnchorPane rootPane;
+	private StackPane rootPane;
+	
+	@FXML
+	private AnchorPane rootAnchorPane;
+	
+	@FXML
+	private JFXTextField txfId;
 
 	@FXML
 	private JFXTextField txfName;
@@ -95,5 +107,26 @@ public class AddMemberController implements Initializable{
 	private void CancelButtonEvent(ActionEvent event) {
 		Stage stage = (Stage) rootPane.getScene().getWindow();
 		stage.close();
+	}
+	
+	private static Integer retrieveMemberId(String email) {
+		try {
+			String query = "SELECT ID FROM MEMBER WHERE EMAIL_ID = ?";
+			PreparedStatement stmt = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				Integer id = rs.getInt("id");
+				System.out.println(id);
+				return id;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private void handleUpdateMember() {
+		Member member = new ListMemberController.Member(id, name, city, address, mobile, email);
 	}
 }

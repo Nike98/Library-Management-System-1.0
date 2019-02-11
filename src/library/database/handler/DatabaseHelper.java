@@ -65,7 +65,7 @@ public class DatabaseHelper {
 	
 	public static boolean checkMemberExistence(Integer id) {
 		try {
-			String checkstmt = "";
+			String checkstmt = "SELECT COUNT(*) FROM MEMBER WHERE ID = ?";
 			PreparedStatement stmt = DatabaseHandler.getInstance().getConnection().prepareStatement(checkstmt);
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();

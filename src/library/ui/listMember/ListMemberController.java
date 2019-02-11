@@ -92,7 +92,7 @@ public class ListMemberController implements Initializable {
 		private final SimpleLongProperty mobile;
 		private final SimpleStringProperty email;
 		
-		Member ( Integer id, String name, String city, 
+		public Member ( Integer id, String name, String city, 
 				String address, Long mobile, String email){
 			this.id = new SimpleIntegerProperty(id);
 			this.name = new SimpleStringProperty(name);

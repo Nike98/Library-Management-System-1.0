@@ -18,7 +18,7 @@ public class MainStage extends Application {
 			scene.getStylesheets().add(getClass().getResource("/Resources/StyleSheets/LibraryStyleSheet.css").toExternalForm());
 			primaryStage.setTitle("Dashboard");
 			primaryStage.setScene(scene);
-			primaryStage.setResizable(false);
+			primaryStage.setResizable(true);
 			primaryStage.show();
 			
 			// This Decreases the time the Application takes to load
