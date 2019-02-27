@@ -2,6 +2,6 @@
 
 <tables>
 	<table-entry name="BOOK" col-data="isbn varchar(17), title varchar(200) not null, author varchar(60) not null, edition_number varchar(60) not null, publisher varchar(200), price varchar(5) not null, available boolean default true, CONSTRAINT BOOK_ID_PK PRIMARY KEY(ISBN)" />
-	<table-entry name="MEMBER" col-data="id ineteger generated always as identity (start with 100, increment by 1), name varchar(200) not null, city varchar(100) not null, address varchar(200) not null, mobile_no bigint not null, email_id varchar(100) not null, CONSTRAINT MEMBER_ID_PK PRIMARY KEY(ID)" />
+	<table-entry name="MEMBER" col-data="id integer generated always as identity (start with 100, increment by 1), name varchar(200) not null, city varchar(100) not null, address varchar(200) not null, mobile_no varchar(10) not null, email_id varchar(100) not null, CONSTRAINT MEMBER_ID_PK PRIMARY KEY(ID)" />
 	<table-entry name="ISSUE" col-data="isbn varchar(17), member_id integer, issue_time timestamp default current_timestamp, day_count integer default 0, CONSTRAINT ISSUE_ISBN_FK FOREIGN KEY(ISBN) REFERENCES BOOK(ISBN), CONSTRAINT ISSUE_MEMBER_ID FOREIGN KEY(MEMBER_ID) REFERENCES MEMBER(ID)" />
 </tables>

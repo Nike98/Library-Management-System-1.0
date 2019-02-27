@@ -93,12 +93,12 @@
                         <Insets top="20.0" />
                      </VBox.margin>
                      <children>
-                        <JFXButton fx:id="btnSave" onAction="#SaveButtonEvent" prefHeight="52.0" prefWidth="133.0" styleClass="jfx-button-save" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Save" textAlignment="CENTER">
+                        <JFXButton fx:id="btnSave" onAction="#SaveButtonEvent" prefHeight="52.0" prefWidth="133.0" text="Save" textAlignment="CENTER">
                            <HBox.margin>
                               <Insets left="30.0" />
                            </HBox.margin>
                         </JFXButton>
-                        <JFXButton fx:id="btnCancel" onAction="#CancelButtonEvent" prefHeight="52.0" prefWidth="133.0" styleClass="jfx-button-cancel" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Cancel" textAlignment="CENTER">
+                        <JFXButton fx:id="btnCancel" onAction="#CancelButtonEvent" prefHeight="52.0" prefWidth="133.0" text="Cancel" textAlignment="CENTER">
                            <HBox.margin>
                               <Insets left="70.0" />
                            </HBox.margin>

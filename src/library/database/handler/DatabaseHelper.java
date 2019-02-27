@@ -29,17 +29,16 @@ public class DatabaseHelper {
 		return false;
 	}
 	
-	public static boolean insertNewMember(Member member) {
+	public static boolean insertNewMember(String name, String city, String address, String mobile, String email) {
 		try {
 			PreparedStatement statement = DatabaseHandler.getInstance().getConnection().prepareStatement(
-					"INSERT INTO MEMBER (ID, NAME, CITY, ADDRESS, MOBILE_NO, EMAIL_ID) \n"
-					+ "VALUES (?, ?, ?, ?, ?, ?)");
-			statement.setInt(1, member.getId());
-			statement.setString(2, member.getName());
-			statement.setString(3, member.getCity());
-			statement.setString(4, member.getAddress());
-			statement.setLong(5, member.getMobile());
-			statement.setString(6, member.getEmail());
+					"INSERT INTO MEMBER (NAME, CITY, ADDRESS, MOBILE_NO, EMAIL_ID) \n"
+					+ "VALUES (?, ?, ?, ?, ?)");
+			statement.setString(1, name);
+			statement.setString(2, city);
+			statement.setString(3, address);
+			statement.setString(4, mobile);
+			statement.setString(5, email);
 			return statement.executeUpdate() > 0;
 		} catch (SQLException e) {
 			e.printStackTrace();

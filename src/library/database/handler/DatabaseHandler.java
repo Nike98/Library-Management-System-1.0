@@ -98,7 +98,7 @@ public final class DatabaseHandler {
 			System.out.println("Already loaded Tables " + loadedTables);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(DatabaseHandler.class.getClass().getResourceAsStream("/Resources/database/table.xml"));
+			Document doc = dBuilder.parse(DatabaseHandler.class.getClass().getResourceAsStream("/Resources/database/tables.xml"));
 			NodeList nodeList = doc.getElementsByTagName("table-entry");
 			for (int i = 0 ; i < nodeList.getLength() ; i++) {
 				Node node = nodeList.item(i);
@@ -106,7 +106,7 @@ public final class DatabaseHandler {
 				String tableName = entry.getAttribute("name");
 				String query = entry.getAttribute("col-data");
 				if (!loadedTables.contains(tableName.toLowerCase()))
-					tableData.add(String.format("CERATE TABLE %s (%s)", tableName, query));
+					tableData.add(String.format("CREATE TABLE %s (%s)", tableName, query));
 			}
 			if (tableData.isEmpty())
 				System.out.println("Tables are already loaded");
@@ -346,7 +346,7 @@ public final class DatabaseHandler {
 			stmt.setString(1, member.getName());
 			stmt.setString(2, member.getCity());
 			stmt.setString(3, member.getAddress());
-			stmt.setLong(4, member.getMobile());
+			stmt.setString(4, member.getMobile());
 			stmt.setString(5, member.getEmail());
 			stmt.setInt(6, member.getId());
 		} catch (SQLException e) {

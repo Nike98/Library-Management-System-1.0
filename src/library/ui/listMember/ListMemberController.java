@@ -72,7 +72,7 @@ public class ListMemberController implements Initializable {
 				String name = res.getString("name");
 				String city = res.getString("city");
 				String address = res.getString("address");
-				Long mobile = res.getLong("mobile_no");
+				String mobile = res.getString("mobile_no");
 				String email = res.getString("email_id");
 				
 				MemberList.add(new Member(id, name, city, address, mobile, email));
@@ -89,16 +89,16 @@ public class ListMemberController implements Initializable {
 		private final SimpleStringProperty name;
 		private final SimpleStringProperty city;
 		private final SimpleStringProperty address;
-		private final SimpleLongProperty mobile;
+		private final SimpleStringProperty mobile;
 		private final SimpleStringProperty email;
 		
 		public Member ( Integer id, String name, String city, 
-				String address, Long mobile, String email){
+				String address, String mobile, String email){
 			this.id = new SimpleIntegerProperty(id);
 			this.name = new SimpleStringProperty(name);
 			this.city = new SimpleStringProperty(city);
 			this.address = new SimpleStringProperty(address);
-			this.mobile = new SimpleLongProperty(mobile);
+			this.mobile = new SimpleStringProperty(mobile);
 			this.email = new SimpleStringProperty(email);
 		}
 		
@@ -118,7 +118,7 @@ public class ListMemberController implements Initializable {
 			return address.get();
 		}
 		
-		public Long getMobile() {
+		public String getMobile() {
 			return mobile.get();
 		}
 

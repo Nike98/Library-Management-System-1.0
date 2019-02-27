@@ -1,9 +1,7 @@
 package library.ui.addMember;
 
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
@@ -16,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
+import library.database.handler.DatabaseHelper;
 import library.ui.listMember.ListMemberController;
 import library.ui.listMember.ListMemberController.Member;
 
@@ -26,9 +25,6 @@ public class AddMemberController implements Initializable{
 	
 	@FXML
 	private AnchorPane rootAnchorPane;
-	
-	@FXML
-	private JFXTextField txfId;
 
 	@FXML
 	private JFXTextField txfName;
@@ -51,7 +47,8 @@ public class AddMemberController implements Initializable{
 	@FXML
 	private JFXButton btnCancel;
 	
-	DatabaseHandler dbHandler;
+	private DatabaseHandler dbHandler;
+	private Boolean isInEditMode = false;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -71,36 +68,28 @@ public class AddMemberController implements Initializable{
 		 * In case if any field id empty,
 		 * an alert box will pop up on the screen.
 		 */
-		boolean flag = memName.isEmpty() || memCity.isEmpty()
+		Boolean flag = memName.isEmpty() || memCity.isEmpty()
 				|| memAddress.isEmpty() || memMobile.isEmpty() || memEmail.isEmpty();
 		if (flag) {
-			ThrowAlert.showErrorMessage("Error Occured", "Please enter in all fields");
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Insufficient Data", "Please enter data in all the fields");
 			return;
 		}
 		
-		// Main SQL Query to Add the Book into the Database
-		String query = " INSERT INTO MEMBER " +
-				 	"(name, city, address, mobile_no, email_id)" +
-					" VALUES (" +
-					"'" + memName + "'," + 
-					"'" + memCity + "'," + 
-					"'" + memAddress + "'," + 
-					"" + memMobile + "," + 
-					"'" + memEmail + "'" +
-					")";
-				
-		// REMOVE THIS BEFORE DEPLOYMENT
-		System.out.println(query);
+		if (isInEditMode) {
+			handleUpdateMember();
+			return;
+		}
 		
-		// Saving the data to the Database
-		if (dbHandler.exeAction(query)) {
-			ThrowAlert.showInformationMessage("Operation Successful", "Member Added Successfully");
+		boolean result = DatabaseHelper.insertNewMember(memName, memCity, memAddress, memMobile, memEmail);
+		if (result) {
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(),
+					"New member added", "New Member " + memName + " has been added");
+			clearEntries();
 			Stage stage = (Stage) rootPane.getScene().getWindow();
 			stage.close();
-		} else {
-			// On Error
-			ThrowAlert.showErrorMessage("Error Occured", "Failed to Save to Database");
-		}
+		} else 
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(),
+					"Failed to add new member", "Please re-check your entries and try again");
 	}
 	
 	@FXML
@@ -109,24 +98,20 @@ public class AddMemberController implements Initializable{
 		stage.close();
 	}
 	
-	private static Integer retrieveMemberId(String email) {
-		try {
-			String query = "SELECT ID FROM MEMBER WHERE EMAIL_ID = ?";
-			PreparedStatement stmt = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
-			stmt.setString(1, email);
-			ResultSet rs = stmt.executeQuery();
-			if (rs.next()) {
-				Integer id = rs.getInt("id");
-				System.out.println(id);
-				return id;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
+	private void clearEntries() {
+		txfName.clear();
+		txfCity.clear();
+		txfAddress.clear();
+		txfMobileNo.clear();
+		txfEmail.clear();
 	}
 	
 	private void handleUpdateMember() {
-		Member member = new ListMemberController.Member(id, name, city, address, mobile, email);
+		Member member = new ListMemberController.Member(
+				null, txfName.getText(), txfCity.getText(), txfAddress.getText(), txfMobileNo.getText(), txfEmail.getText());
+		if (dbHandler.updateMember(member))
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Success", "Member data updated");
+		else
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Failed", "Member update operation failed");
 	}
 }
