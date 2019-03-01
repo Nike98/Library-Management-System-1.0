@@ -15,6 +15,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
+import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.events.JFXDialogEvent;
 import com.jfoenix.effects.JFXDepthManager;
@@ -40,14 +41,24 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
+import library.ui.callback.BookReturnCallback;
 import library.util.LibraryUtil;
 
-public class MainStageController implements Initializable {
+public class MainStageController implements Initializable, BookReturnCallback {
+	
+	private DatabaseHandler dbHandler;
+	private Boolean isReadytoSubmit = false;
+	private PieChart bookChart;
+	private PieChart memberChart;
 	
 	@FXML
 	private StackPane rootPane;
+	
+	@FXML
+	private JFXTabPane mainTabPane;
 	
 	@FXML
 	private Tab IssueTab;
@@ -142,11 +153,6 @@ public class MainStageController implements Initializable {
 	@FXML
 	private Text BoxIssue_Fine;
 	
-	DatabaseHandler dbHandler;
-	boolean isReadytoSubmit = true;
-	PieChart bookChart;
-	PieChart memberChart;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		/*
@@ -201,6 +207,10 @@ public class MainStageController implements Initializable {
 			if (IssueTab.isSelected())
 				refreshGraphs();
 		});
+	}
+	
+	private Stage getStage() {
+		return (Stage) rootPane.getScene().getWindow();
 	}
 	
 	private void clearBookCache() {
@@ -458,6 +468,16 @@ public class MainStageController implements Initializable {
 	 * Events Start from further here.
 	 * 
 	 */
+	
+	@Override
+	public void loadBookReturn(String bookIsbn) {
+		this.Ren_txfIsbn.setText(bookIsbn);
+		mainTabPane.getSelectionModel().select(RenewSubmissionTab);
+		Ren_LoadBookInfo(null);
+		getStage().toFront();
+		if (tool_drawer.isOpened())
+			tool_drawer.close();
+	}
 	
 	@FXML
 	private void Ren_LoadBookInfo(ActionEvent event) {

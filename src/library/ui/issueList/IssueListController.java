@@ -5,6 +5,9 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -102,7 +105,9 @@ public class IssueListController implements Initializable {
 				String isbn = rs.getString("isbn");
 				String bookTitle = rs.getString("title");
 				String memName = rs.getString("name");
+					System.out.println("Name : " + memName);
 				Timestamp issueTime = rs.getTimestamp("issue_time");
+					System.out.println("Issued on " + issueTime);
 				Integer days = Math.toIntExact(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - issueTime.getTime()));
 				Double fine = LibraryUtil.getFineAmount(days);
 				Issue issueInfo = new Issue(counter, isbn, bookTitle, memName, LibraryUtil.formatDateTimeString(new Date(issueTime.getTime())), days, fine);
@@ -134,6 +139,38 @@ public class IssueListController implements Initializable {
 		Issue issueInfo = tableView.getSelectionModel().getSelectedItem();
 		if (issueInfo != null)
 			callback.loadBookReturn(issueInfo.getIsbn());
+	}
+	
+	@FXML
+	private void exportAsPdf(ActionEvent event) {
+		List<List> printData = new ArrayList<>();
+		String[] headers = {
+			"Sn.",
+			"     ISBN     ",
+			"      Book Name      ",
+			"     Holder Name     ",
+			"     Issue Date     ",
+			"  Days Elapsed",
+			"  Fine"
+		};
+		printData.add(Arrays.asList(headers));
+		for (Issue info : IssueList) {
+			List<String> row = new ArrayList<>();
+			row.add(String.valueOf(info.getId()));
+			row.add(info.getIsbn());
+			row.add(info.getBookName());
+			row.add(info.getMemName());
+			row.add(info.getIssueTime());
+			row.add(String.valueOf(info.getDays()));
+			row.add(String.valueOf(info.getFine()));
+			printData.add(row);
+		}
+		LibraryUtil.initPDFExport(rootPane, rootAnchorPane, getstage(), printData, "Issue");
+	}
+	
+	@FXML
+	private void closeStage() {
+		getstage().close();
 	}
 	
 	public static class Issue {		
