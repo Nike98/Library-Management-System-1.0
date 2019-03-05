@@ -4,26 +4,31 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import library.database.handler.DatabaseHandler;
 
 public class ListMemberController implements Initializable {
 	
-	ObservableList<Member> MemberList = FXCollections.observableArrayList();
+	private ObservableList<Member> MemberList = FXCollections.observableArrayList();
+	private DatabaseHandler dbHandler;
 	
 	@FXML
-	private AnchorPane rootPane;
+	private StackPane rootPane;
+	
+	@FXML
+	private AnchorPane rootAnchorPane;
 	
 	@FXML
 	private TableView<Member> MainTable;
@@ -61,11 +66,15 @@ public class ListMemberController implements Initializable {
 		colMobile.setCellValueFactory(new PropertyValueFactory<>("mobile"));
 	}
 	
+	private Stage getStage() {
+		return (Stage) MainTable.getScene().getWindow();
+	}
+	
 	private void LoadData() {
+		MemberList.clear();
 		DatabaseHandler dataHandler = DatabaseHandler.getInstance();
 		String qry = "SELECT * FROM MEMBER";
 		ResultSet res = dataHandler.exeQuery(qry);
-		
 		try {
 			while (res.next()) {
 				Integer id = res.getInt("id");
@@ -82,6 +91,31 @@ public class ListMemberController implements Initializable {
 		}
 		
 		MainTable.getItems().setAll(MemberList);
+	}
+	
+	@FXML
+	private void refreshOperation(ActionEvent event) {
+		LoadData();
+	}
+	
+	@FXML
+	private void deleteMemberOperation(ActionEvent event) {
+		
+	}
+	
+	@FXML
+	private void editMemberOperation(ActionEvent event) {
+		
+	}
+	
+	@FXML
+	private void exportAsPDF(ActionEvent event) {
+		
+	}
+	
+	@FXML
+	private void closeStage(ActionEvent event) {
+		getStage().close();
 	}
 
 	public static class Member {

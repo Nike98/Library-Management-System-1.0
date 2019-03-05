@@ -59,6 +59,10 @@ public class AddBookController implements Initializable {
 		dbHandler = DatabaseHandler.getInstance();
 	}
 	
+	private Stage getStage() {
+		return (Stage) rootPane.getScene().getWindow();
+	}
+	
 	@FXML
 	private void SaveButtonEvent(ActionEvent event) {
 		
@@ -108,8 +112,7 @@ public class AddBookController implements Initializable {
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "New Book Added", 
 					title + " has been added");
 			clearEntries();
-			Stage stage = (Stage) rootPane.getScene().getWindow();
-			stage.close();
+			getStage().close();
 		} else {
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Failed to Add New Book", 
 					"Please check all the entries and try again");
@@ -140,7 +143,7 @@ public class AddBookController implements Initializable {
 		return true;
 	}
 	
-	public void inflateUI(ListBookController.Book book) {
+	public void inflateUI(ListBookController.Book book) {		
 		txfIsbn.setText(book.getIsbn());
 		txfIsbn.setEditable(false);
 		txfTitle.setText(book.getTitle());
@@ -164,8 +167,10 @@ public class AddBookController implements Initializable {
 		ListBookController.Book book = new ListBookController.Book(
 				txfIsbn.getText(), txfTitle.getText(), txfAuthor.getText(), txfEdition.getText(), 
 				txfPublisher.getText(), txfPrice.getText(), true);
-		if (dbHandler.updatebook(book))
+		if (dbHandler.updatebook(book)) {
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Operation Successfull", "Book Update Completed Successfully");
+			getStage().close();
+		}
 		else
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), "Operation Failed", "Book Update Failed");
 	}
