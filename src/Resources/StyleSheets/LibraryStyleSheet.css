@@ -94,6 +94,7 @@
 
 .context-menu{
 	-fx-background-color: derive(-fx-primary, 20%);
+	-fx-text-fill: white;
 }
 
 /* Hamburger Menu */

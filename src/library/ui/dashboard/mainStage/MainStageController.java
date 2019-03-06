@@ -454,7 +454,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 				;
 		btnNo.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventNo) -> {
 			JFXButton btnFail = new JFXButton("OK. Go Back");
-			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnFail), "Failed", "Issue Operation was Cancelled");
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnFail), "Cancelled", "Issue Operation was Cancelled");
 			clearIssueTabEntries();
 		});
 		

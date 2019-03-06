@@ -315,8 +315,7 @@ public final class DatabaseHandler {
 					+ "AUTHOR = ?, \n"
 					+ "PUBLISHER = ?, \n"
 					+ "EDITION_NUMBER = ?, \n"
-					+ "PRICE = ?, \n"
-					+ "AVAILABLE = ?, \n"
+					+ "PRICE = ? \n"
 					+ "WHERE ISBN = ?";
 			PreparedStatement stmt = conn.prepareStatement(update);
 			stmt.setString(1, book.getTitle());
@@ -324,7 +323,7 @@ public final class DatabaseHandler {
 			stmt.setString(3, book.getPublisher());
 			stmt.setString(4, book.getEdition());
 			stmt.setString(5, book.getPrice());
-			stmt.setBoolean(6, book.getAvailibility());
+			stmt.setString(6, book.getIsbn());
 			int res = stmt.executeUpdate();
 			return (res > 0);
 		} catch (SQLException e) {
