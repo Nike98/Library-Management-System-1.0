@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -27,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
 import library.ui.addMember.AddMemberController;
@@ -176,6 +178,16 @@ public class ListMemberController implements Initializable {
 			
 			AddMemberController addMemberController = (AddMemberController) loader.getController();
 			addMemberController.inflateUI(selectedForEdit);
+			
+			Stage stage = new Stage(StageStyle.DECORATED);
+			stage.setTitle("Edit Member");
+			stage.setScene(new Scene(parent));
+			stage.show();
+			// Set the stage icon here
+			
+			stage.setOnHiding((e) -> {
+				refreshOperation(new ActionEvent());
+			});
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage());
 		}
