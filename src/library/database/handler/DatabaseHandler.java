@@ -360,7 +360,7 @@ public final class DatabaseHandler {
 		try {
 			String bookQuery = "SELECT COUNT(*) FROM BOOK";
 			String issueQuery = "SELECT COUNT(*) FROM ISSUE";
-			ResultSet rs = exeQuery(bookQuery);
+			ResultSet rs = executeQuery(bookQuery);
 			// For Book
 			if (rs.next()) {
 				int count = rs.getInt(1);
@@ -368,7 +368,7 @@ public final class DatabaseHandler {
 			}
 			
 			// For Issue
-			rs = exeQuery(issueQuery);
+			rs = executeQuery(issueQuery);
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				data.add(new PieChart.Data("Issued Books (" + count + ")", count));
@@ -384,7 +384,7 @@ public final class DatabaseHandler {
 		try {
 			String memberQuery = "SELECT COUNT(*) FROM MEMBER";
 			String issueQuery = "SELECT COUNT(DISTINCT MEMBER_ID) FROM ISSUE";
-			ResultSet rs = exeQuery(memberQuery);
+			ResultSet rs = executeQuery(memberQuery);
 			// For Member
 			if (rs.next()) {
 				int count = rs.getInt(1);
@@ -392,7 +392,7 @@ public final class DatabaseHandler {
 			}
 			
 			// For Issue
-			rs = exeQuery(issueQuery);
+			rs = executeQuery(issueQuery);
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				data.add(new PieChart.Data("Members with Books (" + count + ")", count));
@@ -404,32 +404,32 @@ public final class DatabaseHandler {
 	}
 	
 	// Method to execute a particular query passed as a String to this method
-	public ResultSet exeQuery(String query) {
+	public ResultSet executeQuery(String query) {
 		ResultSet result;
 		
 		try {
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(query);
 		} catch (SQLException e) {
-			System.out.println("Exception at exeQuery:DataHandler" + e.getLocalizedMessage());
+			System.out.println("Exception at executeQuery:DataHandler" + e.getLocalizedMessage());
 			return null;
 		}
 		
 		return result;
 	}
 	
-	public boolean exeAction(String qry) {
+	public boolean executeAction(String query) {
 		/*
 		 * This method performs particular action given to it
 		 * which include insert, select statements.
 		 */
 		try {
 			stmt = conn.createStatement();
-			stmt.execute(qry);
+			stmt.execute(query);
 			return true;
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error Occured", JOptionPane.ERROR_MESSAGE);
-			System.out.println("Exception at exeAction:DataHandler" + e.getLocalizedMessage());
+			System.out.println("Exception at executeAction:DataHandler" + e.getLocalizedMessage());
 			return false;
 		}
 	}

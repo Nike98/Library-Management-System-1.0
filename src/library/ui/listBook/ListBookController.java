@@ -98,8 +98,8 @@ public class ListBookController implements Initializable{
 	
 	private void LoadData() {
 		DatabaseHandler dataHandler = DatabaseHandler.getInstance();
-		String qry = "SELECT * FROM BOOK";
-		ResultSet res = dataHandler.exeQuery(qry);
+		String query = "SELECT * FROM BOOK";
+		ResultSet res = dataHandler.executeQuery(query);
 		
 		try {
 			while (res.next()) {
