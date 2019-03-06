@@ -121,7 +121,7 @@ public class ListBookController implements Initializable{
 		Book selectedForEdit = MainTable.getSelectionModel().getSelectedItem();
 		if (selectedForEdit == null) {
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(),
-					"No Book Selected", "Please select a proper Book row for deletion");
+					"No Book Selected", "Please select a proper Book row to edit");
 			return;
 		}
 		try {
@@ -185,7 +185,7 @@ public class ListBookController implements Initializable{
 				JFXButton btnDone = new JFXButton("Done. Go Back");
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnDone),
 						"Deletioln Successful",
-						"Book \"" + selectedForDeletion.getTitle() + "\" has been deleted successsfully");
+						"Book \"" + selectedForDeletion.getTitle() + "\" has been deleted successfully");
 				BookList.remove(selectedForDeletion);
 			} else {
 				JFXButton btnBack = new JFXButton("Go Back and Check");
@@ -197,7 +197,7 @@ public class ListBookController implements Initializable{
 		btnCancel.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventCancel) -> {
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(), 
 					"Operation Cancelled", 
-					"Deletion operston was cancelled by the user");
+					"Book deletion operation was cancelled by the user");
 		});
 		ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnYes, btnCancel),
 				"Confirm Delete Operation",

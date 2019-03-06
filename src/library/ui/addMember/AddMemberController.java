@@ -20,6 +20,9 @@ import library.ui.listMember.ListMemberController.Member;
 
 public class AddMemberController implements Initializable{
 	
+	private DatabaseHandler dbHandler;
+	private Boolean isInEditMode = false;
+	
 	@FXML
 	private StackPane rootPane;
 	
@@ -47,9 +50,6 @@ public class AddMemberController implements Initializable{
 	@FXML
 	private JFXButton btnCancel;
 	
-	private DatabaseHandler dbHandler;
-	private Boolean isInEditMode = false;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		dbHandler = DatabaseHandler.getInstance();
@@ -104,6 +104,15 @@ public class AddMemberController implements Initializable{
 		txfAddress.clear();
 		txfMobileNo.clear();
 		txfEmail.clear();
+	}
+	
+	public void inflateUI(ListMemberController.Member member) {
+		txfName.setText(member.getName());
+		txfCity.setText(member.getCity());
+		txfAddress.setText(member.getAddress());
+		txfMobileNo.setText(member.getMobile());
+		txfEmail.setText(member.getEmail());
+		isInEditMode = Boolean.TRUE;
 	}
 	
 	private void handleUpdateMember() {
