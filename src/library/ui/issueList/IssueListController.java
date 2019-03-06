@@ -96,7 +96,7 @@ public class IssueListController implements Initializable {
 				+ "ON MEMBER.ID = ISSUE.MEMBER_ID \n"
 				+ "LEFT OUTER JOIN BOOK \n"
 				+ "ON BOOK.ISBN = ISSUE.ISBN";
-		ResultSet rs = dbHandler.exeQuery(query);
+		ResultSet rs = dbHandler.executeQuery(query);
 		
 		try {
 			int counter = 0;

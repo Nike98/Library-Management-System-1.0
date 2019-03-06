@@ -322,7 +322,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		}
 		else {
 			String query = "SELECT * FROM BOOK WHERE ISBN = '" + isbn + "'";
-			ResultSet rs = dbHandler.exeQuery(query);
+			ResultSet rs = dbHandler.executeQuery(query);
 			Boolean flag = false;
 			
 			try {
@@ -380,7 +380,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			int int_id = Integer.parseInt(id);
 			System.out.println(int_id);
 			String query = "SELECT * FROM MEMBER WHERE ID = " + int_id;
-			ResultSet rs = dbHandler.exeQuery(query);
+			ResultSet rs = dbHandler.executeQuery(query);
 			Boolean flag = false;
 			
 			try {
@@ -429,13 +429,13 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		
 		JFXButton btnYes = new JFXButton("YES");
 		btnYes.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventYes) -> {
-			String insert_qry = "INSERT INTO ISSUE (isbn, member_id) values ("
+			String insert_query = "INSERT INTO ISSUE (isbn, member_id) values ("
 					+ "'" + bookIsbn + "', "
 					+ "" + memId + ")";
 			
-			String update_qry = "UPDATE BOOK SET available = false where isbn = '" + bookIsbn + "'";
+			String update_query = "UPDATE BOOK SET available = false where isbn = '" + bookIsbn + "'";
 			
-			if (dbHandler.exeAction(insert_qry) && dbHandler.exeAction(update_qry)) {
+			if (dbHandler.executeAction(insert_query) && dbHandler.executeAction(update_query)) {
 				//ThrowAlert.showInformationMessage("Success", "Book Issue Operation Completed Successfully");
 				JFXButton btnBack = new JFXButton("Done. Go Back");
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnBack), 
@@ -524,7 +524,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 					+ "ON ISSUE.isbn = BOOK.isbn \n"
 					+ "WHERE ISSUE.isbn = '" + isbn + "'";
 			
-			ResultSet rs = dbHandler.exeQuery(query);
+			ResultSet rs = dbHandler.executeQuery(query);
 			if (rs.next()) {
 				// Member Info
 					BoxMember_Name.setText(rs.getString("name"));
@@ -565,7 +565,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		}
 		
 		/*String query = "SELECT * FROM ISSUE WHERE ISBN = '" + isbn + "'";
-		ResultSet rs = dbHandler.exeQuery(query);
+		ResultSet rs = dbHandler.executeQuery(query);
 		
 		try {
 			while(rs.next()) {
@@ -579,7 +579,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 				
 				data.add("Book Information :-");
 				query = "SELECT * FROM BOOK WHERE ISBN = '" + ren_bookIsbn + "'";
-				ResultSet rs_book = dbHandler.exeQuery(query);
+				ResultSet rs_book = dbHandler.executeQuery(query);
 				while(rs_book.next()) {
 					data.add("\t ISBN : " + rs_book.getString("isbn"));
 					data.add("\t Title : " + rs_book.getString("title"));
@@ -591,7 +591,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 				
 				data.add("Member Information :-");
 				query = "SELECT * FROM MEMBER WHERE ID = '" + ren_memberId + "'";
-				ResultSet rs_member = dbHandler.exeQuery(query);
+				ResultSet rs_member = dbHandler.executeQuery(query);
 				while(rs_member.next()) {
 					data.add("\t ID : " + rs_member.getString("id"));
 					data.add("\t Name : " + rs_member.getString("fname") + " " + rs_member.getString("lname"));
@@ -623,7 +623,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			String update = "UPDATE ISSUE\n"
 					+ "SET issue_time = CURRENT_TIMESTAMP\n"
 					+ "WHERE isbn = '" + Ren_txfIsbn.getText() + "'";
-			if (dbHandler.exeAction(update)) {
+			if (dbHandler.executeAction(update)) {
 				JFXButton btnSuccess = new JFXButton("Done. Go Back");
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnSuccess), "Book Renewed Successfully", null);
 				EnableDisableControls(false);
@@ -691,7 +691,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			String del_query = "DELETE FROM ISSUE WHERE ISBN = '" + isbn + "'";
 			String update_query = "UPDATE BOOK SET AVAILABLE = TRUE WHERE ISBN = '" + isbn + "'";
 			
-			if (dbHandler.exeAction(del_query) && dbHandler.exeAction(update_query)) {
+			if (dbHandler.executeAction(del_query) && dbHandler.executeAction(update_query)) {
 				JFXButton btnSuccess = new JFXButton("Done. Go Back");
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnSuccess), "Book has been Submitted", null);
 				EnableDisableControls(false);
