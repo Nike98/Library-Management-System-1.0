@@ -34,7 +34,7 @@ import library.util.LibraryUtil;
 public class ListBookController implements Initializable{
 	
 	private ObservableList<Book> BookList = FXCollections.observableArrayList();
-	private DatabaseHandler dbHandler;
+	private DatabaseHandler dbHandler = DatabaseHandler.getInstance();
 
 	@FXML
 	private StackPane rootPane;
@@ -88,9 +88,8 @@ public class ListBookController implements Initializable{
 	
 	private void LoadData() {
 		BookList.clear();
-		DatabaseHandler dataHandler = DatabaseHandler.getInstance();
 		String query = "SELECT * FROM BOOK";
-		ResultSet res = dataHandler.executeQuery(query);
+		ResultSet res = dbHandler.executeQuery(query);
 		
 		try {
 			while (res.next()) {

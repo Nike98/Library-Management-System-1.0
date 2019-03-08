@@ -13,12 +13,12 @@ public class MainStage extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		try {
 			
-			Parent root = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/mainStage/mainStage.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/library/ui/loginPage/login.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/Resources/StyleSheets/LibraryStyleSheet.css").toExternalForm());
-			primaryStage.setTitle("Dashboard");
+			primaryStage.setTitle("Library Management System Login");
 			primaryStage.setScene(scene);
-			primaryStage.setResizable(true);
+			primaryStage.setResizable(false);
 			primaryStage.show();
 			
 			// This Decreases the time the Application takes to load

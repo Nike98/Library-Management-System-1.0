@@ -13,10 +13,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import library.alert.ThrowAlert;
 import library.ui.settings.Preferences;
 
 public class LoginController implements Initializable{
+	
+	private Preferences preferences;
 	
 	@FXML
 	private JFXTextField txfUsername;
@@ -24,8 +27,6 @@ public class LoginController implements Initializable{
 	@FXML
 	private JFXPasswordField txfPassword;
 	
-	Preferences preferences;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		preferences = Preferences.getPreferences();
@@ -33,7 +34,7 @@ public class LoginController implements Initializable{
 	
 	@FXML
 	private void CancelButton(ActionEvent event) {
-		System.exit(0);
+		getStage().close();
 	}
 	
 	@FXML
@@ -42,7 +43,7 @@ public class LoginController implements Initializable{
 		String pass = DigestUtils.shaHex(txfPassword.getText());
 		
 		if (uname.equals(preferences.getUsername()) && pass.equals(preferences.getPassword())) {
-			closeStage();
+			getStage().close();
 			LoadDashboard();
 		} else {
 			txfUsername.getStyleClass().add("wrong-credentials");
@@ -50,17 +51,18 @@ public class LoginController implements Initializable{
 		}
 	}
 	
-	private void closeStage() {
-		((Stage)txfUsername.getScene().getWindow()).close();
+	private Stage getStage() {
+		return (Stage) txfUsername.getScene().getWindow();
 	}
 	
 	private void LoadDashboard() {
 		try {
 			Parent parent = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/mainStage/mainstage.fxml"));
-			Stage stage = new Stage();
+			Stage stage = new Stage(StageStyle.DECORATED);
 			stage.setTitle("Dashboard");
 			stage.setScene(new Scene(parent));
 			stage.show();
+			//Set the Stage icon
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

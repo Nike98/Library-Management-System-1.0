@@ -32,11 +32,12 @@ import javafx.stage.StageStyle;
 import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
 import library.ui.addMember.AddMemberController;
+import library.util.LibraryUtil;
 
 public class ListMemberController implements Initializable {
 	
 	private ObservableList<Member> MemberList = FXCollections.observableArrayList();
-	private DatabaseHandler dbHandler;
+	private DatabaseHandler dbHandler = DatabaseHandler.getInstance();
 	
 	@FXML
 	private StackPane rootPane;
@@ -87,14 +88,8 @@ public class ListMemberController implements Initializable {
 	private void LoadData() {
 		MemberList.clear();
 		DatabaseHandler dataHandler = DatabaseHandler.getInstance();
-<<<<<<< HEAD
 		String query = "SELECT * FROM MEMBER";
 		ResultSet res = dataHandler.executeQuery(query);
-		
-=======
-		String qry = "SELECT * FROM MEMBER";
-		ResultSet res = dataHandler.exeQuery(qry);
->>>>>>> bda6d451e73cc343d1c5700835c32b6feccf01fc
 		try {
 			while (res.next()) {
 				Integer id = res.getInt("id");
@@ -120,7 +115,7 @@ public class ListMemberController implements Initializable {
 	
 	@FXML
 	private void deleteMemberOperation(ActionEvent event) {
-		ListMemberController.Member selectedForDeletion = MainTable.getSelectionModel().getSelectedItem();
+		Member selectedForDeletion = MainTable.getSelectionModel().getSelectedItem();
 		if (selectedForDeletion == null) {
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(),
 					"No Member Selected", "Please select a proper member row to be deleted");
@@ -195,7 +190,27 @@ public class ListMemberController implements Initializable {
 	
 	@FXML
 	private void exportAsPDF(ActionEvent event) {
-		
+		List<List> printData = new ArrayList<>();
+		String[] headers = {
+			"ID",
+			"Name",
+			"City",
+			"Address",
+			"Mobile No.",
+			"Email ID"
+		};
+		printData.add(Arrays.asList(headers));
+		for (Member member : MemberList) {
+			List<String> row = new ArrayList<>();
+			row.add(String.valueOf(member.getId()));
+			row.add(member.getName());
+			row.add(member.getCity());
+			row.add(member.getAddress());
+			row.add(member.getMobile());
+			row.add(member.getEmail());
+			printData.add(row);
+		}
+		LibraryUtil.initPDFExport(rootPane, rootAnchorPane, getStage(), printData, "Member");
 	}
 	
 	@FXML

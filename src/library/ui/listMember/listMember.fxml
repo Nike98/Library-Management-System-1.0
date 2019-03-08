@@ -5,7 +5,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <StackPane fx:id="rootPane" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.listMember.ListMemberController">
    <children>
       <AnchorPane fx:id="rootAnchorPane" prefHeight="550.0" prefWidth="790.0">
@@ -14,7 +13,7 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Export As PDF" />
+                    <MenuItem mnemonicParsing="false" onAction="#exportAsPDF" text="Export As PDF" />
                         <MenuItem mnemonicParsing="false" onAction="#closeStage" text="Close" />
                   </items>
                 </Menu>
