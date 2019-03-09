@@ -3,6 +3,7 @@ package library.ui.dashboard.toolbar;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import library.ui.issueList.IssueListController;
 import library.util.LibraryUtil;
 
 public class ToolBarController {
@@ -47,7 +48,7 @@ public class ToolBarController {
 	 
 	 @FXML
 	 private void ListIssueButton(ActionEvent event) {
-		 LibraryUtil.LoadWindow(getClass().getResource("/library/ui/issueList/issueList.fxml"), "Issue List", null);
+		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/issueList/issueList.fxml"), "Issue List", null);
 	 }
 
 	 @FXML
