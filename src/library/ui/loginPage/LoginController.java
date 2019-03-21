@@ -12,12 +12,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import library.alert.ThrowAlert;
 import library.ui.settings.Preferences;
 
-public class LoginController implements Initializable{
+public class LoginController implements Initializable {
 	
 	private Preferences preferences;
 	
@@ -49,6 +51,12 @@ public class LoginController implements Initializable{
 			txfUsername.getStyleClass().add("wrong-credentials");
 			txfPassword.getStyleClass().add("wrong-credentials");
 		}
+	}
+	
+	@FXML
+	private void loginKeyPressEvent(KeyEvent event) {
+		if (event.getCode() == KeyCode.ENTER)
+			LoginButton(null);
 	}
 	
 	private Stage getStage() {

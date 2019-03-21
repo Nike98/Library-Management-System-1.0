@@ -1,5 +1,6 @@
 package library.ui.dashboard.mainStage;
 
+import javafx.scene.input.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -35,6 +36,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -44,13 +46,20 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
+import library.database.handler.DatabaseHelper;
 import library.ui.callback.BookReturnCallback;
 import library.util.LibraryUtil;
 
 public class MainStageController implements Initializable, BookReturnCallback {
 	
-	private DatabaseHandler dbHandler;
+	private static final String BOOK_AVAILABLE = "Book Available";
+	private static final String BOOK_NOT_AVAILABLE = "Not Available";
+	private static final String NO_SUCH_BOOK_AVAILABLE = "No Such Book Available";
+	private static final String NO_SUCH_MEMBER_AVAILABLE = "No Such Member Available";
+	
+	private DatabaseHandler dbHandler = DatabaseHandler.getInstance();
 	private Boolean isReadytoSubmit = false;
+	
 	private PieChart bookChart;
 	private PieChart memberChart;
 	
@@ -104,6 +113,9 @@ public class MainStageController implements Initializable, BookReturnCallback {
 	
 	@FXML
     private JFXTextField Ren_txfIsbn;
+	
+	@FXML
+	private JFXButton btnIssue;
 	
 	@FXML
 	private JFXButton Ren_btnRenewBook;
@@ -209,6 +221,10 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		});
 	}
 	
+	private void initComponents() {
+		mainTabPane.tabMinWidthProperty().bind(rootAnchorPane.widthProperty().divide(mainTabPane.getTabs().size()).subtract(15));
+	}
+	
 	private Stage getStage() {
 		return (Stage) rootPane.getScene().getWindow();
 	}
@@ -292,10 +308,32 @@ public class MainStageController implements Initializable, BookReturnCallback {
 	
 	/*
 	 * 
+	 * Top Navigation Menu Operations and
+	 * Events Start from further here.
+	 * 
+	 */
+	
+	/*
+	 * 
 	 * Issue tab Operations and Events
 	 * start from further here.
 	 * 
 	 */
+	
+	private boolean checkIssueValidity() {
+		txfIsbn.fireEvent(new ActionEvent());
+		txfMemberId.fireEvent(new ActionEvent());
+		return lblBookName.getText().isEmpty() || lblAuthor.getText().isEmpty() || lblStatus.getText().isEmpty() ||
+				lblMemName.getText().isEmpty() || lblMemEmail.getText().isEmpty() ||
+				lblBookName.getText().equals(NO_SUCH_BOOK_AVAILABLE) || 
+				lblMemName.getText().equals(NO_SUCH_MEMBER_AVAILABLE);
+	}
+	
+	@FXML
+	private void btnIssueKeyPressEvent(KeyEvent event) {
+		if (event.getCode() == KeyCode.ENTER)
+			IssueOperation(null);
+	}
 	
 	@FXML
 	private void LoadBookInfo(ActionEvent event) {
@@ -314,43 +352,37 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		EnableDisableGraphs(false);
 		
 		String isbn = txfIsbn.getText();
+		String query = "SELECT * FROM BOOK WHERE ISBN = '" + isbn + "'";
+		ResultSet rs = DatabaseHelper.getBookInfoWithIssueData(isbn);
+		Boolean flag = false;
 		
-		if (isbn.equals("")) {
-			lblBookName.setText("");
-			lblAuthor.setText("No Input Given");
-			lblStatus.setText("");
-		}
-		else {
-			String query = "SELECT * FROM BOOK WHERE ISBN = '" + isbn + "'";
-			ResultSet rs = dbHandler.executeQuery(query);
-			Boolean flag = false;
-			
-			try {
-				while(rs.next()) {
-					String bkName = rs.getString("title");
-					String bkAuthor = rs.getString("author");
-					boolean bkStatus = rs.getBoolean("available");
-					
-					lblBookName.setText(bkName);
-					lblAuthor.setText(bkAuthor);
-					
-					if(bkStatus)
-						lblStatus.setText("Available");
-					else
-						lblStatus.setText("Book Unavailable");
-						
-					
-					flag = true;
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+		try {
+			if (rs.next()) {
+				String bkName = rs.getString("title");
+				String bkAuthor = rs.getString("author");
+				boolean bkStatus = rs.getBoolean("available");
+				Timestamp issuedOn = rs.getTimestamp("issue_time");
+				
+				lblBookName.setText(bkName);
+				lblAuthor.setText(bkAuthor);
+				
+				String status = (bkStatus) ? BOOK_AVAILABLE : String.format("Issued on %s", LibraryUtil.getDateString(new Date(issuedOn.getTime())));
+				if (!bkStatus)
+					lblStatus.getStyleClass().add("not-available");
+				else
+					lblStatus.getStyleClass().remove("not-available");
+				
+				lblStatus.setText(status);
+				
+				flag = true;
 			}
-			
-			if (!flag) {
-				lblBookName.setText("");
-				lblAuthor.setText("No Such Book Available");
-				lblStatus.setText("");
-			}
+				
+			if (!flag)
+				lblAuthor.setText(NO_SUCH_BOOK_AVAILABLE);
+			else
+				txfMemberId.requestFocus();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -370,37 +402,35 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		clearMemberCache();
 		EnableDisableGraphs(false);
 		
-		String id = txfMemberId.getText();
-		
-		if (id.equals("")) {
-			lblMemName.setText("No Input Given");
-			lblMemEmail.setText("");
+		if (txfMemberId.equals("")) {
+			lblMemName.setText(NO_SUCH_MEMBER_AVAILABLE);
+			return;
 		}
-		else {
-			int int_id = Integer.parseInt(id);
-			System.out.println(int_id);
-			String query = "SELECT * FROM MEMBER WHERE ID = " + int_id;
-			ResultSet rs = dbHandler.executeQuery(query);
-			Boolean flag = false;
-			
-			try {
-				while(rs.next()) {
-					String MemName = rs.getString("name");
-					String MemEmail = rs.getString("email_id");
-					
-					lblMemName.setText(MemName);
-					lblMemEmail.setText(MemEmail);
-					
-					flag = true;
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+		
+		String id = txfMemberId.getText();
+		Integer int_id = Integer.parseInt(id);
+		//System.out.println(int_id);
+		String query = "SELECT * FROM MEMBER WHERE ID = " + int_id;
+		ResultSet rs = dbHandler.executeQuery(query);
+		Boolean flag = false;
+		
+		try {
+			while(rs.next()) {
+				String MemName = rs.getString("name");
+				String MemEmail = rs.getString("email_id");
+				
+				lblMemName.setText(MemName);
+				lblMemEmail.setText(MemEmail);
+				
+				flag = true;
 			}
 			
-			if (!flag) {
-				lblMemName.setText("No Such Member Available");
-				lblMemEmail.setText("");
-			}
+			if (!flag)
+				lblMemName.setText(NO_SUCH_MEMBER_AVAILABLE);
+			else
+				btnIssue.requestFocus();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -424,11 +454,30 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		 * aborted and the message is shown to the User.
 		 * 
 		 */
+		if (checkIssueValidity()) {
+			JFXButton btnOk = new JFXButton("OK. Go Back");
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnOk), "Invalid Input", null);
+			return;
+		}
+		
+		if (lblAuthor.getText().equals(BOOK_NOT_AVAILABLE)) {
+			JFXButton btnOk = new JFXButton("OK. Go Back");
+			JFXButton btnView = new JFXButton("View Details");
+			btnView.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent eventView) -> {
+				String bookToBeLoaded = txfIsbn.getText();
+				Ren_txfIsbn.setText(bookToBeLoaded);
+				Ren_txfIsbn.fireEvent(new ActionEvent());
+				mainTabPane.getSelectionModel().select(RenewSubmissionTab);
+			});
+			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnOk, btnView),
+					"Book Already Issued", "Can't process issue request as the book is already issued");
+			return;
+		}
 		String bookIsbn = txfIsbn.getText();
 		int memId = Integer.parseInt(txfMemberId.getText());
 		
 		JFXButton btnYes = new JFXButton("YES");
-		btnYes.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventYes) -> {
+		btnYes.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent eventYes) -> {
 			String insert_query = "INSERT INTO ISSUE (isbn, member_id) values ("
 					+ "'" + bookIsbn + "', "
 					+ "" + memId + ")";
@@ -438,20 +487,21 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			if (dbHandler.executeAction(insert_query) && dbHandler.executeAction(update_query)) {
 				//ThrowAlert.showInformationMessage("Success", "Book Issue Operation Completed Successfully");
 				JFXButton btnBack = new JFXButton("Done. Go Back");
+				btnBack.setOnAction((actionEvent) -> {
+					txfIsbn.requestFocus();
+				});
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnBack), 
 						"Issue Successfull", "Issued " + lblBookName.getText() + " to " + lblMemName.getText());
-			}
-			else {
+				refreshGraphs();
+			} else {
 				//ThrowAlert.showErrorMessage("Failed", "Issue Operation Failed");
 				JFXButton btnCheck = new JFXButton("Go Back and Check");
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnCheck), "Issue Operation Failed", null);
 			}
-			refreshGraphs();
 			clearIssueTabEntries();
 		});
 		
-		JFXButton btnNo = new JFXButton("NO")
-				;
+		JFXButton btnNo = new JFXButton("NO");
 		btnNo.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent eventNo) -> {
 			JFXButton btnFail = new JFXButton("OK. Go Back");
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnFail), "Cancelled", "Issue Operation was Cancelled");
@@ -508,7 +558,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		 * submitted. Otherwise it is False.
 		 */
 		clearRenewTabEntries();
-		//ObservableList<String> data = FXCollections.observableArrayList();
+		ObservableList<String> data = FXCollections.observableArrayList();
 		isReadytoSubmit = false;
 		
 		try {
@@ -550,7 +600,11 @@ public class MainStageController implements Initializable, BookReturnCallback {
 							Long daysElapsed = TimeUnit.DAYS.convert(timeElapsed, TimeUnit.MILLISECONDS);
 						// End
 					BoxIssue_NoOfDays.setText(daysElapsed.toString());
-					BoxIssue_Fine.setText("Not Supported Yet");
+					Double fine = LibraryUtil.getFineAmount(daysElapsed.intValue());
+					if (fine > 0)
+						BoxIssue_Fine.setText(String.format("Fine : %f", LibraryUtil.getFineAmount(daysElapsed.intValue())));
+					else
+						BoxIssue_Fine.setText("");
 				//Issue End
 					
 				isReadytoSubmit = true;
@@ -693,6 +747,9 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			
 			if (dbHandler.executeAction(del_query) && dbHandler.executeAction(update_query)) {
 				JFXButton btnSuccess = new JFXButton("Done. Go Back");
+				btnSuccess.setOnAction((actionEvent) -> {
+					Ren_txfIsbn.requestFocus();
+				});
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnSuccess), "Book has been Submitted", null);
 				EnableDisableControls(false);
 				RenSub_DataContainer.setOpacity(0);

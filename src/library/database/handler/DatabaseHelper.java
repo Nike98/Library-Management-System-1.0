@@ -81,7 +81,7 @@ public class DatabaseHelper {
 	public static ResultSet getBookInfoWithIssueData(String isbn) {
 		try {
 			String query = "SELECT\n"
-					+ "BOOK.TITLE, BOOK.AUTHOR, BOOK.PUBLISHER, ISSUE.ISSUE_TIME\n"
+					+ "BOOK.TITLE, BOOK.AUTHOR, BOOK.PUBLISHER, BOOK.AVAILABLE, ISSUE.ISSUE_TIME\n"
 					+ "FROM BOOK\n"
 					+ "LEFT JOIN ISSUE ON\n"
 					+ "BOOK.ISBN = ISSUE.ISBN\n"
