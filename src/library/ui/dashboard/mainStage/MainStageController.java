@@ -167,20 +167,10 @@ public class MainStageController implements Initializable, BookReturnCallback {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		/*
-		 * The JFXDepthManager is used to lift the HBox a bit from the usual screen.
-		 * 
-		 * Here, setDepth() method takes the arguments of the 
-		 * component and the level as integer.
-		 */
-		JFXDepthManager.setDepth(hboxBook, 1);
-		JFXDepthManager.setDepth(hboxMember, 1);
-		
-		dbHandler = DatabaseHandler.getInstance();
-		
 		// Initializes the Drawer using the Hamburger
 		initDrawer();
 		initGraphs();
+		initComponents();
 	}
 	
 	private void initDrawer() {
@@ -313,6 +303,49 @@ public class MainStageController implements Initializable, BookReturnCallback {
 	 * 
 	 */
 	
+	@FXML
+	private void menuFileSettings(ActionEvent event) {
+		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/settings/settings.fxml"), "Settings", null);
+	}
+	
+	@FXML
+	private void menuFileExit(ActionEvent event) {
+		getStage().close();
+	}
+	
+	
+	@FXML
+	private void menuAddBook(ActionEvent event) {
+		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/addBook/addBook.fxml"), "Add New Book", null);
+	}
+	
+	
+	@FXML
+	private void menuAddMember(ActionEvent event) {
+		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/addMember/addMember.fxml"), "Add New Member", null);
+	}
+	
+	@FXML
+	private void menuViewFullscreen(ActionEvent event) {
+		Stage stage = getStage();
+		stage.setFullScreen(!stage.isFullScreen());
+	}
+	
+	@FXML
+	private void menuViewBookList(ActionEvent event) {
+		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/listBook/listBook.fxml"), "Book List", null);
+	}
+	
+	@FXML
+	private void menuViewMemberList(ActionEvent event) {
+		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/listMember/listMember.fxml"), "Member List", null);
+	}
+	
+	@FXML
+	private void menuViewIssueList(ActionEvent event) {
+		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/issueList/issueList.fxml"), "Book Issue List", null);
+	}
+	
 	/*
 	 * 
 	 * Issue tab Operations and Events
@@ -334,6 +367,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		if (event.getCode() == KeyCode.ENTER)
 			IssueOperation(null);
 	}
+	
 	
 	@FXML
 	private void LoadBookInfo(ActionEvent event) {
@@ -386,6 +420,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		}
 	}
 	
+	
 	@FXML
 	private void LoadMemberInfo(ActionEvent event) {
 		/* This method is associated with the Member ID TextField.
@@ -433,6 +468,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	@FXML
 	private void IssueOperation(ActionEvent event) {
@@ -512,12 +548,14 @@ public class MainStageController implements Initializable, BookReturnCallback {
 				"Are you sure you want to Issue the Book \"" + lblBookName.getText() + "\"\n to " + lblMemName.getText() + " ?");
 	}
 	
+	
 	/*
 	 * 
 	 * Renew / Submission tab Operations and 
 	 * Events Start from further here.
 	 * 
 	 */
+	
 	
 	@Override
 	public void loadBookReturn(String bookIsbn) {
@@ -528,6 +566,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		if (tool_drawer.isOpened())
 			tool_drawer.close();
 	}
+	
 	
 	@FXML
 	private void Ren_LoadBookInfo(ActionEvent event) {
@@ -663,6 +702,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		
 	}
 	
+	
 	@FXML
 	private void Ren_RenewBookButton(ActionEvent event) {
 		if (!isReadytoSubmit) {
@@ -699,6 +739,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 				"Confirm Renew Operation", 
 				"Are you sue you want to Renew the book \"" + BoxBook_Name.getText() + "\"?");
 	}
+	
 	
 	@FXML
 	private void Ren_SubmitBookButton(ActionEvent event) {
