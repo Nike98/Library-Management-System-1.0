@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import java.net.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.paint.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="370.0" prefWidth="410.0" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.loginPage.LoginController">
+   <children>
+      <HBox alignment="CENTER" layoutX="150.0" layoutY="30.0" prefHeight="110.0" prefWidth="410.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <FontAwesomeIcon fill="#2b2b2b" iconName="LOCK" layoutX="161.0" layoutY="80.0" size="6em" styleClass="glyph-icon" text="" textAlignment="CENTER" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="30.0" />
+         </children>
+      </HBox>
+      <JFXTextField fx:id="txfUsername" labelFloat="true" layoutX="88.0" layoutY="118.0" onKeyPressed="#loginKeyPressEvent" promptText="Username" styleClass="jfxtext-field" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="130.0" />
+      <FontAwesomeIcon iconName="USER" layoutX="20.0" layoutY="144.0" size="2em" styleClass="glyph-icon" text="" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="135.0" />
+      <JFXPasswordField fx:id="txfPassword" labelFloat="true" layoutX="55.0" layoutY="255.0" onKeyPressed="#loginKeyPressEvent" promptText="Password" styleClass="jfxtext-field" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="220.0" />
+      <FontAwesomeIcon iconName="KEY" layoutX="20.0" layoutY="217.0" size="2em" styleClass="glyph-icon" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="225.0" />
+      <JFXButton layoutX="35.0" layoutY="268.0" onAction="#LoginButton" prefHeight="35.0" prefWidth="90.0" text="Login" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="75.0" />
+      <JFXButton layoutX="190.0" layoutY="268.0" onAction="#CancelButton" prefHeight="35.0" prefWidth="90.0" text="Exit" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="75.0">
+         
+      </JFXButton>
+   </children>
+</AnchorPane>

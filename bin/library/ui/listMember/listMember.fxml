@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<StackPane fx:id="rootPane" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.listMember.ListMemberController">
+   <children>
+      <AnchorPane fx:id="rootAnchorPane" prefHeight="550.0" prefWidth="790.0">
+         <children>
+            <MenuBar layoutX="20.0" layoutY="20.0" prefHeight="30.0" prefWidth="790.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#exportAsPDF" text="Export As PDF" />
+                        <MenuItem mnemonicParsing="false" onAction="#closeStage" text="Close" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <TableView fx:id="MainTable" layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="750.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+              <columns>
+                <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
+                <TableColumn fx:id="colName" prefWidth="75.0" text="Name" />
+                  <TableColumn fx:id="colCity" prefWidth="75.0" text="City" />
+                  <TableColumn fx:id="colAddress" prefWidth="75.0" text="Address" />
+                  <TableColumn fx:id="colEmail" prefWidth="75.0" text="Email Id" />
+                  <TableColumn fx:id="colMobile" prefWidth="75.0" text="Mobile No" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#refreshOperation" text="Refresh" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteMemberOperation" text="Delete" />
+                        <MenuItem mnemonicParsing="false" onAction="#editMemberOperation" text="Edit" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
