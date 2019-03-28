@@ -48,6 +48,7 @@ import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
 import library.database.handler.DatabaseHelper;
 import library.ui.callback.BookReturnCallback;
+import library.ui.dashboard.toolbar.ToolBarController;
 import library.util.LibraryUtil;
 
 public class MainStageController implements Initializable, BookReturnCallback {
@@ -176,6 +177,30 @@ public class MainStageController implements Initializable, BookReturnCallback {
 	private void initDrawer() {
 		// Method to load a Toolbox on the click of the Hamburger icon
 		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/library/ui/dashboard/toolbar/toolbar.fxml"));
+			VBox toolbar = loader.load();
+			tool_drawer.setSidePane(toolbar);
+			ToolBarController controller = loader.getController();
+			controller.setBookReturnCallback(this);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		HamburgerSlideCloseTransition task = new HamburgerSlideCloseTransition(hamburger);
+		task.setRate(-1);
+		hamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+			tool_drawer.toggle();
+		});
+		tool_drawer.setOnDrawerOpening((event) -> {
+			task.setRate(task.getRate() * -1);
+			task.play();
+			tool_drawer.toFront();
+		});
+		tool_drawer.setOnDrawerClosed((event) -> {
+			tool_drawer.toBack();
+			task.setRate(task.getRate() * -1);
+			task.play();
+		});
+		/*try {
 			VBox toolbar = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/toolbar/toolbar.fxml"));
 			tool_drawer.setSidePane(toolbar);
 		} catch (IOException e) {
@@ -194,7 +219,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			} else {
 				tool_drawer.close();
 			}			
-		});
+		});*/
 	}
 	
 	private void initGraphs() {

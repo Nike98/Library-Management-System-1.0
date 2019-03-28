@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import com.jfoenix.controls.*?>
@@ -7,63 +8,84 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="rootPane" prefHeight="325.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.settings.SettingsController">
+<StackPane fx:id="rootPane" prefHeight="420.0" prefWidth="550.0" stylesheets="@../../../Resources/StyleSheets/LibraryStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.ui.settings.SettingsController">
    <children>
-      <VBox prefHeight="270.0" prefWidth="350.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <JFXTextField fx:id="txfnum_DaysWithoutFine" labelFloat="true" promptText="No. of days without Fine">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="30.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Arial" size="18.0" />
-               </font>
-            </JFXTextField>
-            <JFXTextField fx:id="txfFinePerDay" labelFloat="true" promptText="Fine Per Day">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Arial" size="18.0" />
-               </font>
-            </JFXTextField>
-            <JFXTextField fx:id="txfUserName" labelFloat="true" promptText="Username">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Arial" size="18.0" />
-               </font>
-            </JFXTextField>
-            <JFXPasswordField fx:id="txfPassword" labelFloat="true" promptText="Password">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Arial" size="18.0" />
-               </font>
-            </JFXPasswordField>
-         </children>
-      </VBox>
-      <HBox alignment="CENTER" layoutX="45.0" layoutY="287.0" prefHeight="55.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <JFXButton fx:id="btnSave" onAction="#SaveButton_Click" prefHeight="30.0" prefWidth="90.0" styleClass="jfx-button-save" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Save">
-               <HBox.margin>
-                  <Insets right="50.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="Arial" size="14.0" />
-               </font>
-            </JFXButton>
-            <JFXButton fx:id="btnCancel" onAction="#CancelButton_click" prefHeight="30.0" prefWidth="90.0" styleClass="jfx-button-cancel" stylesheets="@../../../Resources/Stylesheet/MainStyleSheet.css" text="Cancel">
-               <font>
-                  <Font name="Arial" size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-            </JFXButton>
-         </children>
-      </HBox>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab styleClass="settings-tab" text="Basic">
+               <content>
+                  <AnchorPane prefHeight="400.0" prefWidth="500.0" styleClass="info-pane">
+                     <children>
+                        <VBox prefHeight="300.0" prefWidth="500.0" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <JFXTextField fx:id="txfnum_DaysWithoutFine" labelFloat="true" promptText="No. of days without Fine" styleClass="jfxtext-field">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="30.0" right="30.0" top="25.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                              </JFXTextField>
+                              <JFXTextField fx:id="txfFinePerDay" labelFloat="true" promptText="Fine Per Day" styleClass="jfxtext-field">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="30.0" right="30.0" top="25.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                              </JFXTextField>
+                              <JFXTextField fx:id="txfUserName" labelFloat="true" promptText="Username" styleClass="jfxtext-field">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="30.0" right="30.0" top="25.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                              </JFXTextField>
+                              <JFXPasswordField fx:id="txfPassword" labelFloat="true" promptText="Password" styleClass="jfxtext-field">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="30.0" right="30.0" top="25.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                              </JFXPasswordField>
+                           </children>
+                        </VBox>
+                        <HBox alignment="CENTER" layoutX="45.0" layoutY="287.0" prefHeight="90.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                           <children>
+                              <JFXButton fx:id="btnSave" onAction="#SaveButton_Click" prefHeight="40.0" prefWidth="110.0" text="Save">
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                              </JFXButton>
+                              <JFXButton fx:id="btnCancel" onAction="#CancelButton_click" prefHeight="40.0" prefWidth="110.0" text="Cancel">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="50.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+          </Tab>
+          <Tab styleClass="settings-tab" text="Export">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="info-pane">
+                     <children>
+                        <JFXButton layoutX="150.0" layoutY="157.0" onAction="#databaseExportEvent" prefHeight="70.0" prefWidth="250.0" text="Export Database" />
+                        <JFXSpinner fx:id="progressSpinner" layoutX="255.0" layoutY="236.0" prefHeight="40.0" prefWidth="40.0" />
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
    </children>
-</AnchorPane>
+</StackPane>

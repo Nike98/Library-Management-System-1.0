@@ -94,4 +94,13 @@ public class LibraryUtil {
 	public static String formatDateTimeString (Long time) {
 		return DATE_TIME_FORMAT.format(new Date(time));
 	}
+	
+	public static void openFileWithDesktop(File file) {
+		try {
+			Desktop desktop = Desktop.getDesktop();
+			desktop.open(file);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 }
