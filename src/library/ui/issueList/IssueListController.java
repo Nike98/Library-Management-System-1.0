@@ -137,8 +137,10 @@ public class IssueListController implements Initializable {
 	@FXML
 	private void handleReturnbook(ActionEvent event) {
 		Issue issueInfo = tableView.getSelectionModel().getSelectedItem();
-		if (issueInfo != null)
+		if (issueInfo != null) {
+			//System.out.println(issueInfo.getIsbn());
 			callback.loadBookReturn(issueInfo.getIsbn());
+		}
 	}
 	
 	@FXML

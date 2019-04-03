@@ -8,34 +8,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.events.JFXDialogEvent;
-import com.jfoenix.effects.JFXDepthManager;
 import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -48,7 +38,6 @@ import library.alert.ThrowAlert;
 import library.database.handler.DatabaseHandler;
 import library.database.handler.DatabaseHelper;
 import library.ui.callback.BookReturnCallback;
-import library.ui.dashboard.toolbar.ToolBarController;
 import library.util.LibraryUtil;
 
 public class MainStageController implements Initializable, BookReturnCallback {
@@ -177,30 +166,6 @@ public class MainStageController implements Initializable, BookReturnCallback {
 	private void initDrawer() {
 		// Method to load a Toolbox on the click of the Hamburger icon
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/library/ui/dashboard/toolbar/toolbar.fxml"));
-			VBox toolbar = loader.load();
-			tool_drawer.setSidePane(toolbar);
-			ToolBarController controller = loader.getController();
-			controller.setBookReturnCallback(this);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		HamburgerSlideCloseTransition task = new HamburgerSlideCloseTransition(hamburger);
-		task.setRate(-1);
-		hamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-			tool_drawer.toggle();
-		});
-		tool_drawer.setOnDrawerOpening((event) -> {
-			task.setRate(task.getRate() * -1);
-			task.play();
-			tool_drawer.toFront();
-		});
-		tool_drawer.setOnDrawerClosed((event) -> {
-			tool_drawer.toBack();
-			task.setRate(task.getRate() * -1);
-			task.play();
-		});
-		/*try {
 			VBox toolbar = FXMLLoader.load(getClass().getResource("/library/ui/dashboard/toolbar/toolbar.fxml"));
 			tool_drawer.setSidePane(toolbar);
 		} catch (IOException e) {
@@ -219,7 +184,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			} else {
 				tool_drawer.close();
 			}			
-		});*/
+		});
 	}
 	
 	private void initGraphs() {
@@ -411,7 +376,6 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		EnableDisableGraphs(false);
 		
 		String isbn = txfIsbn.getText();
-		String query = "SELECT * FROM BOOK WHERE ISBN = '" + isbn + "'";
 		ResultSet rs = DatabaseHelper.getBookInfoWithIssueData(isbn);
 		Boolean flag = false;
 		
@@ -421,17 +385,19 @@ public class MainStageController implements Initializable, BookReturnCallback {
 				String bkAuthor = rs.getString("author");
 				boolean bkStatus = rs.getBoolean("available");
 				Timestamp issuedOn = rs.getTimestamp("issue_time");
+				String status = (bkStatus) ? BOOK_AVAILABLE : String.format("Issued on %s", LibraryUtil.getDateString(new Date(issuedOn.getTime())));
 				
 				lblBookName.setText(bkName);
-				lblAuthor.setText(bkAuthor);
-				
-				String status = (bkStatus) ? BOOK_AVAILABLE : String.format("Issued on %s", LibraryUtil.getDateString(new Date(issuedOn.getTime())));
-				if (!bkStatus)
-					lblStatus.getStyleClass().add("not-available");
-				else
+				if (!bkStatus) {
+					lblAuthor.getStyleClass().add("not-available");
+					lblStatus.setText(BOOK_NOT_AVAILABLE);
+				}
+				else {
+					lblAuthor.setText(bkAuthor);
 					lblStatus.getStyleClass().remove("not-available");
+				}
 				
-				lblStatus.setText(status);
+				lblAuthor.setText(status);
 				
 				flag = true;
 			}
@@ -462,19 +428,19 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		clearMemberCache();
 		EnableDisableGraphs(false);
 		
-		if (txfMemberId.equals("")) {
+		/*if (txfMemberId.getText() == null) {
 			lblMemName.setText(NO_SUCH_MEMBER_AVAILABLE);
 			return;
-		}
+		}*/
 		
-		String id = txfMemberId.getText();
-		Integer int_id = Integer.parseInt(id);
-		//System.out.println(int_id);
-		String query = "SELECT * FROM MEMBER WHERE ID = " + int_id;
-		ResultSet rs = dbHandler.executeQuery(query);
-		Boolean flag = false;
+		//String id = txfMemberId.getText();
 		
 		try {
+			int int_id = Integer.parseInt(txfMemberId.getText());
+			System.out.println("Id = " + int_id);
+			String query = "SELECT * FROM MEMBER WHERE ID = " + int_id;
+			ResultSet rs = dbHandler.executeQuery(query);
+			Boolean flag = false;
 			while(rs.next()) {
 				String MemName = rs.getString("name");
 				String MemEmail = rs.getString("email_id");
@@ -491,6 +457,8 @@ public class MainStageController implements Initializable, BookReturnCallback {
 				btnIssue.requestFocus();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (NumberFormatException numEx) {
+			lblMemName.setText(NO_SUCH_MEMBER_AVAILABLE);
 		}
 	}
 	
@@ -521,7 +489,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			return;
 		}
 		
-		if (lblAuthor.getText().equals(BOOK_NOT_AVAILABLE)) {
+		if (lblStatus.getText().equals(BOOK_NOT_AVAILABLE)) {
 			JFXButton btnOk = new JFXButton("OK. Go Back");
 			JFXButton btnView = new JFXButton("View Details");
 			btnView.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent eventView) -> {
@@ -546,7 +514,6 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			String update_query = "UPDATE BOOK SET available = false where isbn = '" + bookIsbn + "'";
 			
 			if (dbHandler.executeAction(insert_query) && dbHandler.executeAction(update_query)) {
-				//ThrowAlert.showInformationMessage("Success", "Book Issue Operation Completed Successfully");
 				JFXButton btnBack = new JFXButton("Done. Go Back");
 				btnBack.setOnAction((actionEvent) -> {
 					txfIsbn.requestFocus();
@@ -555,7 +522,6 @@ public class MainStageController implements Initializable, BookReturnCallback {
 						"Issue Successfull", "Issued " + lblBookName.getText() + " to " + lblMemName.getText());
 				refreshGraphs();
 			} else {
-				//ThrowAlert.showErrorMessage("Failed", "Issue Operation Failed");
 				JFXButton btnCheck = new JFXButton("Go Back and Check");
 				ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnCheck), "Issue Operation Failed", null);
 			}
@@ -584,7 +550,9 @@ public class MainStageController implements Initializable, BookReturnCallback {
 	
 	@Override
 	public void loadBookReturn(String bookIsbn) {
+		System.out.println("Reached here");
 		this.Ren_txfIsbn.setText(bookIsbn);
+		System.out.println(bookIsbn);
 		mainTabPane.getSelectionModel().select(RenewSubmissionTab);
 		Ren_LoadBookInfo(null);
 		getStage().toFront();
@@ -680,51 +648,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
-		/*String query = "SELECT * FROM ISSUE WHERE ISBN = '" + isbn + "'";
-		ResultSet rs = dbHandler.executeQuery(query);
-		
-		try {
-			while(rs.next()) {
-				String ren_bookIsbn = rs.getString("isbn");
-				String ren_memberId = rs.getString("member_id");
-				Timestamp ren_issueTime = rs.getTimestamp("issue_time");
-				int ren_count = rs.getInt("day_count");
-				
-				data.add("Issue Date and Time : " + ren_issueTime.toGMTString());
-				data.add("Day Count : " + ren_count);
-				
-				data.add("Book Information :-");
-				query = "SELECT * FROM BOOK WHERE ISBN = '" + ren_bookIsbn + "'";
-				ResultSet rs_book = dbHandler.executeQuery(query);
-				while(rs_book.next()) {
-					data.add("\t ISBN : " + rs_book.getString("isbn"));
-					data.add("\t Title : " + rs_book.getString("title"));
-					data.add("\t Author : " + rs_book.getString("author"));
-					data.add("\t Edition : " + rs_book.getString("edition_number"));
-					data.add("\t Publisher : " + rs_book.getString("publisher"));
-					data.add("\t Price : " + rs_book.getInt("price"));
-				}
-				
-				data.add("Member Information :-");
-				query = "SELECT * FROM MEMBER WHERE ID = '" + ren_memberId + "'";
-				ResultSet rs_member = dbHandler.executeQuery(query);
-				while(rs_member.next()) {
-					data.add("\t ID : " + rs_member.getString("id"));
-					data.add("\t Name : " + rs_member.getString("fname") + " " + rs_member.getString("lname"));
-					data.add("\t Mobile Number : " + rs_member.getString("mobile_no"));
-					data.add("\t Email : " + rs_member.getString("email_id"));
-				}
-				
-				isReadytoSubmit = true;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		dataList.getItems().setAll(data);*/
-		
+		}		
 	}
 	
 	
