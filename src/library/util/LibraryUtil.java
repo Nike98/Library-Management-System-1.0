@@ -28,10 +28,6 @@ public class LibraryUtil {
 	
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 	private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
-
-	/*
-	 * Add the Icon setting Method here
-	 */
 	
 	public static void LoadWindow(URL location, String title, Stage parentStage) {
 		try {

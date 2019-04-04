@@ -428,13 +428,6 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		clearMemberCache();
 		EnableDisableGraphs(false);
 		
-		/*if (txfMemberId.getText() == null) {
-			lblMemName.setText(NO_SUCH_MEMBER_AVAILABLE);
-			return;
-		}*/
-		
-		//String id = txfMemberId.getText();
-		
 		try {
 			int int_id = Integer.parseInt(txfMemberId.getText());
 			System.out.println("Id = " + int_id);
@@ -550,9 +543,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 	
 	@Override
 	public void loadBookReturn(String bookIsbn) {
-		System.out.println("Reached here");
 		this.Ren_txfIsbn.setText(bookIsbn);
-		System.out.println(bookIsbn);
 		mainTabPane.getSelectionModel().select(RenewSubmissionTab);
 		Ren_LoadBookInfo(null);
 		getStage().toFront();

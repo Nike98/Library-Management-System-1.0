@@ -12,9 +12,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import library.util.LibraryUtil;
-import java.awt.SystemTray;
-import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
@@ -130,16 +127,8 @@ public class ThrowAlert {
 		blurNode.setEffect(blurEffect);
 	}
 	
-	public static void showSysTrayMessage(String title, String message) {
-		SystemTray sysTray = SystemTray.getSystemTray();
-		//BufferedImage image
-		// Add all this when custom image of the app is created
-	}
-	
 	private static void styleAlert(Alert alert) {
 		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		//LibraryUtil.seticon
-		
 		DialogPane dialogPane = alert.getDialogPane();
 		dialogPane.getStylesheets().add(ThrowAlert.class.getResource("/Resources/Stylesheets/LibraryStyleSheet.css").toExternalForm());
 		dialogPane.getStyleClass().add("custom-alert");

@@ -14,7 +14,6 @@ public class AddBookMain extends Application {
 			
 			Parent root = FXMLLoader.load(getClass().getResource("addBook.fxml"));
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("/Resources/StyleSheets/LibraryStyleSheet.css").toExternalForm());
 			primaryStage.show();
 		} 
 		catch(Exception e) {

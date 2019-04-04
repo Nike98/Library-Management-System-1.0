@@ -138,7 +138,6 @@ public class IssueListController implements Initializable {
 	private void handleReturnbook(ActionEvent event) {
 		Issue issueInfo = tableView.getSelectionModel().getSelectedItem();
 		if (issueInfo != null) {
-			//System.out.println(issueInfo.getIsbn());
 			callback.loadBookReturn(issueInfo.getIsbn());
 		}
 	}
