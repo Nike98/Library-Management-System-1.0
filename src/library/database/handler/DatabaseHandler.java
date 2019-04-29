@@ -41,10 +41,7 @@ public final class DatabaseHandler {
 	
 	// Constructor
 	private DatabaseHandler() {
-//		CreateConnection();
-//		setupBookTable();
-//		setupMemberTable();
-//		setupIssueTable();
+		
 	}
 	
 	public static void main(String[] args) {
@@ -58,7 +55,7 @@ public final class DatabaseHandler {
 		return handler;
 	}
 		
-	// Method to make the Connection to the Oracle Database
+	// Method to make the Connection to the Apache Derby Database
 	private static void CreateConnection() {
 		
         try {
