@@ -397,7 +397,7 @@ public class MainStageController implements Initializable, BookReturnCallback {
 					lblStatus.getStyleClass().remove("not-available");
 				}
 				
-				lblAuthor.setText(status);
+				lblStatus.setText(status);
 				
 				flag = true;
 			}
@@ -749,6 +749,6 @@ public class MainStageController implements Initializable, BookReturnCallback {
 		
 		ThrowAlert.showDialog(rootPane, rootAnchorPane, Arrays.asList(btnYes, btnNo),
 				"Confirm Submission Operation", 
-				"Are you sue you want to Return the book \"" + BoxBook_Name.getText() + "\"?");
+				"Are you sure you want to Return the book \"" + BoxBook_Name.getText() + "\"?");
 	}
 }

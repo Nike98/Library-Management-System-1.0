@@ -54,17 +54,17 @@ public class ToolBarController implements Initializable{
 
 	@FXML
 	private void ListBookButton(ActionEvent event) {
-		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/listBook/listBook.fxml"), "Member List", null);
+		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/listBook/listBook.fxml"), "Book List", null);
 	}
 
 	@FXML
 	private void ListMemberButton(ActionEvent event) {
-		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/listMember/listMember.fxml"), "Add New Member", null);
+		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/listMember/listMember.fxml"), "Member List", null);
 	}
 	
 	@FXML
 	private void ListIssueButton(ActionEvent event) {
-		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/issueList/issueList.fxml"), "Issue List", null);
+		LibraryUtil.LoadWindow(getClass().getResource("/library/ui/issueList/issueList.fxml"), "Book Issue List", null);
 	}
 
 	@FXML
