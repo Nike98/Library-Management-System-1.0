@@ -14,7 +14,6 @@ public class AddMemberMain extends Application {
 			
 			Parent root = FXMLLoader.load(getClass().getResource("addMember.fxml"));
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("/Resources/Stylesheets/MainStyleSheet.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} 

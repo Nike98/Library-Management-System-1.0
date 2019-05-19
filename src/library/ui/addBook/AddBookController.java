@@ -3,9 +3,6 @@ package library.ui.addBook;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import library.alert.ThrowAlert;
 import library.data.model.Book;
 import library.database.handler.*;

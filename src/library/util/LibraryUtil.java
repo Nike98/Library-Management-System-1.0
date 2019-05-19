@@ -8,9 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
 import com.jfoenix.controls.JFXButton;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -28,10 +26,6 @@ public class LibraryUtil {
 	
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 	private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
-
-	/*
-	 * Add the Icon setting Method here
-	 */
 	
 	public static void LoadWindow(URL location, String title, Stage parentStage) {
 		try {

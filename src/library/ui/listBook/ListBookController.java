@@ -134,8 +134,6 @@ public class ListBookController implements Initializable{
 			stage.setTitle("Edit Book");
 			stage.setScene(new Scene(parent));
 			stage.show();
-			// Show the Stage icon here
-			
 			stage.setOnHiding((e) -> {
 				refreshTableOperation(new ActionEvent());
 			});
@@ -153,22 +151,6 @@ public class ListBookController implements Initializable{
 					"No Book Selected", "Please select a proper Book row for deletion");
 			return;
 		}
-		/*Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setHeaderText(null);
-		alert.setTitle("Deleting Book");
-		alert.setContentText("Are you sure you want to Delete the Book " + selectedForDeletion.getTitle() + " ?");
-		Optional<ButtonType> response = alert.showAndWait();
-		if (response.get() == ButtonType.OK) {
-			boolean result = DatabaseHandler.getInstance().deleteBook(selectedForDeletion);
-			if (result) {
-				ThrowAlert.showInformationMessage("Operation Successful", "The Book " + selectedForDeletion.getTitle() + 
-						" was Deleted from the Records Successfully");
-				BookList.remove(selectedForDeletion);
-			} else
-				ThrowAlert.showErrorMessage("Error Occured", "The Book " + selectedForDeletion.getTitle() + 
-						" could not be Deleted from the Records");
-		} else
-			ThrowAlert.showErrorMessage("Operation Cancelled", "Deletion Operation Cancelled by the User");*/
 		
 		if (DatabaseHandler.getInstance().isBookIssued(selectedForDeletion)) {
 			ThrowAlert.showDialog(rootPane, rootAnchorPane, new ArrayList<>(),
